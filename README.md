@@ -59,4 +59,6 @@ https://frankfangcode.github.io/nccu-pangolin-game/
 ## v12 正門探索
 從校門外直走進校園；鏡頭靠近角色，地圖隨探索顯示。建築與道路比對及缺照處詳見 BUILDINGS-v12.md。
 
-main推送後，GitHub Actions先跑測試，再以scripts/package-site.mjs封裝、發布至GitHub Pages。遊戲來源保持私有，網站公開。
+main推送後，GitHub Actions先跑測試，再以scripts/package-site.mjs封裝、發布至GitHub Pages。網站目標為公開。儲存庫目前API顯示公開，與原私有要求不同，待使用者確認；本輪未更動可見性。
+
+發布狀態：2026-10-20 00:02（台灣），GitHub Actions／Pages服務異常，工作排隊，網址尚未完成上線驗收。詳見HANDOFF.md。

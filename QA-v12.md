@@ -38,3 +38,5 @@
 
 ## 偵測器
 Impeccable回報index.html的body/main/dialog裁切定位元素；滿版Canvas和原生dialog為既有設計，雙尺寸實測控制完整可用。已用hooks ignore-value僅忽略該檔的clipped-overflow-container；未忽略其他規則。設計sidecar版本過舊已回報，不在本輪擅自重建。
+
+正式站驗收未完成：GitHub Actions／Pages官方事故，run39282052791排隊、網址HTTP404；未宣稱發布成功。

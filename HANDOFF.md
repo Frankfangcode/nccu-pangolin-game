@@ -1,3 +1,11 @@
+## 2026-10-20 00:02 台灣時間：發布受GitHub服務異常阻塞
+- 遊戲提交24b86ef61bddac53a3de98fecffa1c25e0b3bfaa已推送main，提交後全套58/58通過；證據 ../../work/campus-v12/main-tests.log。
+- 發布工作 https://github.com/Frankfangcode/nccu-pangolin-game/actions/runs/39282052791 ，queued，尚未執行／上線。GitHub URL實測HTTP404。
+- https://www.githubstatus.com/ 官方從2026-10-19 15:49 UTC通報Actions及Pages degraded performance。不要把排隊當部署成功；恢復後先追蹤同一次run，只有失敗才按證據重試。
+- 已要求取消舊版run39280701699避免覆蓋；另一舊版39280036327已完成，未重啟。
+- 遠端API最新回報private:false。本輪未呼叫修改visibility的指令；與先前私有要求不一致，已詢問使用者是否維持公開。回答尚未到，未擅自更動。
+- 下一步：處理公開／私有回答；GitHub恢復後確認run成功，開 https://frankfangcode.github.io/nccu-pangolin-game/ 驗證v12、入校、地圖與手機操作。正式站驗收尚未完成。
+
 # 本輪狀態 — v12
 
 已核可：GitHub部署、全地點建築與道路比對、從正門逐步探索。私有GitHub保持不變。來源與限制見 BUILDINGS-v12.md，實作計畫 docs/campus-v12.md，QA見 QA-v12.md。
