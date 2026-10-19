@@ -49,3 +49,9 @@ node --test test/*.test.mjs
 這是私有原型儲存庫，尚無正式網站或部署流程。`nccu100` 僅作為校舍／地圖參考，沒有修改該專案。美術與角色使用模型生成素材，未搬用參考遊戲資產。
 
 目前驗收見 [QA-v11.md](QA-v11.md)，交接見 [HANDOFF.md](HANDOFF.md)。
+
+## 線上遊玩
+
+https://nccu-pangolin-game.speedyswan.chatgpt.site
+
+公開免登入。進度保存在各自瀏覽器，與本機預覽分開。部署與更新紀錄見 HANDOFF.md。
