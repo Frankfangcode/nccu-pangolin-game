@@ -1,3 +1,6 @@
+## 2026-10-20 使用者確認
+使用者明確選擇「維持公開，使用 GitHub Pages」，取代先前私有儲存庫要求。保留現有public設定，不另建網站。再次查詢run39282052791仍queued、尚無執行步驟；Pages狀態errored。下一步仍是等待既有run結果並完成正式網址驗收，不能宣稱已上線。
+
 ## 2026-10-20 00:02 台灣時間：發布受GitHub服務異常阻塞
 - 遊戲提交24b86ef61bddac53a3de98fecffa1c25e0b3bfaa已推送main，提交後全套58/58通過；證據 ../../work/campus-v12/main-tests.log。
 - 發布工作 https://github.com/Frankfangcode/nccu-pangolin-game/actions/runs/39282052791 ，queued，尚未執行／上線。GitHub URL實測HTTP404。
@@ -8,7 +11,7 @@
 
 # 本輪狀態 — v12
 
-已核可：GitHub部署、全地點建築與道路比對、從正門逐步探索。私有GitHub保持不變。來源與限制見 BUILDINGS-v12.md，實作計畫 docs/campus-v12.md，QA見 QA-v12.md。
+已核可：GitHub部署、全地點建築與道路比對、從正門逐步探索。GitHub依2026-10-20新授權維持公開。來源與限制見 BUILDINGS-v12.md，實作計畫 docs/campus-v12.md，QA見 QA-v12.md。
 
 修改：正門外出生、紀念碑移旁、道路／門房；桌機1.75與手機1.15固定近距離鏡頭；地圖僅附近及已到訪地點；入門先導指示；四組生成素材校正五棟樓；五種命名道路表現；77個runtime檔案白名單封裝；GitHub Pages workflow自動全測後發布。
 
