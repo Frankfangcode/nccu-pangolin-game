@@ -1,3 +1,7 @@
+
+## v13 正式站發布驗證（2026-10-20）
+遊戲提交 d95735157efab87135864dd65acb2cee3c4defdf 已推送main，main全測61/61。GitHub Pages最新build同提交、built、error:null。正式網址 https://frankfangcode.github.io/nccu-pangolin-game/ 實際載入main.mjs?v=13；全新瀏覽器以手機搖桿入校、鍵盤走完全部五階段、開啟偵察、重載保持complete，console無錯誤／警告。來源維持API當前main:/；舊gh-pages分支未使用，Sites未更新。後續直接main推送會觸發此部署，不需重複觸發。
+
 # 小段冒險 v13 驗收
 
 ## 範圍與結果
