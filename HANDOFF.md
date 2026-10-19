@@ -1,3 +1,18 @@
+# 本輪狀態 — v12
+
+已核可：GitHub部署、全地點建築與道路比對、從正門逐步探索。私有GitHub保持不變。來源與限制見 BUILDINGS-v12.md，實作計畫 docs/campus-v12.md，QA見 QA-v12.md。
+
+修改：正門外出生、紀念碑移旁、道路／門房；桌機1.75與手機1.15固定近距離鏡頭；地圖僅附近及已到訪地點；入門先導指示；四組生成素材校正五棟樓；五種命名道路表現；77個runtime檔案白名單封裝；GitHub Pages workflow自動全測後發布。
+
+驗證：Node24 58/58測試；兩輪雙尺寸截圖見 ../../work/campus-v12/round2-desktop.png、round2-mobile.png；子目錄真實入校／地圖／重載／手機搖桿通過，console無錯誤。未新增套件、存檔欄位或付款服務。
+
+重要限制：62個地點已逐項列比對結果，不等於全校建築均有實景照。缺照項、道路精確線形／尺度、門房造型仍待核實；完整動物鏈沿用單元與既有端到端證據，本輪未重走全鏈。GitHub新網域的進度與Sites分開。
+
+部署：沿用 https://frankfangcode.github.io/nccu-pangolin-game/ ，GitHub Pages改workflow模式，.github/workflows/pages.yml。發布狀態於收尾補記。舊Sites未刪除，避免破壞既有連結，但不再作本輪發布目標。
+
+---
+以下為歷史紀錄：
+
 # 本輪狀態 — v11.1
 
 ## 已核可

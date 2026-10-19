@@ -1,16 +1,16 @@
-import {createTouchControls} from './touch.mjs?v=11';
-import {createQuest,QUEST_STEPS,questTarget,interactQuest} from './quest.mjs?v=8';
-import {readSave,writeSave} from './save.mjs?v=8';
-import {createStory} from './story.mjs?v=7';
-import {manifest} from './manifest.mjs?v=8';
-import {discoverPlaces,nearestPlace} from './exploration.mjs';
+import {createTouchControls} from './touch.mjs?v=12';
+import {createQuest,QUEST_STEPS,questTarget,interactQuest} from './quest.mjs?v=12';
+import {readSave,writeSave} from './save.mjs?v=12';
+import {createStory} from './story.mjs?v=12';
+import {manifest} from './manifest.mjs?v=12';
+import {discoverPlaces,nearestPlace,entryObjective} from './exploration.mjs';
 import {findRoute} from './navigation.mjs';
-import {createAtlas} from './atlas.mjs?v=8';
-import { WORLD } from './world.mjs?v=5';
-import { createGame, stepMovement, advanceHumans, advanceAwareness, advanceChase, interact } from './rules.mjs?v=11';
-import { createInput } from './input.mjs?v=11.1';
-import { render,cameraFor } from './render.mjs?v=11.1';
-import {createMinimap} from './minimap.mjs?v=10';
+import {createAtlas} from './atlas.mjs?v=12';
+import { WORLD } from './world.mjs?v=12';
+import { createGame, stepMovement, advanceHumans, advanceAwareness, advanceChase, interact } from './rules.mjs?v=12';
+import { createInput } from './input.mjs?v=12';
+import { render,cameraFor } from './render.mjs?v=12';
+import {createMinimap} from './minimap.mjs?v=12';
 import { loadAssets } from './assets.mjs';
 let assets;
 const startButton=document.querySelector('#start');
@@ -48,7 +48,7 @@ export function getGameSnapshot(){return structuredClone(state);}
 
 let target=null,route=null,lastRouteAt=0;
 function guideTo(p){target=p;route=p?findRoute(state.player,p.entry,WORLD):null;lastRouteAt=0;}
-function guideQuest(){guideTo(questTarget(state.quest));}
+function guideQuest(){guideTo(entryObjective(state,WORLD)??questTarget(state.quest));}
 const atlas=createAtlas(WORLD,()=>state,()=>assets,guideTo);
 const questDialog=document.querySelector('#quest-dialog');
 document.querySelector('#quest-close').onclick=()=>questDialog.close();
@@ -104,13 +104,15 @@ function frame(now) {
        else if(result.state!==state)state=result.state;
        else state=interact(state,WORLD);
       }
+      const entering=entryObjective(state,WORLD);
       state=discoverPlaces(state,WORLD);
+      if(entering&&!entryObjective(state,WORLD))guideQuest();
     }
   }
 
   if(started)persist();
   const stage=state.quest.stage,step=QUEST_STEPS[stage];
-  document.querySelector('#quest-guide').textContent=step?`${step.objective} ↗`:'黑貓的委託 · 已完成 ✓';
+  document.querySelector('#quest-guide').textContent=entryObjective(state,WORLD)?'從正門走進校園 ↗':step?`${step.objective} ↗`:'黑貓的委託 · 已完成 ✓';
   document.querySelector('#quest-guide').disabled=!step;document.querySelector('#quest-guide').hidden=!step;
   document.querySelector('#quest-progress').textContent=step?`動物朋友 / ${Object.keys(QUEST_STEPS).indexOf(stage)+1} · 5`:'動物朋友 / 信任建立';
   document.querySelector('#scout').hidden=stage!=='complete';

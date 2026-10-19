@@ -14,7 +14,9 @@ test('lower-campus landmarks follow the supplied map: library left of hall, fiel
 });
 
 test('new gate home can hide and patrols do not pass through campus buildings',()=>{
- assert.ok(isHidden({...createGame(WORLD),player:{...WORLD.start,curled:true}},WORLD),'gate home must have a hiding bush');
+ const b=WORLD.bushes[0];
+ assert.ok(Math.hypot(b.x+b.w/2-WORLD.start.x,b.y+b.h/2-WORLD.start.y)<180,'hiding bush stays near entry');
+ assert.ok(isHidden({...createGame(WORLD),player:{x:b.x+b.w/2,y:b.y+b.h/2,curled:true}},WORLD),'roadside home must have a hiding bush');
  for(const human of WORLD.humans){
   const [a,b]=human.route;
   for(let i=0;i<=100;i++){

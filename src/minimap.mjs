@@ -1,4 +1,4 @@
-import {drawAtlas} from './landscape.mjs?v=8';
+import {drawAtlas} from './landscape.mjs?v=12';
 export function localProjection(player,size=240,span=1000){
  return p=>({x:size/2+(p.x-player.x)*size/span,y:size/2+(p.y-player.y)*size/span});
 }
@@ -8,12 +8,13 @@ export function objectiveMarker(p,size=240,radius=100){
 }
 export function createMinimap(canvas,world){
  const background=document.createElement('canvas');background.width=1300;background.height=900;
- const ctx=canvas.getContext('2d');let ready=false;
+ const ctx=canvas.getContext('2d');let signature='';
  const size=240,span=1000,scale=background.width/world.width;
  canvas.width=size;canvas.height=size;
  return {paint(state,assets,target){
   if(!assets)return;
-  if(!ready){drawAtlas(background.getContext('2d'),world,assets,{visited:[],humans:[],player:{x:-1000,y:-1000}},null);ready=true;}
+  const next=JSON.stringify([Math.round(state.player.x/30),Math.round(state.player.y/30),state.visited]);
+  if(signature!==next){drawAtlas(background.getContext('2d'),world,assets,{...state,humans:[],quest:null},null);signature=next;}
   const project=localProjection(state.player,size,span);
   ctx.clearRect(0,0,size,size);ctx.save();ctx.beginPath();ctx.arc(120,120,116,0,Math.PI*2);ctx.clip();
   ctx.fillStyle='#254a38';ctx.fillRect(0,0,size,size);

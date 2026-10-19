@@ -52,6 +52,11 @@ node --test test/*.test.mjs
 
 ## 線上遊玩
 
-https://nccu-pangolin-game.speedyswan.chatgpt.site
+https://frankfangcode.github.io/nccu-pangolin-game/
 
 公開免登入。進度保存在各自瀏覽器，與本機預覽分開。部署與更新紀錄見 HANDOFF.md。
+
+## v12 正門探索
+從校門外直走進校園；鏡頭靠近角色，地圖隨探索顯示。建築與道路比對及缺照處詳見 BUILDINGS-v12.md。
+
+main推送後，GitHub Actions先跑測試，再以scripts/package-site.mjs封裝、發布至GitHub Pages。遊戲來源保持私有，網站公開。

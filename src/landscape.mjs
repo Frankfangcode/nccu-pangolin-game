@@ -1,3 +1,4 @@
+import {knownPlaces,exploredAreas} from './exploration.mjs';
 const patterns=new WeakMap();
 function material(c,a,name){
  let cache=patterns.get(c);if(!cache){cache={};patterns.set(c,cache);}
@@ -8,7 +9,14 @@ function stroke(c,points,width,paint){
 }
 export function drawGround(c,world,a){
  c.fillStyle=material(c,a,'grass');c.fillRect(-1000,-1000,world.width+2000,world.height+2000);
- for(const r of world.roads)stroke(c,r,72,material(c,a,'path'));
+ for(const r of world.roads.slice(4))stroke(c,r,48,material(c,a,'path'));
+ for(const r of world.roadStyles??[])stroke(c,r.points,r.width+12,'#d0cbbb');
+ for(const r of world.roadStyles??[]){
+  stroke(c,r.points,r.width,({asphalt:'#7a807b',brick:'#bd7d60',stone:'#b9b9a4'})[r.surface]);
+ }
+ // Pedestrian crossing immediately outside the open gate lane.
+ for(let x=2320;x<=2400;x+=16){c.fillStyle='#f4edda';c.fillRect(x,3340,8,40);}
+
  for(const r of world.water){stroke(c,r.points,r.width+14,'#a0c895');stroke(c,r.points,r.width,material(c,a,'water'));}
 }
 export function drawPlace(c,p,a){
@@ -23,8 +31,12 @@ export function drawAtlas(c,world,a,state,target){
  const w=c.canvas.width,h=c.canvas.height;c.clearRect(0,0,w,h);if(!a)return;
  const scale=Math.min(w/world.width,h/world.height),ox=(w-world.width*scale)/2,oy=(h-world.height*scale)/2;
  c.save();c.translate(ox,oy);c.scale(scale,scale);drawGround(c,world,a);
- for(const p of [...world.landmarks,...(world.trees??[]).map(p=>({...p,asset:'tree'}))].sort((a,b)=>a.y-b.y))drawPlace(c,p,a);
+ for(const p of [...knownPlaces(state,world),...(world.trees??[]).map(p=>({...p,asset:'tree'}))].sort((a,b)=>a.y-b.y))drawPlace(c,p,a);
  for(const b of world.bridges.filter(b=>!world.landmarks.some(p=>p.kind==='bridge'&&Math.abs(p.x-b.x-b.w/2)<1)))drawPlace(c,{x:b.x+b.w/2,y:b.y+b.h,w:b.w,h:b.h,asset:'bridge-ns',kind:'bridge',vertical:true},a);
+ // Hide unexplored terrain; only visited neighborhoods and the current view remain.
+ c.globalCompositeOperation='destination-in';c.beginPath();
+ for(const area of exploredAreas(state,world)){c.moveTo(area.x+area.radius,area.y);c.arc(area.x,area.y,area.radius,0,Math.PI*2);}
+ c.fill();c.globalCompositeOperation='source-over';
  c.restore();
  function dot(p,color,r){c.fillStyle=color;c.strokeStyle='#fff9e7';c.lineWidth=2;c.beginPath();c.arc(ox+p.x*scale,oy+p.y*scale,r,0,Math.PI*2);c.fill();c.stroke();}
  for(const p of world.landmarks)if(state.visited?.includes(p.id))dot(p.entry,'#2b6346',3);
