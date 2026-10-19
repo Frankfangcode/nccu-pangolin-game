@@ -1,0 +1,44 @@
+[
+  {
+    "name": "roman",
+    "photo": "src/world/buildings/roman-plaza/photos/moon-gate-frames.jpg",
+    "details": "NCCU Roman Plaza: low SEMICIRCULAR gray concrete open pergola, panels pierced with full circular moon gate holes alternating open rectangular bays, square posts and continuous top beam, sparse green vine canopy and dark thin inner posts. No classical arches, no red roof. Open foreground center.",
+    "result": "Generated images are saved to /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d as /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d/exec-ddb57797-045e-414b-88e1-5fabc7ea23d8.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  },
+  {
+    "name": "law",
+    "photo": "src/world/buildings/law-school/photos/aerial-northwest.jpg",
+    "details": "NCCU College of Law: long narrow eight storey slab, charcoal gray narrow left end with tall white rectangular frame and TWO orange projecting balcony boxes, long main elevation has white horizontal floor bands and thin orange vertical fins over dark windows, recessed glass lower two floors, white projecting flat roof with two gray mechanical boxes.",
+    "result": "Generated images are saved to /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d as /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d/exec-9a13bab0-8675-48f0-b6fc-7b3b61379b2a.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  },
+  {
+    "name": "computer",
+    "photo": "src/world/buildings/computer-center/photos/tower-and-info-building.jpg",
+    "details": "NCCU computer center AND connected information building as ONE asset. Tall pale gray tower on LEFT about eight floors, strong raised central crown and recessed vertical window frame, slim round corner column with fan window ornament. Connect via low four floor wing with horizontal blue-gray open gallery railings to RIGHT low information building with square parapet and small round rooftop tank. Tower distinctly much taller than wing.",
+    "result": "Generated images are saved to /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d as /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d/exec-e16e44e2-8ac1-43c6-83dc-30d60262bf8d.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  },
+  {
+    "name": "jiying",
+    "photo": "src/world/buildings/jiying-hall/photos/front-north.jpg",
+    "details": "NCCU Jiying Hall, asymmetrical modern four storey low block, photo exact facade arrangement: tall plain off-white mass at LEFT, broad projecting taupe brown horizontal balcony bands and dark continuous strip windows on RIGHT, recessed ground-floor shop arcade, green bookstore fascia left and dark navy restaurant fascia right, narrow yellow low wall. Flat roof with setback top storey. No pitched roof or classical arches.",
+    "result": "Generated images are saved to /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d as /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d/exec-51a73fd0-5b83-4280-90e6-0804a336c5a5.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  },
+  {
+    "name": "gym",
+    "photo": "src/world/buildings/track/photos/gym-and-track.jpg",
+    "details": "ONLY the gym on LEFT of reference photo, omit tall towers behind: NCCU gym is low broad trapezoidal hall with inward sloping pale gray side buttresses, flat shallow roof extending back, broad deep dark recessed front glazed entrance, white thin columns, two mustard yellow vertical perforated wall panels framing front entrance. No curved roof, no round arch.",
+    "result": "Generated images are saved to /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d as /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d/exec-32a8c133-2771-4e42-becb-15a536b6b078.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  },
+  {
+    "name": "admin",
+    "photo": "src/world/buildings/command-stand/photos/side-with-admin-building.jpg",
+    "details": "ONLY the administration building BEHIND the foreground covered stand in reference. Omit foreground stand entirely. Tall broad rectangular pale gray concrete civic building, flat roof, strong heavy top storey projecting slightly with tall narrow deep recessed vertical windows, stacked rows of small deep rectangular windows below, substantial central entrance void at bottom, lower side wings. No pediment, no roof courtyard, no glass blue office facade.",
+    "result": "Generated images are saved to /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d as /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d/exec-33b76a26-68a9-4451-a12f-45f86ef7cd21.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  },
+  {
+    "name": "zonghe",
+    "photo": "src/world/buildings/track/photos/gym-and-track.jpg",
+    "details": "ONLY tall combined academic building on RIGHT of reference, omit gym and track. NCCU combined college building: pale muted pink-gray complex, two tall broad rectangular towers connected by a recessed middle wing of dark horizontal balcony bands; left tower roughly 17 floors with disciplined dense grid of small dark square windows, right tower taller than middle wing, flat roofs, large open rectangular sky passage near top center. No orange brick, no blue cylinder, no pitched roof.",
+    "result": "Generated images are saved to /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d as /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d/exec-058e8d9d-63f0-4cd6-bc52-6ed513b24614.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  }
+]

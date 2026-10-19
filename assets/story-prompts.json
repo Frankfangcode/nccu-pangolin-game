@@ -1,0 +1,19 @@
+{
+  "scenes": [
+    [
+      "awakening",
+      "Inside a cozy university student robotics workshop, an East Asian college student with short dark hair and green sweatshirt sitting at a desk holding a small controller, looking warmly at a small brown pangolin robot on the desk. The pangolin has simple polygon brown scales, long tapered tail, tiny black eyes, a tiny teal indicator on one shoulder. Laptop has abstract shapes no words. Window shows wooded Taiwanese campus hillside. Soft daylight."
+    ],
+    [
+      "cat",
+      "On a wooded hillside path at National Chengchi University Taiwan: small brown pangolin robot with polygon brown scales, long tapered tail and a tiny teal indicator on shoulder looks up at a sleek solid BLACK cat with amber eyes sitting on a low stone wall beside steps. The cat is skeptical but charming, one raised eyebrow. Both characters fully visible in central frame. Green trees and distant cream campus building. Friendly sunny mystery, not gloomy."
+    ],
+    [
+      "mission",
+      "Same solid BLACK cat with amber eyes standing on a stone wall beside a brown polygon-scaled pangolin robot with long tail and tiny teal shoulder indicator. Cat points paw toward a distant blue-roof campus hall downhill. A single Taiwan blue magpie, blue body black head red beak long tail, perches on a nearby branch watching them. Taiwan hillside university campus with paths and green trees. A sense of setting off together. Characters central."
+    ]
+  ],
+  "reference": "assets/flat/pangolin/sheet-transparent.png",
+  "style": "Flat cartoon, three 3:2 panels; no lettering; original human student, black cat, robotic pangolin; all generated with image_gen.",
+  "missionCorrection": "Replaced inaccurate domed hall using assets/flat/hall.png as reference; preserved characters."
+}

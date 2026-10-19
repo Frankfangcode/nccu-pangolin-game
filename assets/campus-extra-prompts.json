@@ -1,0 +1,22 @@
+[
+  {
+    "name": "bridge-ns",
+    "prompt": "Create ONE isolated 2D flat cartoon campus pedestrian bridge sprite. Exact north-south vertical orientation, straight deck extending from bottom of image to top. TOP DOWN view, no perspective convergence. Warm tan rectangular deck with sparse simple plank lines. Thin dark gray railing along LEFT and RIGHT sides only. TOP and BOTTOM ends open for walking. NO support legs, NO piers, NO shadows, NO river, NO ground. Long slender rectangle, ratio width to height 1:3. Simple solid flat colors, no realistic texture. Center object with 12% margins on pure solid magenta #FF00FF. No words.",
+    "output": "Generated images are saved to /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d as /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d/exec-fd09dbb1-5106-4ad2-bc2e-6aacacc9c7b7.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  },
+  {
+    "name": "deck",
+    "prompt": "Create ONE isolated reusable 2D flat cartoon game sprite: an NCCU hillside wooden lookout platform, a wide low tan wooden deck with simple dark brown railings along back and sides, open front steps. NO pavilion, NO roof, NO tall posts, NO trees, NO ground, NO people or lettering. Match approved reference flat polygon color planes, very low detail, three-quarter overhead view, no realistic texture. Center complete object on pure magenta #FF00FF with generous margins.",
+    "output": "Generated images are saved to /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d as /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d/exec-3f28b981-5265-4b85-976a-bbc5ebc4851c.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  },
+  {
+    "name": "field",
+    "prompt": "Create ONE isolated 2D flat cartoon overhead recreation sports field for NCCU six-phase sports ground: wide green grass rectangle with six narrow white rectangular practice lanes in two neat rows, simple flat white markings, NO nets, NO tennis or basketball circles, NO people, NO words, NO surroundings. Slight three-quarter overhead perspective matching game reference. Solid flat colors, no realistic texture. Center complete field on pure magenta #FF00FF with generous margins.",
+    "output": "Generated images are saved to /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d as /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d/exec-6a07f55f-8813-4309-a4dc-ee14882df0d7.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  },
+  {
+    "name": "backgate",
+    "prompt": "Create ONE isolated 2D flat cartoon campus back gate sprite: two short light gray stone pillars holding an open dark teal wrought iron gate, simple overhead connecting lintel, entrance gap in center fully open, three-quarter overhead game view, cream warm highlights, flat clean polygon color shapes matching reference, no text, no sign lettering, no people, no ground slab, no vegetation, no realistic detail. Entire object centered on pure magenta #FF00FF background with generous margins.",
+    "output": "Generated images are saved to /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d as /Users/frank/.codex/generated_images/01a153ee-89c8-7eb0-bbf1-a6527e75636d/exec-b4a622a0-8640-4146-b552-9aa6006688c1.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+  }
+]

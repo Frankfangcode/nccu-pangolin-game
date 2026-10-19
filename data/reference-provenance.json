@@ -1,0 +1,110 @@
+{
+  "commit": "482194eec5f02834d5da15132ac10bba26c4ccf1",
+  "buildings": [
+    {
+      "id": "admin-building",
+      "name": "行政大樓",
+      "path": "src/world/buildings/admin-building/index.js"
+    },
+    {
+      "id": "lohas-hall",
+      "name": "樂活館",
+      "path": "src/world/buildings/lohas-hall/index.js"
+    },
+    {
+      "id": "track",
+      "name": "田徑場",
+      "path": "src/world/buildings/track/index.js"
+    },
+    {
+      "id": "business-school",
+      "name": "商學院",
+      "path": "src/world/buildings/business-school/index.js"
+    },
+    {
+      "id": "jiying-hall",
+      "name": "集英樓",
+      "path": "src/world/buildings/jiying-hall/index.js"
+    },
+    {
+      "id": "guofu-hall",
+      "name": "果夫樓",
+      "path": "src/world/buildings/guofu-hall/index.js"
+    },
+    {
+      "id": "main-gate",
+      "name": "正門",
+      "path": "src/world/buildings/main-gate/index.js"
+    },
+    {
+      "id": "library",
+      "name": "中正圖書館",
+      "path": "src/world/buildings/library/index.js"
+    },
+    {
+      "id": "zhixi-hall",
+      "name": "志希樓",
+      "path": "src/world/buildings/zhixi-hall/index.js"
+    },
+    {
+      "id": "law-school",
+      "name": "法學院",
+      "path": "src/world/buildings/law-school/index.js"
+    },
+    {
+      "id": "research-building",
+      "name": "研究大樓",
+      "path": "src/world/buildings/research-building/index.js"
+    },
+    {
+      "id": "zonghe",
+      "name": "綜合院館",
+      "path": "src/world/buildings/zonghe/index.js"
+    },
+    {
+      "id": "uphill-campus",
+      "name": "山上校區",
+      "path": "src/world/buildings/uphill-campus/index.js"
+    },
+    {
+      "id": "siwei-hall",
+      "name": "四維堂",
+      "path": "src/world/buildings/siwei-hall/index.js"
+    },
+    {
+      "id": "command-stand",
+      "name": "司令台",
+      "path": "src/world/buildings/command-stand/index.js"
+    },
+    {
+      "id": "law-education-route",
+      "name": "法學院－教育學院照片街區",
+      "path": "src/world/buildings/law-education-route/index.js"
+    },
+    {
+      "id": "daren-hall",
+      "name": "大仁樓",
+      "path": "src/world/buildings/daren-hall/index.js"
+    },
+    {
+      "id": "computer-center",
+      "name": "電算中心與資訊大樓",
+      "path": "src/world/buildings/computer-center/index.js"
+    },
+    {
+      "id": "gym",
+      "name": "體育館",
+      "path": "src/world/buildings/gym/index.js"
+    },
+    {
+      "id": "swimming-hall",
+      "name": "游泳館",
+      "path": "src/world/buildings/swimming-hall/index.js"
+    },
+    {
+      "id": "roman-plaza",
+      "name": "羅馬廣場",
+      "path": "src/world/buildings/roman-plaza/index.js"
+    }
+  ]
+}

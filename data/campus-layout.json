@@ -1,0 +1,1029 @@
+{
+  "version": 5,
+  "reference": "User supplied NCCU illustrated map, 2026-10-19; relative placement only",
+  "width": 5200,
+  "height": 3600,
+  "scale": 4,
+  "landmarks": [
+    {
+      "id": "place-01",
+      "name": "政大校門",
+      "asset": "gate",
+      "x": 2360,
+      "y": 3180,
+      "w": 200,
+      "h": 400,
+      "kind": "landmark",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-02",
+      "name": "校友服務中心",
+      "asset": "office",
+      "x": 2620,
+      "y": 3152,
+      "w": 320,
+      "h": 220,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-03",
+      "name": "身心健康中心",
+      "asset": "heritage",
+      "x": 1980,
+      "y": 3240,
+      "w": 440,
+      "h": 240,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-04",
+      "name": "研究大樓",
+      "asset": "office",
+      "x": 2140,
+      "y": 3000,
+      "w": 360,
+      "h": 260,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-05",
+      "name": "學思樓",
+      "asset": "office",
+      "x": 1800,
+      "y": 2996,
+      "w": 340,
+      "h": 240,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-06",
+      "name": "志希樓",
+      "asset": "heritage",
+      "x": 2540,
+      "y": 2940,
+      "w": 320,
+      "h": 240,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-07",
+      "name": "果夫樓",
+      "asset": "heritage",
+      "x": 2860,
+      "y": 2972,
+      "w": 340,
+      "h": 232,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-08",
+      "name": "商學院",
+      "asset": "business",
+      "x": 2040,
+      "y": 2804,
+      "w": 560,
+      "h": 440,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-09",
+      "name": "資訊大樓",
+      "asset": "computer",
+      "x": 3200,
+      "y": 3048,
+      "w": 440,
+      "h": 360,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-10",
+      "name": "樂活館",
+      "asset": "heritage",
+      "x": 3100,
+      "y": 3304,
+      "w": 360,
+      "h": 232,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-11",
+      "name": "樂活小舖",
+      "asset": "shop",
+      "x": 3400,
+      "y": 3288,
+      "w": 240,
+      "h": 168,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-12",
+      "name": "新聞館",
+      "asset": "office",
+      "x": 3760,
+      "y": 3120,
+      "w": 280,
+      "h": 200,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-13",
+      "name": "大勇樓",
+      "asset": "office",
+      "x": 4000,
+      "y": 3028,
+      "w": 280,
+      "h": 232,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-14",
+      "name": "大仁樓",
+      "asset": "heritage",
+      "x": 4060,
+      "y": 3232,
+      "w": 260,
+      "h": 208,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-15",
+      "name": "大智樓",
+      "asset": "heritage",
+      "x": 3900,
+      "y": 3400,
+      "w": 300,
+      "h": 220,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-16",
+      "name": "集英樓",
+      "asset": "jiying",
+      "x": 3600,
+      "y": 3400,
+      "w": 320,
+      "h": 208,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-17",
+      "name": "道南橋",
+      "asset": "bridge",
+      "x": 4600,
+      "y": 3340,
+      "w": 440,
+      "h": 200,
+      "kind": "bridge",
+      "zone": "河岸"
+    },
+    {
+      "id": "place-18",
+      "name": "河堤籃球場",
+      "asset": "basketball",
+      "x": 4320,
+      "y": 2952,
+      "w": 360,
+      "h": 320,
+      "kind": "ground",
+      "zone": "河岸"
+    },
+    {
+      "id": "place-19",
+      "name": "景美溪",
+      "asset": "river-marker",
+      "x": 4832,
+      "y": 2680,
+      "w": 0,
+      "h": 0,
+      "kind": "nature",
+      "zone": "河岸"
+    },
+    {
+      "id": "place-20",
+      "name": "綜合院館",
+      "asset": "zonghe",
+      "x": 4060,
+      "y": 2688,
+      "w": 560,
+      "h": 580,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-21",
+      "name": "羅馬廣場",
+      "asset": "roman",
+      "x": 3640,
+      "y": 2720,
+      "w": 400,
+      "h": 260,
+      "kind": "landmark",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-22",
+      "name": "行政大樓",
+      "asset": "admin",
+      "x": 3240,
+      "y": 2580,
+      "w": 540,
+      "h": 420,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-23",
+      "name": "四維堂",
+      "asset": "hall",
+      "x": 2740,
+      "y": 2548,
+      "w": 480,
+      "h": 380,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-24",
+      "name": "中正圖書館",
+      "asset": "library",
+      "x": 2200,
+      "y": 2504,
+      "w": 600,
+      "h": 440,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-25",
+      "name": "法學院",
+      "asset": "law",
+      "x": 1700,
+      "y": 2588,
+      "w": 380,
+      "h": 440,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-26",
+      "name": "附設實幼",
+      "asset": "school",
+      "x": 1440,
+      "y": 2740,
+      "w": 300,
+      "h": 220,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-27",
+      "name": "莊敬九舍",
+      "asset": "dorm",
+      "x": 1120,
+      "y": 2640,
+      "w": 380,
+      "h": 380,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-28",
+      "name": "井塘樓",
+      "asset": "jingtang",
+      "x": 1260,
+      "y": 2400,
+      "w": 440,
+      "h": 380,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-29",
+      "name": "游泳館",
+      "asset": "pool",
+      "x": 1720,
+      "y": 2300,
+      "w": 600,
+      "h": 260,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-30",
+      "name": "風雩樓",
+      "asset": "office",
+      "x": 2880,
+      "y": 2232,
+      "w": 320,
+      "h": 240,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-31",
+      "name": "風雩走廊",
+      "asset": "walkway",
+      "x": 3360,
+      "y": 2120,
+      "w": 520,
+      "h": 180,
+      "kind": "landmark",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-32",
+      "name": "操場",
+      "asset": "track",
+      "x": 3760,
+      "y": 2328,
+      "w": 640,
+      "h": 400,
+      "kind": "ground",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-33",
+      "name": "體育館",
+      "asset": "gym",
+      "x": 4040,
+      "y": 2080,
+      "w": 520,
+      "h": 360,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-34",
+      "name": "達賢圖書館",
+      "asset": "daxian",
+      "x": 1080,
+      "y": 3168,
+      "w": 600,
+      "h": 460,
+      "kind": "building",
+      "zone": "山下校區"
+    },
+    {
+      "id": "place-35",
+      "name": "附設實小",
+      "asset": "school",
+      "x": 700,
+      "y": 1948,
+      "w": 480,
+      "h": 300,
+      "kind": "building",
+      "zone": "環山步道"
+    },
+    {
+      "id": "place-36",
+      "name": "濟賢橋",
+      "asset": "bridge",
+      "x": 2200,
+      "y": 2112,
+      "w": 240,
+      "h": 360,
+      "kind": "bridge",
+      "zone": "河岸"
+    },
+    {
+      "id": "place-37",
+      "name": "渡賢橋",
+      "asset": "bridge",
+      "x": 3400,
+      "y": 1920,
+      "w": 240,
+      "h": 360,
+      "kind": "bridge",
+      "zone": "河岸"
+    },
+    {
+      "id": "place-38",
+      "name": "指南溪",
+      "asset": "river-marker",
+      "x": 2840,
+      "y": 2000,
+      "w": 0,
+      "h": 0,
+      "kind": "nature",
+      "zone": "河岸"
+    },
+    {
+      "id": "place-39",
+      "name": "大坑溪",
+      "asset": "river-marker",
+      "x": 760,
+      "y": 1600,
+      "w": 0,
+      "h": 0,
+      "kind": "nature",
+      "zone": "環山步道"
+    },
+    {
+      "id": "place-40",
+      "name": "六期運動場",
+      "asset": "field",
+      "x": 1600,
+      "y": 1340,
+      "w": 680,
+      "h": 340,
+      "kind": "ground",
+      "zone": "環山步道"
+    },
+    {
+      "id": "place-41",
+      "name": "環山網球場",
+      "asset": "tennis",
+      "x": 1640,
+      "y": 1560,
+      "w": 600,
+      "h": 280,
+      "kind": "ground",
+      "zone": "環山步道"
+    },
+    {
+      "id": "place-42",
+      "name": "環山道木平台",
+      "asset": "deck",
+      "x": 2440,
+      "y": 1020,
+      "w": 440,
+      "h": 240,
+      "kind": "landmark",
+      "zone": "環山步道"
+    },
+    {
+      "id": "place-43",
+      "name": "環山一道",
+      "asset": "trail-marker",
+      "x": 2960,
+      "y": 1500,
+      "w": 0,
+      "h": 0,
+      "kind": "route",
+      "zone": "環山步道"
+    },
+    {
+      "id": "place-44",
+      "name": "環山二道",
+      "asset": "trail-marker",
+      "x": 1360,
+      "y": 1700,
+      "w": 0,
+      "h": 0,
+      "kind": "route",
+      "zone": "環山步道"
+    },
+    {
+      "id": "place-45",
+      "name": "待曦亭",
+      "asset": "pavilion",
+      "x": 3020,
+      "y": 1348,
+      "w": 400,
+      "h": 300,
+      "kind": "landmark",
+      "zone": "山上校區"
+    },
+    {
+      "id": "place-46",
+      "name": "行健道",
+      "asset": "trail-marker",
+      "x": 3260,
+      "y": 1492,
+      "w": 0,
+      "h": 0,
+      "kind": "route",
+      "zone": "山上校區"
+    },
+    {
+      "id": "place-47",
+      "name": "傳播學院",
+      "asset": "communication",
+      "x": 3360,
+      "y": 1740,
+      "w": 560,
+      "h": 440,
+      "kind": "building",
+      "zone": "山上校區"
+    },
+    {
+      "id": "place-48",
+      "name": "道藩樓",
+      "asset": "academic",
+      "x": 3880,
+      "y": 1740,
+      "w": 380,
+      "h": 320,
+      "kind": "building",
+      "zone": "山上校區"
+    },
+    {
+      "id": "place-49",
+      "name": "百年樓",
+      "asset": "bainian",
+      "x": 3640,
+      "y": 1408,
+      "w": 560,
+      "h": 400,
+      "kind": "building",
+      "zone": "山上校區"
+    },
+    {
+      "id": "place-50",
+      "name": "藝文中心",
+      "asset": "arts",
+      "x": 4220,
+      "y": 1552,
+      "w": 600,
+      "h": 460,
+      "kind": "building",
+      "zone": "山上校區"
+    },
+    {
+      "id": "place-51",
+      "name": "精神堡壘",
+      "asset": "monument",
+      "x": 3928,
+      "y": 1528,
+      "w": 180,
+      "h": 312,
+      "kind": "landmark",
+      "zone": "山上校區"
+    },
+    {
+      "id": "place-52",
+      "name": "季陶樓",
+      "asset": "academic",
+      "x": 3980,
+      "y": 1220,
+      "w": 500,
+      "h": 380,
+      "kind": "building",
+      "zone": "山上校區"
+    },
+    {
+      "id": "place-53",
+      "name": "國際大樓",
+      "asset": "international",
+      "x": 4000,
+      "y": 980,
+      "w": 560,
+      "h": 400,
+      "kind": "building",
+      "zone": "山上校區"
+    },
+    {
+      "id": "place-54",
+      "name": "醉夢湖",
+      "asset": "lake",
+      "x": 3400,
+      "y": 1080,
+      "w": 500,
+      "h": 300,
+      "kind": "nature",
+      "zone": "山上校區"
+    },
+    {
+      "id": "place-55",
+      "name": "蔣公銅像",
+      "asset": "statue",
+      "x": 4640,
+      "y": 1012,
+      "w": 260,
+      "h": 360,
+      "kind": "landmark",
+      "zone": "自強宿舍"
+    },
+    {
+      "id": "place-56",
+      "name": "後校門",
+      "asset": "backgate",
+      "x": 4760,
+      "y": 1100,
+      "w": 240,
+      "h": 220,
+      "kind": "landmark",
+      "zone": "自強宿舍"
+    },
+    {
+      "id": "place-57",
+      "name": "自強宿舍區",
+      "asset": "dorm",
+      "x": 4400,
+      "y": 580,
+      "w": 620,
+      "h": 480,
+      "kind": "building",
+      "zone": "自強宿舍"
+    },
+    {
+      "id": "place-58",
+      "name": "自強九舍・山居學習中心",
+      "asset": "dorm",
+      "x": 4260,
+      "y": 864,
+      "w": 460,
+      "h": 360,
+      "kind": "building",
+      "zone": "自強宿舍"
+    },
+    {
+      "id": "place-59",
+      "name": "自強十舍",
+      "asset": "dorm",
+      "x": 3900,
+      "y": 708,
+      "w": 400,
+      "h": 340,
+      "kind": "building",
+      "zone": "自強宿舍"
+    },
+    {
+      "id": "place-60",
+      "name": "安九食堂",
+      "asset": "canteen",
+      "x": 4540,
+      "y": 790,
+      "w": 320,
+      "h": 260,
+      "kind": "building",
+      "zone": "自強宿舍"
+    },
+    {
+      "id": "place-61",
+      "name": "產學營運暨創新育成中心",
+      "asset": "innovation",
+      "x": 3080,
+      "y": 776,
+      "w": 720,
+      "h": 440,
+      "kind": "building",
+      "zone": "山上校區"
+    },
+    {
+      "id": "place-62",
+      "name": "河堤棒球場",
+      "asset": "baseball",
+      "x": 4400,
+      "y": 1990,
+      "w": 440,
+      "h": 260,
+      "kind": "ground",
+      "zone": "河岸"
+    }
+  ],
+  "water": [
+    {
+      "id": "jingmei",
+      "points": [
+        [
+          1160,
+          305
+        ],
+        [
+          1150,
+          500
+        ],
+        [
+          1160,
+          650
+        ],
+        [
+          1150,
+          900
+        ]
+      ],
+      "width": 40
+    },
+    {
+      "id": "zhinan",
+      "points": [
+        [
+          0,
+          530
+        ],
+        [
+          250,
+          510
+        ],
+        [
+          450,
+          540
+        ],
+        [
+          650,
+          520
+        ],
+        [
+          850,
+          480
+        ],
+        [
+          1055,
+          450
+        ],
+        [
+          1160,
+          400
+        ]
+      ],
+      "width": 28
+    },
+    {
+      "id": "dakeng",
+      "points": [
+        [
+          170,
+          200
+        ],
+        [
+          220,
+          290
+        ],
+        [
+          210,
+          390
+        ],
+        [
+          250,
+          510
+        ]
+      ],
+      "width": 24
+    }
+  ],
+  "roads": [
+    [
+      [
+        200,
+        850
+      ],
+      [
+        580,
+        850
+      ],
+      [
+        1000,
+        875
+      ],
+      [
+        1100,
+        850
+      ]
+    ],
+    [
+      [
+        590,
+        850
+      ],
+      [
+        590,
+        680
+      ],
+      [
+        590,
+        630
+      ]
+    ],
+    [
+      [
+        240,
+        700
+      ],
+      [
+        450,
+        700
+      ],
+      [
+        700,
+        700
+      ],
+      [
+        1060,
+        700
+      ]
+    ],
+    [
+      [
+        250,
+        620
+      ],
+      [
+        450,
+        665
+      ],
+      [
+        700,
+        665
+      ],
+      [
+        850,
+        680
+      ],
+      [
+        1080,
+        680
+      ]
+    ],
+    [
+      [
+        250,
+        550
+      ],
+      [
+        480,
+        585
+      ],
+      [
+        670,
+        575
+      ],
+      [
+        850,
+        550
+      ],
+      [
+        1070,
+        550
+      ]
+    ],
+    [
+      [
+        250,
+        550
+      ],
+      [
+        250,
+        520
+      ],
+      [
+        300,
+        445
+      ],
+      [
+        450,
+        440
+      ],
+      [
+        550,
+        528
+      ],
+      [
+        550,
+        580
+      ]
+    ],
+    [
+      [
+        850,
+        550
+      ],
+      [
+        850,
+        480
+      ],
+      [
+        865,
+        460
+      ],
+      [
+        760,
+        395
+      ],
+      [
+        650,
+        325
+      ],
+      [
+        610,
+        255
+      ]
+    ],
+    [
+      [
+        300,
+        445
+      ],
+      [
+        290,
+        325
+      ],
+      [
+        410,
+        265
+      ],
+      [
+        610,
+        255
+      ],
+      [
+        740,
+        215
+      ],
+      [
+        900,
+        215
+      ]
+    ],
+    [
+      [
+        650,
+        325
+      ],
+      [
+        760,
+        360
+      ],
+      [
+        855,
+        385
+      ],
+      [
+        950,
+        400
+      ],
+      [
+        1080,
+        400
+      ]
+    ],
+    [
+      [
+        855,
+        385
+      ],
+      [
+        850,
+        300
+      ],
+      [
+        950,
+        275
+      ],
+      [
+        1040,
+        265
+      ],
+      [
+        1150,
+        280
+      ]
+    ],
+    [
+      [
+        900,
+        215
+      ],
+      [
+        940,
+        140
+      ],
+      [
+        1070,
+        90
+      ],
+      [
+        1190,
+        150
+      ],
+      [
+        1190,
+        280
+      ]
+    ],
+    [
+      [
+        1060,
+        700
+      ],
+      [
+        1080,
+        760
+      ],
+      [
+        1100,
+        835
+      ],
+      [
+        1220,
+        835
+      ]
+    ]
+  ]
+}

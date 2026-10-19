@@ -1,0 +1,22 @@
+{
+  "version": 3,
+  "scope": "Lower campus first level; relative positions from user map, not survey-accurate reconstruction",
+  "requests": [
+    {
+      "asset": "campus-ground",
+      "prompt": "Image1 is a geographic and architectural reference of National Chengchi University; Image2 sets the ART STYLE. Use simple FLAT cartoon cut-paper solid color shapes, only a few hard-edged tones, no realistic materials, no tiles/bricks/leaf details, no photorealism, no soft 3D rendering, no outlines. Original illustration. Create terrain-only 3:2 landscape runtime map focused on LOWER CAMPUS. Coordinates normalized: medium green lawn throughout. A flat pale blue horizontal stream occupies y=.07 to .16 all across top; joins flat blue river at right x=.94 to1 flowing down entire right edge. Only very top y<.06 has a few flat distant darkgreen hill silhouettes. Walkable lawn below y=.18 and left x=.93. Broad warm tan walking avenue horizontal from(.12,.64) to(.86,.64), vertical entry avenue x=.47 fromy=.64 to1. Short branches from(.345,.64) to(.345,.56), from(.58,.64) to(.58,.57), and from(.79,.64) to(.79,.46). Red oval running track centered(.79,.35), width.24 height.23, cream lane lines and flat green interior. Leave clear grass rectangles for separate building sprites: library x=.24-.45,y=.30-.56; hall x=.49-.67,y=.34-.57. Sparse flat triangular grass tufts like art reference, small flower dots. NO buildings, bridges, props, people, trees, labels, text, UI, perspective horizon. River must stay on TOP and RIGHT edges and track in UPPER RIGHT, not bottom."
+    },
+    {
+      "asset": "campus-hall",
+      "prompt": "Image1 is a geographic and architectural reference of National Chengchi University; Image2 sets the ART STYLE. Use simple FLAT cartoon cut-paper solid color shapes, only a few hard-edged tones, no realistic materials, no tiles/bricks/leaf details, no photorealism, no soft 3D rendering, no outlines. Original illustration. Generate ONE isolated Siwei Hall inspired by the small building labelled 四維堂 in campus reference: modest narrow two-storey light peach and cream hall, BLUE-TEAL pitched gabled roof with a few simple cream ridge lines, front gable, simple blue rectangular windows, brown central door. Clearly distinguish from a large classical palace. South-facing high three-quarter overhead camera, mostly front view, like game props. Entire building centered on uniform pure #FF00FF magenta with 15% margins. Flat large polygon colors, minimal details, no gradients. No ground, shadows, plants, text or labels."
+    },
+    {
+      "asset": "campus-library",
+      "prompt": "Image1 is a geographic and architectural reference of National Chengchi University; Image2 sets the ART STYLE. Use simple FLAT cartoon cut-paper solid color shapes, only a few hard-edged tones, no realistic materials, no tiles/bricks/leaf details, no photorealism, no soft 3D rendering, no outlines. Original illustration. Generate ONE isolated old Zhongzheng Library inspired by building labelled 中正圖書館 in campus reference: three-storey cream low broad library, warm BROWN flat roof with a small rectangular open courtyard/skylight, rounded/chamfered broad front facade with horizontal terracotta bands, small simple blue windows, central entrance. Roof visible in south-facing overhead three-quarter view. Keep broad blocky shape and simple flat cut-paper colors, no glass skyscraper, no blue roof. Entire building centered on uniform pure #FF00FF magenta with15% margins. No ground, shadows, plants, text or labels."
+    },
+    {
+      "asset": "gate",
+      "prompt": "Image1 is a geographic and architectural reference of National Chengchi University; Image2 sets the ART STYLE. Use simple FLAT cartoon cut-paper solid color shapes, only a few hard-edged tones, no realistic materials, no tiles/bricks/leaf details, no photorealism, no soft 3D rendering, no outlines. Original illustration. ONE isolated small red brick campus entrance monument inspired by the vertical red-orange landmark labelled 政大校門 near bottom middle of campus map. Slender tall tapered red-orange obelisk on low stepped red base, small pale cream round medallion near top, two simple cream rectangular decorative plaques below. NO readable words or tiny writing. Flat matte polygon color shapes, original simple cartoon game prop, overhead front three-quarter view. Center full monument with ample margins on uniform pure #FF00FF magenta. No ground, shadows, trees, text, labels, borders."
+    }
+  ]
+}
