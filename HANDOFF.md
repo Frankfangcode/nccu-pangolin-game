@@ -1,3 +1,10 @@
+## 2026-10-20 緊急發布更新
+- 使用者要求盡速上線。GitHub 官方同時通報 Actions 與 Pages 降級；原 workflow run 39282052791 持續 queued，已提出取消並停用該 workflow，避免兩套發布流程競爭。
+- Node 24 完整測試 58/58 通過（允許本機回環連接埠的環境）；`scripts/package-site.mjs` 封裝 77 個 runtime 檔與 `.nojekyll`。封裝從獨立暫存庫推至公開 `gh-pages` 分支提交 `85a88982877a9615611b1418cee378633e2670f1`。Pages 設定改為 `legacy`，來源 `gh-pages:/`，沿用原網址 `https://frankfangcode.github.io/nccu-pangolin-game/`。
+- GitHub Pages API 已接收手動建置，最新建置指向上述提交但仍 `building`；公開網址實測 HTTP 404，**GitHub Pages 尚未上線**。恢復後要檢查建置結果並在原網址走正門、地圖與手機操作。後續正式更新若維持分支來源，需重新封裝、推送 `gh-pages`，並驗證；舊 workflow 已停用。
+- 為讓玩家立即玩到 v12，沿用既有公開 Sites 專案與原網址 `https://nccu-pangolin-game.speedyswan.chatgpt.site/`。來源提交 `d131a460daa2c5ee49107654f55c190e302047d3`，保存版本 `appgprj_6ad63ae8b8108191b5278566f73523ca~appgver_77afc0dfc2c08191bbe51e893e19cdc4`，部署 `appgdep_6ad64456530c8191b9e947029d8588ff` 成功。公開網址 HTTP 200；真實瀏覽器驗證入校、探索揭露、進度保存、桌機與手機畫面，console 0 errors / 0 warnings。此網址不是 GitHub Pages。
+- 本輪未修改遊戲程式；本交接文件與 README／QA 的狀態更新以 `[skip ci]` 提交至 main。
+
 ## 2026-10-20 使用者確認
 使用者明確選擇「維持公開，使用 GitHub Pages」，取代先前私有儲存庫要求。保留現有public設定，不另建網站。再次查詢run39282052791仍queued、尚無執行步驟；Pages狀態errored。下一步仍是等待既有run結果並完成正式網址驗收，不能宣稱已上線。
 

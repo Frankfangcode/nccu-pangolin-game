@@ -46,19 +46,21 @@ node --test test/*.test.mjs
 
 只有一條動物委託及三個小惡作劇；NPC 為靜態素材，沒有配音、帳號、雲端同步或多人模式。手機已用瀏覽器雙指事件驗證，尚未做實體手機長時間測試。存檔保存在瀏覽器，清除網站資料會失去進度。
 
-這是私有原型儲存庫，尚無正式網站或部署流程。`nccu100` 僅作為校舍／地圖參考，沒有修改該專案。美術與角色使用模型生成素材，未搬用參考遊戲資產。
+這是公開的遊戲原型儲存庫。`nccu100` 僅作為校舍／地圖參考，沒有修改該專案。美術與角色使用模型生成素材，未搬用參考遊戲資產。
 
 目前驗收見 [QA-v11.md](QA-v11.md)，交接見 [HANDOFF.md](HANDOFF.md)。
 
 ## 線上遊玩
 
-https://frankfangcode.github.io/nccu-pangolin-game/
+目前可玩的 v12：https://nccu-pangolin-game.speedyswan.chatgpt.site/
+
+GitHub Pages 預定網址：https://frankfangcode.github.io/nccu-pangolin-game/ （GitHub 服務異常時可能暫時為 404）
 
 公開免登入。進度保存在各自瀏覽器，與本機預覽分開。部署與更新紀錄見 HANDOFF.md。
 
 ## v12 正門探索
 從校門外直走進校園；鏡頭靠近角色，地圖隨探索顯示。建築與道路比對及缺照處詳見 BUILDINGS-v12.md。
 
-main推送後，GitHub Actions先跑測試，再以scripts/package-site.mjs封裝、發布至GitHub Pages。網站與GitHub儲存庫均公開，使用者於2026-10-20明確確認。
+遊戲封裝已推至 `gh-pages` 分支，GitHub Pages 設定為從該分支發布。原 Actions 工作因 GitHub 服務異常而卡住，已停用；後續更新需重新執行測試、封裝、推送 `gh-pages` 並驗收公開網址。網站與 GitHub 儲存庫均公開，使用者於 2026-10-20 明確確認。
 
-發布狀態：2026-10-20 00:02（台灣），GitHub Actions／Pages服務異常，工作排隊，網址尚未完成上線驗收。詳見HANDOFF.md。
+發布狀態：v12 已在既有公開試玩網址上線並完成核心流程驗收；GitHub Pages 的分支建置仍在處理，網址尚未完成上線驗收。詳見 HANDOFF.md。

@@ -39,4 +39,6 @@
 ## 偵測器
 Impeccable回報index.html的body/main/dialog裁切定位元素；滿版Canvas和原生dialog為既有設計，雙尺寸實測控制完整可用。已用hooks ignore-value僅忽略該檔的clipped-overflow-container；未忽略其他規則。設計sidecar版本過舊已回報，不在本輪擅自重建。
 
-正式站驗收未完成：GitHub Actions／Pages官方事故，run39282052791排隊、網址HTTP404；未宣稱發布成功。
+2026-10-20 緊急發布：GitHub Actions／Pages 官方事故。已將白名單封裝推至 `gh-pages` 分支並切換 Pages 來源；最新建置指向提交 `85a8898`，仍在 `building`，GitHub Pages 網址 HTTP 404，未宣稱上線。
+
+同版 v12 已更新到既有公開 Sites 網址，部署回報 `succeeded`，公開 URL 實測 HTTP 200。Playwright 在公開站實測：跳過開場、正門目標、地圖不顯示遠處醉夢湖、直走入校、提示推進、重新載入後保留到訪；1280×800 與 375×812 畫面已擷取到 `../../work/campus-v12/live-desktop.png`、`live-mobile.png`，console 0 errors / 0 warnings。此驗收不代表 GitHub Pages 已可玩，也未驗證實體手機長時間操作。
