@@ -1,4 +1,4 @@
-import {drawAtlas} from './landscape.mjs?v=12';
+import {drawAtlas} from './landscape.mjs?v=13';
 export function localProjection(player,size=240,span=1000){
  return p=>({x:size/2+(p.x-player.x)*size/span,y:size/2+(p.y-player.y)*size/span});
 }

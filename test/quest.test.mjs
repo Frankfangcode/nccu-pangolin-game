@@ -36,3 +36,32 @@ test('all quest destinations connect to campus paths and collection survives cap
  const carrying=at({stage:'return-magpie'},'treasure');
  assert.equal(capturePlayer(carrying,WORLD).quest.stage,'return-magpie');
 });
+test('first friend is reachable on the entrance walk without a cross-campus detour',async()=>{
+ const {findRoute}=await import('../src/navigation.mjs');
+ const route=findRoute(WORLD.start,QUEST_ACTORS.cat.entry,WORLD);
+ assert.ok(route);
+ const length=route.reduce((sum,p,i)=>i?sum+Math.hypot(p.x-route[i-1].x,p.y-route[i-1].y):sum,0);
+ assert.ok(length<600,`first meeting takes ${length} world units`);
+});
+test('pickup and handoff provide one scene event; hints cannot duplicate rewards',()=>{
+ const pickup=interactQuest(at({stage:'collect'},'treasure'),WORLD);
+ assert.deepEqual(pickup.feedback,{kind:'pickup',actor:'treasure',label:'收藏已收好'});
+ const again=interactQuest(at(pickup.state.quest,'treasure'),WORLD);
+ assert.equal(again.feedback,undefined);
+ const handoff=interactQuest(at(pickup.state.quest,'magpie'),WORLD);
+ assert.deepEqual(handoff.feedback,{kind:'handoff',actor:'magpie',label:'物歸原主'});
+ const finish=interactQuest(at({stage:'report-cat'},'cat'),WORLD);
+ assert.equal(finish.feedback.kind,'friendship');
+ assert.equal(interactQuest(at(finish.state.quest,'cat'),WORLD).feedback,undefined);
+ for(const status of ['alert','chase'])assert.equal(interactQuest({...at({stage:'collect'},'treasure'),status},WORLD).feedback,undefined);
+});
+test('scene cue shows carried treasure only until handoff, and greeting only nearby in safety',async()=>{
+ const {questScene}=await import('../src/quest.mjs');
+ const carrying=at({stage:'return-magpie'},'magpie');
+ assert.equal(questScene(carrying).carrying,true);
+ assert.equal(questScene(carrying).greeting,'magpie');
+ assert.equal(questScene({...carrying,status:'chase'}).greeting,null);
+ assert.equal(questScene({...carrying,player:WORLD.start}).greeting,null);
+ assert.equal(questScene(at({stage:'report-cat'},'cat')).carrying,false);
+ assert.equal(questScene(at({stage:'complete'},'cat')).greeting,'cat');
+});

@@ -1,16 +1,16 @@
-import {createTouchControls} from './touch.mjs?v=12';
-import {createQuest,QUEST_STEPS,questTarget,interactQuest} from './quest.mjs?v=12';
-import {readSave,writeSave} from './save.mjs?v=12';
-import {createStory} from './story.mjs?v=12';
-import {manifest} from './manifest.mjs?v=12';
+import {createTouchControls} from './touch.mjs?v=13';
+import {createQuest,QUEST_STEPS,questTarget,interactQuest} from './quest.mjs?v=13';
+import {readSave,writeSave} from './save.mjs?v=13';
+import {createStory} from './story.mjs?v=13';
+import {manifest} from './manifest.mjs?v=13';
 import {discoverPlaces,nearestPlace,entryObjective} from './exploration.mjs';
 import {findRoute} from './navigation.mjs';
-import {createAtlas} from './atlas.mjs?v=12';
-import { WORLD } from './world.mjs?v=12';
-import { createGame, stepMovement, advanceHumans, advanceAwareness, advanceChase, interact } from './rules.mjs?v=12';
-import { createInput } from './input.mjs?v=12';
-import { render,cameraFor } from './render.mjs?v=12';
-import {createMinimap} from './minimap.mjs?v=12';
+import {createAtlas} from './atlas.mjs?v=13';
+import { WORLD } from './world.mjs?v=13';
+import { createGame, stepMovement, advanceHumans, advanceAwareness, advanceChase, interact } from './rules.mjs?v=13';
+import { createInput } from './input.mjs?v=13';
+import { render,cameraFor } from './render.mjs?v=13';
+import {createMinimap} from './minimap.mjs?v=13';
 import { loadAssets } from './assets.mjs';
 let assets;
 const startButton=document.querySelector('#start');
@@ -47,12 +47,16 @@ function persist(){
 export function getGameSnapshot(){return structuredClone(state);}
 
 let target=null,route=null,lastRouteAt=0;
+let feedback=null,pendingFeedback=null,sceneTime=0;
 function guideTo(p){target=p;route=p?findRoute(state.player,p.entry,WORLD):null;lastRouteAt=0;}
 function guideQuest(){guideTo(entryObjective(state,WORLD)??questTarget(state.quest));}
 const atlas=createAtlas(WORLD,()=>state,()=>assets,guideTo);
 const questDialog=document.querySelector('#quest-dialog');
 document.querySelector('#quest-close').onclick=()=>questDialog.close();
-questDialog.addEventListener('close',()=>canvas.focus());
+questDialog.addEventListener('close',()=>{
+ if(pendingFeedback){feedback={...pendingFeedback,startedAt:sceneTime};pendingFeedback=null;}
+ canvas.focus();
+});
 document.querySelector('#quest-guide').onclick=()=>{guideQuest();canvas.focus();};
 document.querySelector('#scout').onclick=()=>{if(state.quest.stage==='complete')atlas.open();};
 function showQuestDialogue(data){
@@ -61,6 +65,10 @@ function showQuestDialogue(data){
  document.querySelector('#quest-text').textContent=data.text;
  document.querySelector('#quest-portrait').src=manifest[data.asset];
  document.querySelector('#quest-portrait').alt=data.speaker;
+ document.querySelector('#quest-close').textContent=({
+ 'meet-magpie':'去找藍鵲 →','collect':'我去找找 →','return-magpie':'收好，帶回去 →',
+ 'report-cat':'回去告訴黑貓 →','complete':'和朋友繼續散步 →'
+ })[state.quest.stage]??'繼續散步 →';
  questDialog.showModal();
 }
 
@@ -100,7 +108,7 @@ function frame(now) {
       state = advanceChase(state, dt, WORLD);
       if (actions.interact){
        const before=state.quest.stage,result=interactQuest(state,WORLD);
-       if(result.dialogue){state=result.state;showQuestDialogue(result.dialogue);if(state.quest.stage!==before)guideQuest();}
+       if(result.dialogue){state=result.state;pendingFeedback=result.feedback??null;showQuestDialogue(result.dialogue);if(state.quest.stage!==before)guideQuest();}
        else if(result.state!==state)state=result.state;
        else state=interact(state,WORLD);
       }
@@ -110,6 +118,9 @@ function frame(now) {
     }
   }
 
+  const paused=!started||dialog.open||atlas.dialog.open||story.dialog.open||questDialog.open||state.won;
+  if(!paused)sceneTime+=dt;
+  if(feedback&&sceneTime-feedback.startedAt>1.6)feedback=null;
   if(started)persist();
   const stage=state.quest.stage,step=QUEST_STEPS[stage];
   document.querySelector('#quest-guide').textContent=entryObjective(state,WORLD)?'從正門走進校園 ↗':step?`${step.objective} ↗`:'黑貓的委託 · 已完成 ✓';
@@ -136,7 +147,7 @@ function frame(now) {
   const touch = window.matchMedia('(pointer: coarse)').matches || width < 600;
   touchControls.show(touch&&started&&!dialog.open&&!atlas.dialog.open&&!story.dialog.open&&!questDialog.open&&!state.won);
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  render(ctx, state, WORLD, { width, height, time: now / 1000, touch, started, reduceMotion,route,target }, {assets});
+  render(ctx, state, WORLD, { width, height, time: now / 1000, touch, started, reduceMotion,route,target,sceneTime,feedback,conversing:questDialog.open }, {assets});
   if(now-mapPaintAt>150){minimap.paint(state,assets,target??questTarget(state.quest),cameraFor(state.player,WORLD,{width,height,touch}),{width,height});mapPaintAt=now;}
   document.querySelector('#counter').textContent=`今日搞怪　${state.completedPranks.length} / 3`;
   document.querySelector('#mood').textContent=state.status==='chase'?'被發現了！快躲進花叢':state.status==='alert'?'有人看過來了…':state.player.curled?'蜷縮中 · 花叢裡才安全':'躲好，別被人類發現。';
