@@ -136,3 +136,10 @@
 
 !/docs/small-adventure-v13.md
 !/QA-v13.md
+
+# v14: every runtime module, compact images and their tooling must ship.
+!/src/*.mjs
+!/assets/**/*.webp
+!/scripts/optimize-assets.py
+!/test/*.mjs
+!/QA-v14.md

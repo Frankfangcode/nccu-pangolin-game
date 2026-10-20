@@ -1,3 +1,6 @@
+## v14.2 修正：新檔被 .gitignore 白名單擋下（2026-10-20）
+v14 起正式站卡在「素材載入中…」：.gitignore 預設忽略全部，src/closeup.mjs 與所有 .webp 未被提交，main.mjs 匯入 404 導致整個模組失敗。已在白名單加入 src/*.mjs、assets/**/*.webp、test/*.mjs 等，並新增 deploy 測試：封裝出的每個執行檔都必須被 git 追蹤。驗證改用「從提交 clone 的乾淨副本」在瀏覽器實跑。新增檔案時務必確認 git status 有出現。
+
 ## v14.1 素材瘦身（2026-10-20）
 使用者回報正式站卡在「素材載入中…」很久。原因：開場前要下載54張PNG共17.4MB。新增 scripts/optimize-assets.py 產生 .webp（場景圖最長邊1024、任務小圖縮到實際顯示尺寸，故事插畫保留1536），manifest、故事、封裝改讀 .webp；PNG 保留為原始檔。啟動下載 17.4MB→約1.5MB；模擬快速4G 2.0秒進入故事。按鈕顯示載入百分比。70/70測試，畫面目視無明顯失真，console乾淨。新增或替換 PNG 後要重跑 optimize-assets.py。
 
