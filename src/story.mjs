@@ -27,7 +27,7 @@ export function createStory(onComplete){
    const id=++request,loader=new Image();
    loader.onload=()=>{if(id!==request)return;img.src=loader.src;img.hidden=false;status.hidden=true;retry.hidden=true;};
    loader.onerror=()=>{if(id!==request)return;status.textContent='插畫暫時沒載入。可以重試，或繼續讀故事。';retry.hidden=false;};
-   loader.src=`assets/story/${p.image}.webp?v=14`;
+   loader.src=`assets/story/${p.image}.webp?v=15`;
   }
  }
  next.onclick=()=>{state=advanceStory(state);if(state.done)finish();else show();};

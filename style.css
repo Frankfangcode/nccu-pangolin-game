@@ -129,3 +129,33 @@ button{transition:transform 120ms cubic-bezier(.2,.8,.2,1)}
 @keyframes closeup-hop{0%{transform:translate(0,36px)}55%{transform:translate(-60px,-96px) rotate(-14deg)}100%{transform:translate(-120px,4px) rotate(0)}}
 @media(max-width:600px){#closeup{inset:auto 12px 16px;margin:0;position:fixed;width:calc(100% - 24px);padding:16px}#closeup header h2{font-size:20px;margin-bottom:10px}#closeup-hint{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.closeup-stage .claw,.closeup-stage .duck{transition:none}.closeup-stage.done .face.silly,.closeup-stage.done .frog{animation:none}.closeup-stage.done .frog{transform:translate(-120px,4px)}}
+/* v15 mobile-first: landscape phones, press anywhere to steer */
+.game-shell{min-height:0}
+#joystick{left:0;top:0;bottom:auto;width:104px;height:104px;margin:-52px 0 0 -52px;pointer-events:none;opacity:0;transition:opacity 120ms ease-out}
+#joystick.held{opacity:1}
+#joystick span{width:44px;height:44px}
+#touch-hint{position:absolute;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);margin:0;padding:6px 14px;border-radius:999px;background:#244638c4;color:var(--paper);font-size:12px;white-space:nowrap;pointer-events:none;transition:opacity .4s}
+#touch-controls:has(#joystick.held) #touch-hint{opacity:0}
+.touch-actions{right:max(20px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom))}
+.touch-actions button{width:58px;height:58px;font-size:13px}.touch-actions #touch-interact{width:66px;height:66px;margin-bottom:30px}
+#rotate{display:none;position:fixed;inset:0;z-index:50;background:var(--ink);color:var(--paper);flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:24px}
+#rotate span{font-size:46px;display:inline-block;animation:rotate-hint 1.8s ease-in-out infinite}
+#rotate strong{font-size:20px}#rotate small{font-size:13px;opacity:.8}
+@keyframes rotate-hint{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
+@media (orientation:portrait) and (pointer:coarse){#rotate{display:flex}}
+@media (prefers-reduced-motion:reduce){#rotate span{animation:none;transform:rotate(90deg)}}
+/* Landscape phones: short screens get a compact HUD that stays out of the playfield */
+@media (max-height:500px){
+ .hud{top:max(10px,env(safe-area-inset-top));left:max(14px,env(safe-area-inset-left));right:max(14px,env(safe-area-inset-right))}
+ .hud .identity,.hud .mission,footer{display:none}
+ .hud #map-toggle{width:84px;height:84px;top:0;right:52px}
+ .hud #help{width:40px;height:40px;font-size:18px}
+ .quest-hud{top:max(10px,env(safe-area-inset-top));left:max(14px,env(safe-area-inset-left));max-width:260px;padding:0;background:transparent;box-shadow:none}
+ .quest-hud>span{display:none}.quest-hud button{min-height:38px;padding:6px 12px;font-size:13px}
+ .explore-hud{top:58px;left:max(14px,env(safe-area-inset-left));font-size:11px}.explore-hud #explored{display:none}
+ #danger{top:auto;bottom:max(14px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);max-width:60%}
+ .toast{bottom:64px}
+ #quest-dialog,#closeup{inset:auto 12px 10px auto;margin:0;position:fixed;width:min(520px,calc(100% - 24px));max-height:calc(100svh - 20px);padding:14px 18px}
+ .closeup-stage{max-height:52svh;margin:0 auto}
+ #closeup header h2{font-size:18px;margin:2px 0 8px}#closeup-hint{margin-top:8px;font-size:13px}#closeup-act{margin-top:6px;min-height:44px;padding:10px 18px}
+}

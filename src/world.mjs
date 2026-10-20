@@ -1,5 +1,5 @@
 import {isBlocked,segmentDistance} from './navigation.mjs';
-import {CAMPUS} from './campus-data.mjs?v=14';
+import {CAMPUS} from './campus-data.mjs?v=15';
 const aliases={school:'heritage',shop:'heritage',canteen:'heritage',academic:'office'};
 const landmarks=CAMPUS.landmarks.map(p=>{
  const n={...p,asset:aliases[p.asset]??p.asset,w:p.w*.72,h:p.h*.72};

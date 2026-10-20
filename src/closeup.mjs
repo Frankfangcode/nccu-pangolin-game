@@ -92,7 +92,7 @@ export function createCloseup(dialog) {
       stage.innerHTML = `<svg viewBox="0 0 400 260" role="img" aria-label="${p.title}特寫">${scene.svg}${CLAW}</svg>`;
       place.textContent = `${p.title} · 近距離`;
       title.textContent = p.action;
-      hint.textContent = `${scene.hint}，或按 E`;
+      hint.textContent = window.matchMedia('(pointer: fine)').matches ? `${scene.hint}，或按 E` : scene.hint;
       act.textContent = `伸出爪子 · ${scene.cta}`;
       act.disabled = false;
       dialog.showModal();

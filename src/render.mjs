@@ -1,11 +1,11 @@
-import {QUEST_ACTORS,questTarget,questScene} from './quest.mjs?v=14';
-import {drawGround,drawPlace,drawRoute} from './landscape.mjs?v=14';
+import {QUEST_ACTORS,questTarget,questScene} from './quest.mjs?v=15';
+import {drawGround,drawPlace,drawRoute} from './landscape.mjs?v=15';
 import { depthSort } from './assets.mjs';
-import {visionOf,activityOf,isWaking} from './rules.mjs?v=14';
+import {visionOf,activityOf,isWaking} from './rules.mjs?v=15';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export function cameraFor(player,world,{width,height,touch}) {
- const zoom=touch?1.15:1.75,viewWidth=width/zoom,viewHeight=height/zoom;
- return {zoom,width:viewWidth,height:viewHeight,x:clamp(player.x-viewWidth/2,0,Math.max(0,world.width-viewWidth)),y:Math.max(0,player.y-viewHeight*(touch?.55:.62))};
+ const zoom=touch?clamp(height/430,.78,1.15):1.75,viewWidth=width/zoom,viewHeight=height/zoom;
+ return {zoom,width:viewWidth,height:viewHeight,x:clamp(player.x-viewWidth/2,0,Math.max(0,world.width-viewWidth)),y:Math.max(0,player.y-viewHeight*(touch?.58:.62))};
 }
 
 function text(c,t,x,y,size=14,color='#fff9e7'){c.font=`700 ${size}px "PingFang TC", sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillStyle=color;c.fillText(t,x,y);}

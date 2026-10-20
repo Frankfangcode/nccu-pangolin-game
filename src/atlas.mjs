@@ -1,6 +1,6 @@
-import {questTarget} from './quest.mjs?v=14';
+import {questTarget} from './quest.mjs?v=15';
 import {filterPlaces,knownPlaces} from './exploration.mjs';
-import {drawAtlas} from './landscape.mjs?v=14';
+import {drawAtlas} from './landscape.mjs?v=15';
 export function createAtlas(world,getState,getAssets,onSelect){
  const dialog=document.querySelector('#atlas'),canvas=document.querySelector('#atlas-map'),list=document.querySelector('#place-list'),query=document.querySelector('#place-search'),zone=document.querySelector('#zone-filter');
  let selected=null;
