@@ -199,3 +199,22 @@ export function pangolin(frame = 0, curled = false) {
       e(55, 25, 9, 7.5, P.pangolinBelly) + path('M60 22 L74 27 L61 30 Z', P.pangolinBelly) + c(58, 23, 1.8, P.eye) + c(48, 22, 1.8, P.glass),
   };
 }
+
+// Palms along the avenue (nccu100 vegetation.js): tall coconut palm and short fan palm.
+export function palm(fan = false) {
+  const n = fan ? 13 : 9, cx = 100, cy = fan ? 92 : 70, len = fan ? 58 : 84;
+  let fronds = '';
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + (i / (n - 1) - .5) * (fan ? 3.3 : 5.6) + (fan ? 0 : (i % 2 ? .1 : -.1));
+    const droop = fan ? .1 : .35, tx = cx + Math.cos(a) * len, ty = cy + Math.sin(a) * len * .7 + Math.abs(Math.cos(a)) * len * droop;
+    const nx = -Math.sin(a) * (fan ? 5 : 9), ny = Math.cos(a) * (fan ? 5 : 9);
+    const mx = (cx + tx) / 2, my = (cy + ty) / 2 - (fan ? 0 : 6);
+    fronds += path(`M${cx} ${cy} Q${(mx + nx).toFixed(1)} ${(my + ny).toFixed(1)} ${tx.toFixed(1)} ${ty.toFixed(1)} Z`, i % 2 ? P.palmFrondDark : P.palmFrond) +
+      path(`M${cx} ${cy} Q${(mx - nx).toFixed(1)} ${(my - ny).toFixed(1)} ${tx.toFixed(1)} ${ty.toFixed(1)} Z`, P.palmFrondLight);
+  }
+  const top = cy + 4, foot = fan ? 150 : 250;
+  const trunk = fan ? path(`M96 ${top} L94 ${foot} L106 ${foot} L104 ${top} Z`, P.fanTrunk)
+    : path(`M97 ${top} L93 ${foot} L101 ${foot} L101 ${top} Z`, P.palmTrunk) + path(`M101 ${top} L101 ${foot} L108 ${foot} L104 ${top} Z`, P.palmTrunkDark) +
+      Array.from({ length: 12 }, (_, i) => r(93, top + 12 + i * 14, 15, 2, P.palmTrunkDark)).join('');
+  return { w: 200, h: foot + 8, body: spikyShadow(112, foot, fan ? 46 : 60, fan ? 10 : 13, 20) + trunk + fronds + c(cx, cy, fan ? 5 : 7, fan ? P.palmFrondDark : P.trunk) };
+}

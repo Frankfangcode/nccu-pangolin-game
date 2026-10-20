@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#244638"><title>v15 風格樣張 · 正門前廣場</title><link rel="icon" href="data:,">
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#244638"><title>v15 區域一 · 正門到噴水池</title><link rel="icon" href="data:,">
 <style>
 :root{--paper:#fff8e8;--ink:#244638}
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#6cb54a;font-family:"Avenir Next","PingFang TC",sans-serif}
@@ -12,9 +12,9 @@ canvas{display:block;width:100vw;height:100svh;touch-action:none}
 @media (orientation:portrait) and (pointer:coarse){.rotate{display:flex}}
 </style></head>
 <body>
-<canvas id="scene" aria-label="v15 風格樣張：政大正門前廣場。方向鍵或拖曳畫面移動，C 蜷縮。"></canvas>
-<p class="tag">v15 風格樣張 · 正門前廣場<a href="./">回遊戲 ↗</a></p>
+<canvas id="scene" aria-label="v15 區域一：政大正門到噴水池。方向鍵或拖曳畫面移動，C 蜷縮。"></canvas>
+<p class="tag">v15 區域一 · 正門到噴水池<a href="./">回遊戲 ↗</a></p>
 <p class="hint">WASD／拖曳畫面移動 · 按住 C 蜷縮 · 靠近鴿子看看</p>
 <div class="rotate"><span>📱</span>轉成橫向更好玩</div>
-<script type="module">import {start} from './src/art/sample.mjs';window.__sample=start(document.querySelector('#scene'));</script>
+<script type="module">import {start} from './src/art/region.mjs';import {MAIN_GATE} from './src/regions/main-gate.mjs';window.__sample=start(document.querySelector('#scene'),MAIN_GATE);</script>
 </body></html>

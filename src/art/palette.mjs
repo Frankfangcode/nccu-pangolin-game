@@ -15,6 +15,17 @@ export const P = {
   pangolin: '#a3693f', pangolinDark: '#7d4c2c', pangolinBelly: '#e3b78d', eye: '#22201c',
   pigeon: '#9aa3ab', pigeonDark: '#78828b', mushroom: '#e8735c', mushroomStem: '#f6ead7', rock: '#a9a99e', rockDark: '#8d8d83',
   leafFall1: '#e6a44a', leafFall2: '#d77a3c', white: '#fffaf0', ink: '#244638',
+  // 區域一（正門）實景色：取自 nccu100 的材質色並配合切面亮暗
+  sidewalk: '#dccdb5', sidewalkJoint: '#c8b89e', sidewalkSouth: '#d4c6af', road: '#5b6270', roadDark: '#4f5562', roadYellow: '#f2d36b',
+  paver: '#c2bfb6', paverJoint: '#aeaba2', paverRing: '#cbc8bf', avenueEdge: '#8f8e88',
+  brickRed: '#c9695a', brickRedLight: '#d47a6a', brickRedDark: '#b0574a', brickBase: '#7b3a36', passage: '#4a3530',
+  concrete: '#a29e95', concreteTop: '#b9b5ac', concreteDark: '#8c8981', winDark: '#4a5b66', winLight: '#7d98a6',
+  granite: '#8c3b3e', graniteLight: '#a14d4f', graniteDark: '#6f2d30', gold: '#e8c57c', badgeBlue: '#2457a4',
+  flowerRed: '#d9363c', flowerOrange: '#f08a3c', planter: '#b9ad9a', hedge: '#4f9a48', hedgeTop: '#5fae52', hedgeDark: '#3d7d38',
+  cone: '#f0702e', boomRed: '#d8433f', boomYellow: '#f0c43a', bannerRed: '#d8433f', bannerYellow: '#efd54a', poleGrey: '#8f949a',
+  water: '#5f8f89', waterLight: '#8cbab3', basin: '#8f8577', basinTop: '#a39886',
+  palmFrond: '#4f9a3e', palmFrondLight: '#62b049', palmFrondDark: '#3d7f31', palmTrunk: '#cfc7b8', palmTrunkDark: '#b3aa98', fanTrunk: '#8f7c66',
+  signalGreen: '#52e08a', bowl: '#e9e8e3', bowlShade: '#c9c7bf', lavender: '#9b7fd0', busBlue: '#1f5fae', booth: '#a9d1e3', boothDark: '#86b4c9', boardBlue: '#7aa2c9', boardWood: '#6b4a35',
 };
 export const SHADOW = 'rgba(24,70,28,0.28)';
 export const PALETTE_VALUES = new Set([...Object.values(P), SHADOW]);
