@@ -15,16 +15,51 @@ export function svgMarkup({ w, h, body }, scale = 1) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${Math.round(w * scale)}" height="${Math.round(h * scale)}" viewBox="0 0 ${w} ${h}">${body}</svg>`;
 }
 
+// Low-poly facets, matching the original pangolin and walkers: a jittered
+// polygon fanned from a hub up-left of centre; faces toward the light are lighter.
+function facets(cx, cy, rad, n, seed, [light, mid, dark], squash = 1) {
+  let k = seed * 9301 + 49297;
+  const rnd = () => ((k = (k * 9301 + 49297) % 233280) / 233280);
+  const pts = Array.from({ length: n }, (_, i) => {
+    const a = i / n * Math.PI * 2 + (rnd() - .5) * .35, rr = rad * (.84 + rnd() * .2);
+    return [cx + Math.cos(a) * rr, cy + Math.sin(a) * rr * squash];
+  });
+  const hx = cx - rad * .2, hy = cy - rad * .24 * squash;
+  return pts.map((p, i) => {
+    const q = pts[(i + 1) % n], a = Math.atan2((p[1] + q[1]) / 2 - cy, (p[0] + q[0]) / 2 - cx);
+    const lit = (Math.cos(a + Math.PI * .75) + 1) / 2 + (i % 2 ? .08 : -.08);
+    const f = lit > .62 ? light : lit > .3 ? mid : dark;
+    const d = `M${hx.toFixed(1)} ${hy.toFixed(1)}L${p[0].toFixed(1)} ${p[1].toFixed(1)}L${q[0].toFixed(1)} ${q[1].toFixed(1)}Z`;
+    return `<path d="${d}" fill="${f}" stroke="${f}" stroke-width=".8" stroke-linejoin="round"/>`;
+  }).join('');
+}
+const spikyShadow = (cx, cy, rx, ry, n = 16) => path(Array.from({ length: n }, (_, i) => {
+  const a = i / n * Math.PI * 2, rr = i % 2 ? .78 : 1;
+  return `${i ? 'L' : 'M'}${(cx + Math.cos(a) * rx * rr).toFixed(1)} ${(cy + Math.sin(a) * ry * rr).toFixed(1)}`;
+}).join('') + 'Z', SHADOW);
+const LEAVES = [P.leafLight, P.leaf, P.leafDark];
+
 export function tree(kind = 0) {
-  const s = kind === 1 ? 0.8 : 1;
-  const k = (x, y, rad, f) => c(60 + (x - 60) * s, 100 + (y - 100) * s, rad * s, f);
+  if (kind === 2) return pine();
+  const s = kind === 1 ? .82 : 1, X = x => 60 + (x - 60) * s, Y = y => 104 + (y - 104) * s;
   return {
     w: 120, h: 150,
-    body: shadow(68, 140, 46 * s, 10 * s) +
-      r(54, 100, 12, 44, P.trunk, 3) + r(60, 100, 6, 44, P.trunkDark, 2) +
-      k(38, 90, 30, P.leafDark) + k(82, 90, 30, P.leafDark) + k(60, 100, 30, P.leafDark) +
-      k(36, 72, 30, P.leaf) + k(84, 72, 30, P.leaf) + k(60, 54, 34, P.leaf) + k(60, 80, 33, P.leaf) +
-      k(48, 46, 15, P.leafLight) + k(32, 64, 10, P.leafLight) + k(72, 38, 9, P.leafLight) + k(42, 30, 6, P.leafLight),
+    body: spikyShadow(70, 138, 50 * s, 12 * s) +
+      path('M54 96 L50 144 L60 146 L58 96 Z', P.trunk) + path('M58 96 L60 146 L70 144 L64 96 Z', P.trunkDark) +
+      facets(X(38), Y(92), 27 * s, 8, kind * 7 + 1, [P.leaf, P.leafDark, P.leafDeep], .9) +
+      facets(X(84), Y(90), 28 * s, 8, kind * 7 + 2, [P.leaf, P.leafDark, P.leafDeep], .9) +
+      facets(X(60), Y(96), 24 * s, 7, kind * 7 + 5, [P.leaf, P.leafDark, P.leafDeep], .7) +
+      facets(X(60), Y(64), 46 * s, 12, kind * 7 + 3, LEAVES, .92) +
+      facets(X(44), Y(48), 16 * s, 6, kind * 7 + 4, [P.leafLight, P.leafLight, P.leaf]),
+  };
+}
+
+function pine() {
+  const tier = (y, w, h) => path(`M60 ${y - h} L${60 - w} ${y} L60 ${y - 4} Z`, P.pineLight) + path(`M60 ${y - h} L60 ${y - 4} L${60 + w} ${y} Z`, P.pineDark) + path(`M${60 - w} ${y} L60 ${y - 4} L${60 + w} ${y} L60 ${y + 6} Z`, P.pine);
+  return {
+    w: 120, h: 160,
+    body: spikyShadow(70, 148, 40, 10, 18) + path('M56 120 L54 152 L66 152 L64 120 Z', P.trunkDark) +
+      tier(132, 46, 46) + tier(100, 38, 44) + tier(68, 28, 42),
   };
 }
 
@@ -32,10 +67,10 @@ export function bush(flowers = true) {
   const fl = (x, y) => [0, 1, 2, 3, 4].map(i => c(x + Math.cos(i * 1.256) * 2.6, y + Math.sin(i * 1.256) * 2.6, 2, P.petal)).join('') + c(x, y, 1.4, P.pollen);
   return {
     w: 72, h: 52,
-    body: shadow(40, 46, 32, 6) + c(22, 34, 16, P.bushDark) + c(50, 34, 16, P.bushDark) + c(36, 38, 15, P.bushDark) +
-      c(22, 28, 15, P.bush) + c(50, 28, 15, P.bush) + c(36, 20, 16, P.bush) + c(36, 31, 15, P.bush) +
-      c(30, 15, 6, P.leafLight) + c(16, 24, 4, P.leafLight) +
-      (flowers ? fl(24, 26) + fl(44, 18) + fl(52, 32) + fl(34, 36) : ''),
+    body: spikyShadow(40, 45, 32, 7, 14) +
+      facets(22, 32, 16, 7, 11, [P.bush, P.bushDark, P.leafDeep], .85) + facets(52, 32, 16, 7, 12, [P.bush, P.bushDark, P.leafDeep], .85) +
+      facets(37, 24, 20, 9, 13, [P.leafLight, P.bush, P.bushDark], .85) +
+      (flowers ? fl(26, 22) + fl(44, 16) + fl(54, 30) + fl(34, 33) : ''),
   };
 }
 
@@ -73,7 +108,7 @@ export function bicycle(color = P.red) {
 }
 
 export function rock() {
-  return { w: 30, h: 20, body: shadow(17, 17, 12, 3) + path('M3 16 Q2 6 12 4 Q24 2 27 12 Q28 17 20 17 Z', P.rock) + path('M12 4 Q22 3 25 9 Q18 8 12 10 Z', P.wall) + path('M3 16 Q14 18 27 14 Q26 18 18 18 L6 18 Z', P.rockDark) };
+  return { w: 32, h: 22, body: e(18, 18, 13, 3.5, SHADOW) + facets(15, 12, 12, 6, 21, [P.wall, P.rock, P.rockDark], .7) };
 }
 
 export function mushroom() {

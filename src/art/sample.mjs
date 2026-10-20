@@ -3,6 +3,33 @@
 import { P, SHADOW } from './palette.mjs';
 import * as S from './sprites.mjs';
 
+// Characters reuse the original game's faceted sheets (4 frames x 4 facings:
+// east, west, south, north). Extra walkers are recoloured from the explorer.
+const SHEETS = { human: 'assets/flat/human/sheet-transparent.webp', pangolin: 'assets/flat/pangolin/sheet-transparent.webp', curl: 'assets/flat/curl/curl-1.webp' };
+const ROW = { east: 0, west: 1, south: 2, north: 3 };
+const OUTFITS = { student: null, guard: { hat: [45, 74, 107], pack: [52, 80, 107] }, jogger: { hat: [228, 93, 76], pack: [63, 111, 181] }, reader: { hat: [90, 156, 110], pack: [242, 184, 75] } };
+const sheets = {};
+function hue(r, g, b) { const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn; if (!d) return [0, 0, mx / 255]; const h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; return [(h * 60 + 360) % 360, d / mx, mx / 255]; }
+function recolour(img, outfit) {
+  const cv = document.createElement('canvas'); cv.width = img.width; cv.height = img.height;
+  const x = cv.getContext('2d'); x.drawImage(img, 0, 0); if (!outfit) return cv;
+  const data = x.getImageData(0, 0, cv.width, cv.height), px = data.data;
+  for (let i = 0; i < px.length; i += 4) {
+    if (px[i + 3] < 10) continue;
+    const [h, sat, v] = hue(px[i], px[i + 1], px[i + 2]);
+    const target = sat > .45 && v > .3 ? (h >= 32 && h <= 58 ? outfit.hat : h >= 2 && h < 32 ? outfit.pack : null) : null;
+    if (target) { const k = v / .85; px[i] = Math.min(255, target[0] * k); px[i + 1] = Math.min(255, target[1] * k); px[i + 2] = Math.min(255, target[2] * k); }
+  }
+  x.putImageData(data, 0, 0); return cv;
+}
+export const ready = Promise.all(Object.entries(SHEETS).map(([k, url]) => new Promise((ok, fail) => { const i = new Image(); i.onload = () => ok([k, i]); i.onerror = fail; i.src = url; })))
+  .then(list => { const raw = Object.fromEntries(list); for (const [name, outfit] of Object.entries(OUTFITS)) sheets[name] = recolour(raw.human, outfit); sheets.pangolin = raw.pangolin; sheets.curl = raw.curl; });
+function actor(ctx, sheet, row, col, x, y, size) {
+  if (!sheets[sheet]) return;
+  ctx.fillStyle = SHADOW; ctx.beginPath(); ctx.ellipse(x + 4, y + 1, size * .24, size * .07, 0, 0, 7); ctx.fill();
+  ctx.drawImage(sheets[sheet], col * 128, row * 128, 128, 128, x - size / 2, y - size * .91, size, size);
+}
+
 const W = 1800, H = 1200;
 const ROAD = { y: 1020, h: 100 }, SIDEWALK = { y: 968, h: 52 };
 const PLAZA = { x: 640, y: 760, w: 520, h: 208 }, PATH = { x: 840, w: 120 };
@@ -21,7 +48,7 @@ add(S.nameWall(), 'namewall', 620, 962, { label: 'NATIONAL CHENGCHI UNIVERSITY',
 add(S.guardBooth(), 'booth', 1240, 860);
 // avenue of trees
 for (let y = 130, i = 0; y < 720; y += 125, i++) { add(S.tree(i % 2), `tree${i % 2}`, 770, y); add(S.tree((i + 1) % 2), `tree${(i + 1) % 2}`, 1030, y + 40); }
-for (const [x, y, k] of [[420, 260, 0], [300, 560, 1], [520, 700, 0], [1380, 300, 1], [1540, 620, 0], [1300, 640, 1], [160, 860, 0], [1660, 880, 1]]) add(S.tree(k), `tree${k}`, x, y);
+for (const [x, y, k] of [[420, 260, 0], [300, 560, 2], [520, 700, 0], [1380, 300, 2], [1540, 620, 0], [1300, 640, 1], [160, 860, 2], [1660, 880, 1], [120, 300, 2], [1680, 300, 0]]) add(S.tree(k), `tree${k}`, x, y);
 // plaza furniture
 add(S.bench(), 'bench', 700, 820); add(S.bench(), 'bench', 1100, 820);
 add(S.lamp(), 'lamp', 652, 780); add(S.lamp(), 'lamp', 1148, 780); add(S.lamp(), 'lamp', 440, 1012); add(S.lamp(), 'lamp', 1360, 1012);
@@ -37,8 +64,8 @@ for (let i = 0; i < 140; i++) {
   const x = rand() * W, y = rand() * (SIDEWALK.y - 40);
   if (onPaving(x, y)) continue;
   const kind = rand();
-  if (kind < .7) add(S.tuft(), 'tuft', x, y, { flat: true });
-  else if (kind < .82) add(S.rock(), 'rock', x, y);
+  if (kind < .7) continue;
+  else if (kind < .84) add(S.rock(), 'rock', x, y);
   else add(S.mushroom(), 'mushroom', x, y);
 }
 const leaves = Array.from({ length: 70 }, () => ({ x: PATH.x - 30 + rand() * (PATH.w + 60), y: rand() * PLAZA.y, k: rand() < .5 ? 0 : 1, a: rand() * 6 }));
@@ -47,7 +74,7 @@ const pigeons = [[860, 860], [890, 875], [930, 850], [720, 900]].map(([x, y], i)
 const people = [
   { look: 'student', x: 900, y: 600, route: [[900, 250], [900, 900]], speed: 34, phone: true, habit: 'phone' },
   { look: 'jogger', x: 300, y: 996, route: [[120, 996], [1700, 996]], speed: 80 },
-  { look: 'reader', x: 700, y: 470, route: null, dir: 'south', sitting: true },
+  { look: 'reader', x: 650, y: 486, route: null, dir: 'east', phone: true, habit: 'phone' },
   { look: 'guard', x: 1306, y: 868, route: null, habit: 'nap', dir: 'south' },
 ].map(p => ({ ...p, leg: 0, dir: p.dir ?? 'south', anim: 0 }));
 
@@ -67,10 +94,23 @@ function draw(ctx, key, sprite, x, y, flip = false) {
   ctx.drawImage(img, -sprite.w / 2, -sprite.h, sprite.w, sprite.h); ctx.restore();
 }
 
+let grassTile = null;
+function grassPattern(ctx) {
+  if (!grassTile) {
+    const t = document.createElement('canvas'); t.width = t.height = 240; const g = t.getContext('2d');
+    g.fillStyle = P.grass; g.fillRect(0, 0, 240, 240); seed = 41;
+    for (let i = 0; i < 900; i++) {
+      const x = rand() * 240, y = rand() * 240, h = 6 + rand() * 11, w = 1.1 + rand() * 1.5;
+      g.fillStyle = rand() < .55 ? P.bladeDark : P.bladeLight;
+      g.beginPath(); g.moveTo(x - w, y); g.lineTo(x + (rand() - .5) * 2, y - h); g.lineTo(x + w, y); g.fill();
+    }
+    for (let i = 0; i < 2; i++) { const x = rand() * 240, y = rand() * 240; g.fillStyle = P.flowerYellow; g.beginPath(); g.arc(x, y, 2.2, 0, 7); g.fill(); }
+    grassTile = ctx.createPattern(t, 'repeat');
+  }
+  return grassTile;
+}
 function ground(ctx) {
-  ctx.fillStyle = P.grass; ctx.fillRect(-400, -400, W + 800, H + 800);
-  seed = 99;
-  for (let i = 0; i < 70; i++) { ctx.fillStyle = rand() < .55 ? P.grassDark : P.grassLight; ctx.beginPath(); ctx.ellipse(rand() * W, rand() * SIDEWALK.y, 30 + rand() * 70, 14 + rand() * 30, 0, 0, 7); ctx.fill(); }
+  ctx.fillStyle = grassPattern(ctx); ctx.fillRect(-400, -400, W + 800, H + 800);
   // brick avenue
   ctx.fillStyle = P.brick; ctx.fillRect(PATH.x, -400, PATH.w, PLAZA.y + 400);
   ctx.fillStyle = P.brickJoint; for (let y = -400; y < PLAZA.y; y += 22) { ctx.fillRect(PATH.x, y, PATH.w, 2); for (let x = PATH.x + ((y / 22) % 2 ? 0 : 20); x < PATH.x + PATH.w; x += 40) ctx.fillRect(x, y, 2, 22); }
@@ -116,14 +156,14 @@ function update(dt, t) {
   if (player.moving) {
     dx /= Math.max(1, m); dy /= Math.max(1, m);
     player.x = Math.max(20, Math.min(W - 20, player.x + dx * 130 * dt)); player.y = Math.max(40, Math.min(H - 20, player.y + dy * 130 * dt));
-    if (Math.abs(dx) > .2) player.dir = dx > 0 ? 'east' : 'west';
+    player.dir = Math.abs(dx) >= Math.abs(dy) ? (dx > 0 ? 'east' : 'west') : (dy > 0 ? 'south' : 'north');
     player.anim += dt * 9;
   }
   for (const p of people) {
     if (!p.route) continue;
     const [a, b] = p.route, target = p.back ? a : b, ddx = target[0] - p.x, ddy = target[1] - p.y, d = Math.hypot(ddx, ddy);
     if (d < 3) { p.back = !p.back; continue; }
-    p.x += ddx / d * p.speed * dt; p.y += ddy / d * p.speed * dt; p.anim += dt * (p.speed / 9);
+    p.x += ddx / d * p.speed * dt; p.y += ddy / d * p.speed * dt; p.anim += dt * (p.speed / 7);
     p.dir = Math.abs(ddx) > Math.abs(ddy) ? (ddx > 0 ? 'east' : 'west') : (ddy > 0 ? 'south' : 'north');
   }
   for (const b of pigeons) {
@@ -135,7 +175,7 @@ function update(dt, t) {
 
 function frame(ctx, view, t) {
   const { width, height, dpr } = view;
-  const zoom = height / 520;
+  const zoom = height / (height < 500 ? 400 : 520); // phones in landscape sit closer
   const scale = Math.ceil(zoom * dpr * 2) / 2;
   if (scale !== rasterScale) { rasterScale = scale; }
   const camX = Math.max(-200, Math.min(W + 200 - width / zoom, player.x - width / zoom / 2));
@@ -150,15 +190,14 @@ function frame(ctx, view, t) {
     else items.push({ y: p.y, draw: () => { draw(ctx, p.key, p.sprite, p.x, p.y); if (p.label) wallText(ctx, p); } });
   }
   for (const b of pigeons) items.push({ y: b.y, draw: () => draw(ctx, `pigeon${b.fled ? 0 : Math.floor(t * 2 + b.t * 3) % 2}`, S.pigeon(b.fled ? 0 : Math.floor(t * 2 + b.t * 3) % 2), b.x, b.y - (b.fled ? b.fled * 30 : 0), b.fled ? b.vx < 0 : false) });
-  for (const p of people) items.push({ y: p.y + (p.sitting ? 1 : 0), draw: () => {
-    const dir = p.dir === 'west' ? 'east' : p.dir, f = Math.floor(p.anim) % 2;
-    draw(ctx, `${p.look}-${dir}-${f}-${p.phone ? 1 : 0}-${p.sitting ? 1 : 0}`, S.person(p.look, dir, p.route ? f : 0, { phone: p.phone, sitting: p.sitting }), p.x, p.y - (p.sitting ? 10 : 0), p.dir === 'west');
-    if (p.habit) bubble(ctx, p.x, p.y - 74, p.habit, t);
+  for (const p of people) items.push({ y: p.y, draw: () => {
+    const col = p.route ? Math.floor(p.anim) % 4 : 0;
+    actor(ctx, p.look, ROW[p.dir], col, p.x, p.y, 84);
+    if (p.habit) bubble(ctx, p.x, p.y - 88, p.habit, t);
   } });
   items.push({ y: player.y, draw: () => {
-    const f = Math.floor(player.anim) % 2;
-    if (player.curled) draw(ctx, 'curl', S.pangolin(0, true), player.x, player.y);
-    else draw(ctx, `pangolin${f}`, S.pangolin(player.moving ? f : 0), player.x, player.y, player.dir === 'west');
+    if (player.curled) { if (sheets.curl) { ctx.fillStyle = SHADOW; ctx.beginPath(); ctx.ellipse(player.x + 4, player.y + 2, 20, 6, 0, 0, 7); ctx.fill(); ctx.drawImage(sheets.curl, player.x - 29, player.y - 53, 58, 58); } }
+    else actor(ctx, 'pangolin', ROW[player.dir], player.moving ? Math.floor(player.anim) % 4 : 0, player.x, player.y, 85);
   } });
   items.sort((a, b) => a.y - b.y).forEach(i => i.draw());
   ctx.restore();
