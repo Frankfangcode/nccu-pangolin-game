@@ -1,6 +1,7 @@
-import {QUEST_ACTORS,questTarget,questScene} from './quest.mjs?v=13';
-import {drawGround,drawPlace,drawRoute} from './landscape.mjs?v=13';
+import {QUEST_ACTORS,questTarget,questScene} from './quest.mjs?v=14';
+import {drawGround,drawPlace,drawRoute} from './landscape.mjs?v=14';
 import { depthSort } from './assets.mjs';
+import {visionOf,activityOf,isWaking} from './rules.mjs?v=14';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export function cameraFor(player,world,{width,height,touch}) {
  const zoom=touch?1.15:1.75,viewWidth=width/zoom,viewHeight=height/zoom;
@@ -12,6 +13,19 @@ function pill(c,t,x,y,w=100){c.fillStyle='#203f36e8';c.beginPath();c.roundRect(x
 function shadow(c,x,y,w){c.fillStyle='#183e342b';c.beginPath();c.ellipse(x+5,y+2,w*.35,w*.12,0,0,Math.PI*2);c.fill();}
 function sprite(c,img,x,y,w,h=w){c.drawImage(img,x-w/2,y-h,w,h);}
 function actor(c,img,p,t,size,row,animated){shadow(c,p.x,p.y,size*.6);const col=animated?Math.floor(t*8)%4:0;c.drawImage(img,col*128,row*128,128,128,p.x-size/2,p.y-size*.91,size,size);}
+// A glowing phone in hand: the person is looking down, not around.
+function handPhone(c,p){c.save();c.fillStyle='#203f36';c.beginPath();c.roundRect(p.x+9,p.y-46,9,14,2);c.fill();c.fillStyle='#9fe3ff';c.fillRect(p.x+10.5,p.y-44.5,6,10);c.restore();}
+// Habit read at a glance: phone or Z bubble; it blinks orange just before they look up.
+export function habitBubble(c,p,doing,clock,waking,still){
+ const x=p.x,y=p.y-88,blink=waking&&!still?(Math.sin(clock*14)>0?1:.45):1;
+ c.save();c.globalAlpha=blink;c.fillStyle=waking?'#e9a24d':'#fff8e8';c.strokeStyle='#244638';c.lineWidth=2;
+ c.beginPath();c.arc(x,y,13,0,Math.PI*2);c.fill();c.stroke();
+ c.beginPath();c.moveTo(x-4,y+11);c.lineTo(x,y+18);c.lineTo(x+3,y+11);c.fill();
+ if(doing==='phone'){c.fillStyle='#244638';c.beginPath();c.roundRect(x-5,y-8,10,16,2);c.fill();c.fillStyle=waking?'#fff8e8':'#9fe3ff';c.fillRect(x-3.5,y-6,7,10);}
+ else text(c,'Z',x,y+1,15,'#244638');
+ c.restore();
+ if(doing==='nap'&&!still)for(let k=0;k<3;k++){const t=(clock*.55+k/3)%1;c.save();c.globalAlpha=(1-t)*.9;text(c,'z',x+16+t*14,y-6-t*26,9+t*7,'#fff8e8');c.restore();}
+}
 export function render(c,state,world,v,{assets:a}={}) {
  const {width:w,height:h,time:t,touch}=v;c.clearRect(0,0,w,h);if(!a)return;
  const camera=cameraFor(state.player,world,v);c.save();c.scale(camera.zoom,camera.zoom);c.translate(-camera.x,-camera.y);
@@ -20,7 +34,7 @@ export function render(c,state,world,v,{assets:a}={}) {
  for(const p of world.landmarks.filter(p=>['ground','bridge','nature'].includes(p.kind)))drawPlace(c,p,a);
  drawPlace(c,{x:1000,y:2210,w:200,h:340,asset:'bridge-ns',kind:'bridge',vertical:true},a);
  if(!v.conversing)drawRoute(c,v.route);
- for(const human of state.humans){c.save();c.translate(human.x,human.y);c.rotate(human.facing);const g=c.createRadialGradient(0,0,10,0,0,human.range);g.addColorStop(0,human.awareness>0?'#ff7d434d':'#fff3af55');g.addColorStop(1,'#fff3af05');c.fillStyle=g;c.beginPath();c.moveTo(0,0);c.arc(0,0,human.range,-.55,.55);c.closePath();c.fill();c.restore();}
+ for(const human of state.humans){const sight=visionOf(human);if(sight.range<12)continue;c.save();c.translate(human.x,human.y);c.rotate(human.facing);const g=c.createRadialGradient(0,0,10,0,0,sight.range);g.addColorStop(0,human.awareness>0?'#ff7d434d':'#fff3af55');g.addColorStop(1,'#fff3af05');c.fillStyle=g;c.beginPath();c.moveTo(0,0);c.arc(0,0,sight.range,-sight.half,sight.half);c.closePath();c.fill();c.restore();}
  const objects=[];
  if(world.gatehouse){const p=world.gatehouse;objects.push({sortY:p.y,draw(){sprite(c,a.gatehouse,p.x,p.y,p.w,p.h);}});}
 
@@ -30,7 +44,7 @@ export function render(c,state,world,v,{assets:a}={}) {
 
  for(const b of world.bushes)objects.push({sortY:b.y+b.h,draw(){c.save();const inside=state.player.x>=b.x&&state.player.x<=b.x+b.w&&state.player.y>=b.y&&state.player.y<=b.y+b.h;c.globalAlpha=inside?.22:1;sprite(c,a.shrub,b.x+b.w/2,b.y+b.h,b.w+24,b.h+35);c.restore();}});
  world.pranks.forEach((p,i)=>objects.push({sortY:p.y,draw(){shadow(c,p.x,p.y,50);sprite(c,a[['sign','frog','duck'][i]],p.x,p.y,i===0?68:55,i===0?78:60);const done=state.completedPranks.includes(p.id);pill(c,done?'✓':String(i+1),p.x,p.y-88,30);if(Math.hypot(state.player.x-p.x,state.player.y-p.y)<65&&!done)pill(c,touch?'按「互動」':`E · ${p.action}`,p.x,p.y-120,touch?110:220);}}));
- state.humans.forEach(p=>objects.push({sortY:p.y,draw(){const row=Math.abs(Math.cos(p.facing))>.6?(Math.cos(p.facing)>0?0:1):(Math.sin(p.facing)>0?2:3);actor(c,a.human,p,clock,84,row,!v.reduceMotion);if(p.awareness>0)pill(c,p.mode==='chase'?'!':'?',p.x,p.y-83,28);}}));
+ state.humans.forEach(p=>objects.push({sortY:p.y,draw(){const row=Math.abs(Math.cos(p.facing))>.6?(Math.cos(p.facing)>0?0:1):(Math.sin(p.facing)>0?2:3);const doing=activityOf(p);actor(c,a.human,p,clock,84,row,!v.reduceMotion&&doing==='walk');if(doing==='phone')handPhone(c,p);if(p.awareness>0)pill(c,p.mode==='chase'?'!':'?',p.x,p.y-83,28);}}));
  objects.push({sortY:state.player.y,draw(){const p=state.player;if(p.curled){shadow(c,p.x,p.y,48);sprite(c,a.curl,p.x,p.y+5,58,58);}else actor(c,a.pangolin,p,clock,85,({east:0,west:1,south:2,north:3})[p.direction]??0,p.moving&&!v.reduceMotion);}});
  for(const npc of Object.values(QUEST_ACTORS)){
   if(npc.id==='treasure'&&state.quest?.stage!=='collect')continue;
@@ -50,6 +64,8 @@ export function render(c,state,world,v,{assets:a}={}) {
    if(npc.id==='treasure'){const shine=v.reduceMotion?1:.65+Math.sin(clock*3)*.25;c.save();c.globalAlpha=shine;text(c,'✦',p.x+17,p.y-24,16,'#fff1b2');c.restore();}}});
  }
  depthSort(objects).forEach(o=>o.draw());
+ // Habit bubbles sit above buildings and canopies so they stay readable.
+ for(const p of state.humans){const doing=activityOf(p);if(!(p.awareness>0)&&doing!=='walk')habitBubble(c,p,doing,clock,isWaking(p),v.reduceMotion);}
  const closest=world.landmarks.reduce((a,b)=>Math.hypot(a.x-state.player.x,a.y-state.player.y)<Math.hypot(b.x-state.player.x,b.y-state.player.y)?a:b);
  for(const p of world.landmarks){if(!visible({...p,w:250,h:p.h+50}))continue;const near=Math.hypot(state.player.x-p.x,state.player.y-p.y)<440;const labelY=p.y-(a[p.asset]?Math.min(p.h,p.w*a[p.asset].height/a[p.asset].width):0)-20;const labelW=Math.max(90,p.name.length*14+24);if(!scene.greeting&&!v.conversing&&((near&&p.id===closest.id)||v.target?.id===p.id)&&labelY>camera.y+20&&labelY<camera.y+camera.height-20&&p.x-labelW/2>camera.x+4&&p.x+labelW/2<camera.x+camera.width-4)pill(c,p.name,p.x,labelY,labelW);}
  if(v.target&&!v.conversing){const p=v.target.entry;c.strokeStyle='#fff1b2';c.lineWidth=3;c.beginPath();c.arc(p.x,p.y,22,0,Math.PI*2);c.stroke();}

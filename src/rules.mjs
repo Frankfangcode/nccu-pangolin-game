@@ -2,6 +2,42 @@ import {isBlocked as blocked,findRoute} from './navigation.mjs';
 export const PLAYER_SPEED = 120;
 export const PLAYER_RADIUS = 7;
 
+// What a person is doing is drawn above their head, so players can read the
+// opening: asleep people see nothing, people on phones only see a short cone.
+export const ACTIVITIES = {
+  walk:  { range: 1,    half: 0.58, speed: 1 },
+  phone: { range: 0.45, half: 0.32, speed: 0.4 },
+  nap:   { range: 0,    half: 0,    speed: 0 },
+};
+export const WAKE_WARNING = 1.2;
+export const activityOf = human => (human.mode === 'chase' ? 'walk' : human.activity ?? 'walk');
+export function visionOf(human) {
+  const a = ACTIVITIES[activityOf(human)] ?? ACTIVITIES.walk;
+  return { range: (human.range ?? 115) * a.range, half: a.half };
+}
+/** True while a nap or phone break is about to end — the icon blinks as a warning. */
+export const isWaking = human => activityOf(human) !== 'walk' && (human.activityLeft ?? Infinity) <= WAKE_WARNING;
+
+export function advanceActivities(state, dt) {
+  const seconds = Math.min(Math.max(dt, 0), 0.05);
+  const humans = state.humans.map(original => {
+    if (!original.schedule?.length) return original;
+    const human = { ...original };
+    if (human.mode === 'chase') return human;
+    let index = human.activityIndex ?? 0;
+    let left = (human.activityLeft ?? human.schedule[index][1]) - seconds;
+    while (left <= 0) {
+      index = (index + 1) % human.schedule.length;
+      left += human.schedule[index][1];
+    }
+    human.activityIndex = index;
+    human.activityLeft = left;
+    human.activity = human.schedule[index][0];
+    return human;
+  });
+  return { ...state, humans };
+}
+
 
 export function createGame(world) {
   return {
@@ -44,10 +80,11 @@ export function canHumanSee(human, player, world) {
   const dx = player.x - human.x;
   const dy = player.y - human.y;
   const distance = Math.hypot(dx, dy);
-  if (distance > (human.range ?? 115) || distance < 0.001) return false;
+  const vision = visionOf(human);
+  if (distance > vision.range || distance < 0.001) return false;
   const angle = Math.atan2(dy, dx);
   const offset = Math.atan2(Math.sin(angle - human.facing), Math.cos(angle - human.facing));
-  if (Math.abs(offset) > 0.58) return false;
+  if (Math.abs(offset) > vision.half) return false;
   for (let travel = 4; travel < distance; travel += 4) {
     const x = human.x + dx * travel / distance;
     const y = human.y + dy * travel / distance;
@@ -75,8 +112,10 @@ export function advanceHumans(state, dt, world) {
     }
     const dx = target.x - human.x,dy = target.y - human.y,distance = Math.hypot(dx,dy);
     if(!distance)return human;
+    const pace = ACTIVITIES[activityOf(human)]?.speed ?? 1;
+    if (!pace) return human;
     human.facing = Math.atan2(dy,dx);
-    const travel = Math.min(distance,(human.speed??56)*seconds);
+    const travel = Math.min(distance,(human.speed??56)*pace*seconds);
     const x=human.x+dx/distance*travel,y=human.y+dy/distance*travel;
     if(world&&blocked(x,y,world)){
       human.detour=findRoute(human,human.route[human.waypointIndex],world)?.slice(1)??[];
@@ -97,7 +136,7 @@ export function advanceAwareness(state, dt, world) {
     } else {
       human.awareness = Math.max(0, (human.awareness ?? 0) - seconds * 2);
     }
-    if (human.awareness >= 0.999) human.mode = 'chase';
+    if (human.awareness >= 0.999) { human.mode = 'chase'; human.activity = 'walk'; }
     return human;
   });
   const status = humans.some(h => h.mode === 'chase') ? 'chase' : humans.some(h => h.awareness > 0) ? 'alert' : 'safe';
@@ -161,4 +200,10 @@ export function interact(state, world) {
   if (!nearby) return state;
   if (state.completedPranks.includes(nearby.id)) return state;
   return { ...state, completedPranks: [...state.completedPranks, nearby.id], message: nearby.message ?? '搞怪成功！' };
+}
+
+/** The unfinished prank within reach, if any — opens the close-up instead of completing instantly. */
+export function nearbyPrank(state, world) {
+  const prank = world.pranks.find(p => Math.hypot(p.x - state.player.x, p.y - state.player.y) < 28);
+  return prank && !state.completedPranks.includes(prank.id) ? prank : null;
 }

@@ -1,3 +1,9 @@
+## v14 人類習慣與特寫搞怪（2026-10-20）
+使用者看過 Sneaky Sasquatch 截圖後，要求做「人類狀態畫在頭上」與「手入鏡特寫」兩項並直接更新 GitHub。
+修改：rules.mjs 新增 ACTIVITIES／advanceActivities／visionOf／isWaking／nearbyPrank；world.mjs 五位巡邏者各有排程；render.mjs 依習慣畫視線錐、手機與泡泡（最上層）；新增 closeup.mjs 與 #closeup 對話框；main 在搞怪處開特寫、完成後才計分；說明加習慣圖示解說；版本號 v=14。無新存檔欄位、套件或外部服務。
+驗證：70/70 測試；Playwright 桌機與手機實玩特寫與排程，console 乾淨。詳見 QA-v14.md。
+發布：推送 main 即由 GitHub Pages（main:/）部署。
+
 
 ## v13 正式站發布驗證（2026-10-20）
 遊戲提交 d95735157efab87135864dd65acb2cee3c4defdf 已推送main，main全測61/61。GitHub Pages最新build同提交、built、error:null。正式網址 https://frankfangcode.github.io/nccu-pangolin-game/ 實際載入main.mjs?v=13；全新瀏覽器以手機搖桿入校、鍵盤走完全部五階段、開啟偵察、重載保持complete，console無錯誤／警告。來源維持API當前main:/；舊gh-pages分支未使用，Sites未更新。後續直接main推送會觸發此部署，不需重複觸發。

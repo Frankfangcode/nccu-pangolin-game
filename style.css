@@ -106,3 +106,26 @@ button{transition:transform 120ms cubic-bezier(.2,.8,.2,1)}
  #danger{left:16px;top:94px;font-size:12px;max-width:calc(100% - 32px)}
 }
 @media(prefers-reduced-motion:reduce){#joystick span{transition:none}}
+/* v14 close-up pranks: the claw enters frame, tap the target */
+#closeup{max-width:540px;padding:22px 24px 24px;border-radius:24px}
+#closeup header h2{margin:4px 0 14px;font-size:24px;line-height:1.3}
+.closeup-stage{aspect-ratio:400/260;border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:inset 0 0 0 3px #24463822}
+.closeup-stage svg{display:block;width:100%;height:100%}
+.closeup-stage .claw{transform:translate(296px,182px) scale(1.25);transition:transform .5s cubic-bezier(.3,1.35,.5,1)}
+.closeup-stage.reach .claw{transform:translate(calc(var(--tx) + 6px),calc(var(--ty) + 6px)) scale(1.25)}
+.closeup-stage.done .claw{transform:translate(310px,200px) scale(1.25);transition-duration:.45s}
+.closeup-stage .face.silly{display:none}
+.closeup-stage.done .face.plain{display:none}
+.closeup-stage.done .face.silly{display:inline;transform-box:view-box;transform-origin:200px 112px;animation:closeup-wobble .5s ease-out}
+.closeup-stage .frog{opacity:0;transform:translateY(36px)}
+.closeup-stage.done .frog{opacity:1;animation:closeup-hop .75s cubic-bezier(.2,.8,.3,1) forwards}
+.closeup-stage.done .button{transform:translateY(4px)}
+.closeup-stage .duck{transition:transform .7s cubic-bezier(.3,1.2,.5,1) .1s}
+.closeup-stage.done .duck{transform:translate(78px,-122px)}
+#closeup-hint{min-height:1.9em;margin:14px 0 0;font-size:15px;font-weight:600}
+#closeup-act{display:block;margin:12px 0 0 auto;min-height:48px;padding:12px 22px;background:var(--ink);color:var(--paper);border-radius:var(--radius);font-weight:700;font-size:15px}
+#closeup-act:disabled{opacity:.5;cursor:default}
+@keyframes closeup-wobble{0%{transform:rotate(0) scale(1)}30%{transform:rotate(-8deg) scale(1.08)}60%{transform:rotate(6deg)}100%{transform:rotate(0)}}
+@keyframes closeup-hop{0%{transform:translate(0,36px)}55%{transform:translate(-60px,-96px) rotate(-14deg)}100%{transform:translate(-120px,4px) rotate(0)}}
+@media(max-width:600px){#closeup{inset:auto 12px 16px;margin:0;position:fixed;width:calc(100% - 24px);padding:16px}#closeup header h2{font-size:20px;margin-bottom:10px}#closeup-hint{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.closeup-stage .claw,.closeup-stage .duck{transition:none}.closeup-stage.done .face.silly,.closeup-stage.done .frog{animation:none}.closeup-stage.done .frog{transform:translate(-120px,4px)}}

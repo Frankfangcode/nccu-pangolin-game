@@ -1,17 +1,18 @@
-import {createTouchControls} from './touch.mjs?v=13';
-import {createQuest,QUEST_STEPS,questTarget,interactQuest} from './quest.mjs?v=13';
-import {readSave,writeSave} from './save.mjs?v=13';
-import {createStory} from './story.mjs?v=13';
-import {manifest} from './manifest.mjs?v=13';
+import {createTouchControls} from './touch.mjs?v=14';
+import {createQuest,QUEST_STEPS,questTarget,interactQuest} from './quest.mjs?v=14';
+import {readSave,writeSave} from './save.mjs?v=14';
+import {createStory} from './story.mjs?v=14';
+import {manifest} from './manifest.mjs?v=14';
 import {discoverPlaces,nearestPlace,entryObjective} from './exploration.mjs';
 import {findRoute} from './navigation.mjs';
-import {createAtlas} from './atlas.mjs?v=13';
-import { WORLD } from './world.mjs?v=13';
-import { createGame, stepMovement, advanceHumans, advanceAwareness, advanceChase, interact } from './rules.mjs?v=13';
-import { createInput } from './input.mjs?v=13';
-import { render,cameraFor } from './render.mjs?v=13';
-import {createMinimap} from './minimap.mjs?v=13';
+import {createAtlas} from './atlas.mjs?v=14';
+import { WORLD } from './world.mjs?v=14';
+import { createGame, stepMovement, advanceActivities, advanceHumans, advanceAwareness, advanceChase, interact, nearbyPrank } from './rules.mjs?v=14';
+import { createInput } from './input.mjs?v=14';
+import { render,cameraFor } from './render.mjs?v=14';
+import {createMinimap} from './minimap.mjs?v=14';
 import { loadAssets } from './assets.mjs';
+import {createCloseup} from './closeup.mjs?v=14';
 let assets;
 const startButton=document.querySelector('#start');
 const intro=document.querySelector('#intro');
@@ -52,6 +53,7 @@ function guideTo(p){target=p;route=p?findRoute(state.player,p.entry,WORLD):null;
 function guideQuest(){guideTo(entryObjective(state,WORLD)??questTarget(state.quest));}
 const atlas=createAtlas(WORLD,()=>state,()=>assets,guideTo);
 const questDialog=document.querySelector('#quest-dialog');
+const closeup=createCloseup(document.querySelector('#closeup'));
 document.querySelector('#quest-close').onclick=()=>questDialog.close();
 questDialog.addEventListener('close',()=>{
  if(pendingFeedback){feedback={...pendingFeedback,startedAt:sceneTime};pendingFeedback=null;}
@@ -96,13 +98,14 @@ function frame(now) {
   previous = now;
   const keys=input.read(),finger=touchControls.read();
   const actions={...keys,axisX:finger.axisX,axisY:finger.axisY,interact:keys.interact||finger.interact,curl:keys.curl||finger.curl};
-  if (state.won && actions.restart && !atlas.dialog.open && !dialog.open && !story.dialog.open && !questDialog.open) {
+  if (state.won && actions.restart && !atlas.dialog.open && !dialog.open && !story.dialog.open && !questDialog.open&&!closeup.dialog.open) {
     state = returnHome();target=null;route=null;
     started = true;
-  } else if (started && !state.won && !dialog.open && !atlas.dialog.open && !story.dialog.open && !questDialog.open) {
+  } else if (started && !state.won && !dialog.open && !atlas.dialog.open && !story.dialog.open && !questDialog.open&&!closeup.dialog.open) {
     if (actions.restart) {state = returnHome();target=null;route=null;}
     else {
       state = stepMovement(state, actions, dt, WORLD);
+      state = advanceActivities(state, dt);
       state = advanceHumans(state, dt, WORLD);
       state = advanceAwareness(state, dt, WORLD);
       state = advanceChase(state, dt, WORLD);
@@ -110,6 +113,10 @@ function frame(now) {
        const before=state.quest.stage,result=interactQuest(state,WORLD);
        if(result.dialogue){state=result.state;pendingFeedback=result.feedback??null;showQuestDialogue(result.dialogue);if(state.quest.stage!==before)guideQuest();}
        else if(result.state!==state)state=result.state;
+       else if(nearbyPrank(state,WORLD)){
+        if(state.status==='chase')state={...state,message:'先甩掉追你的人，再搞怪。'};
+        else closeup.open(nearbyPrank(state,WORLD),finished=>{if(finished)state=interact(state,WORLD);canvas.focus();});
+       }
        else state=interact(state,WORLD);
       }
       const entering=entryObjective(state,WORLD);
@@ -118,7 +125,7 @@ function frame(now) {
     }
   }
 
-  const paused=!started||dialog.open||atlas.dialog.open||story.dialog.open||questDialog.open||state.won;
+  const paused=!started||dialog.open||atlas.dialog.open||story.dialog.open||questDialog.open||closeup.dialog.open||state.won;
   if(!paused)sceneTime+=dt;
   if(feedback&&sceneTime-feedback.startedAt>1.6)feedback=null;
   if(started)persist();
@@ -145,7 +152,7 @@ function frame(now) {
   const width = canvas.clientWidth;
   const height = canvas.clientHeight;
   const touch = window.matchMedia('(pointer: coarse)').matches || width < 600;
-  touchControls.show(touch&&started&&!dialog.open&&!atlas.dialog.open&&!story.dialog.open&&!questDialog.open&&!state.won);
+  touchControls.show(touch&&started&&!dialog.open&&!atlas.dialog.open&&!story.dialog.open&&!questDialog.open&&!closeup.dialog.open&&!state.won);
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   render(ctx, state, WORLD, { width, height, time: now / 1000, touch, started, reduceMotion,route,target,sceneTime,feedback,conversing:questDialog.open }, {assets});
   if(now-mapPaintAt>150){minimap.paint(state,assets,target??questTarget(state.quest),cameraFor(state.player,WORLD,{width,height,touch}),{width,height});mapPaintAt=now;}

@@ -1,5 +1,5 @@
 import {isBlocked,segmentDistance} from './navigation.mjs';
-import {CAMPUS} from './campus-data.mjs?v=13';
+import {CAMPUS} from './campus-data.mjs?v=14';
 const aliases={school:'heritage',shop:'heritage',canteen:'heritage',academic:'office'};
 const landmarks=CAMPUS.landmarks.map(p=>{
  const n={...p,asset:aliases[p.asset]??p.asset,w:p.w*.72,h:p.h*.72};
@@ -34,7 +34,10 @@ const roadStyles=[
 const bushes=[{x:start.x-180,y:start.y+20,w:96,h:76},...landmarks.filter(p=>p.kind==='building').map(p=>({x:p.x+p.w/2+32,y:p.y+4,w:68,h:60}))];
 const byName=name=>landmarks.find(p=>p.name===name);
 const pranks=[['hall','四維堂','替立牌換上搞怪表情','嘿嘿！立牌露出搞怪笑臉。'],['library','中正圖書館','啟動紙青蛙箱','呱！紙青蛙跳出來了。'],['field','操場','推動鴨子布偶','嘎！鴨子坐上了看台。']].map(([id,name,action,message])=>({id,...byName(name).entry,title:name,action,message}));
-const humans=[{x:2640,y:2680},{x:2180,y:2610},{x:3700,y:2400},{x:3000,y:1620},{x:4400,y:1180}].map((p,i)=>({id:`visitor${i}`, ...p,facing:0,range:140,route:[{x:p.x-65,y:p.y},{x:p.x+65,y:p.y}],waypointIndex:0,routeDirection:1,mode:'route',awareness:0,searchLeft:0,speed:50}));
+// Each visitor cycles through readable habits: the treasure guard checks a phone,
+// two others doze off. Lengths differ so the openings never line up.
+const schedules=[[['walk',5],['phone',4.5]],[['nap',8],['walk',4]],[['walk',7],['phone',3.5]],[['phone',5],['walk',5]],[['nap',9],['walk',3.5]]];
+const humans=[{x:2640,y:2680},{x:2180,y:2610},{x:3700,y:2400},{x:3000,y:1620},{x:4400,y:1180}].map((p,i)=>({id:`visitor${i}`, ...p,facing:0,range:140,route:[{x:p.x-65,y:p.y},{x:p.x+65,y:p.y}],waypointIndex:0,routeDirection:1,mode:'route',awareness:0,searchLeft:0,speed:50,schedule:schedules[i],activityIndex:0,activityLeft:schedules[i][0][1],activity:schedules[i][0][0]}));
 export const WORLD={width:CAMPUS.width,height:CAMPUS.height,start,landmarks,water,bridges,roadStyles,roads:CAMPUS.roads.map(r=>r.map(p=>p.map(v=>v*4))),obstacles,bushes,humans,pranks};
 
 // Deterministic decorative canopy placement; paths and landmark entrances stay open.
