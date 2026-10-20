@@ -13,7 +13,9 @@ const X = x => x * M, Y = z => z * M, H = h => h * M * K;
 const SHEETS = { human: 'assets/flat/human/sheet-transparent.webp', pangolin: 'assets/flat/pangolin/sheet-transparent.webp', curl: 'assets/flat/curl/curl-1.webp' };
 const ROW = { east: 0, west: 1, south: 2, north: 3 };
 const OUTFITS = { student: null, guard: { hat: [45, 74, 107], pack: [52, 80, 107] }, jogger: { hat: [228, 93, 76], pack: [63, 111, 181] }, reader: { hat: [90, 156, 110], pack: [242, 184, 75] } };
-const sheets = {};
+const sheets = {}, art = {};
+// Original pangolin-game illustrations reused as-is in the region.
+const ART = { booth: 'assets/campus/gatehouse-v12.webp', tree: 'assets/flat/tree.webp', bush: 'assets/flat/pack/pack-1.webp', board: 'assets/flat/pack/pack-2.webp', cat: 'assets/campus/quest-cat.webp', grass: 'assets/campus/grass.webp' };
 function hsv(r, g, b) { const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn; if (!d) return [0, 0, mx / 255]; const h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; return [(h * 60 + 360) % 360, d / mx, mx / 255]; }
 function recolour(img, outfit) {
   const cv = document.createElement('canvas'); cv.width = img.width; cv.height = img.height;
@@ -27,8 +29,8 @@ function recolour(img, outfit) {
   }
   x.putImageData(data, 0, 0); return cv;
 }
-const ready = Promise.all(Object.entries(SHEETS).map(([k, url]) => new Promise((ok, fail) => { const i = new Image(); i.onload = () => ok([k, i]); i.onerror = fail; i.src = url; })))
-  .then(list => { const raw = Object.fromEntries(list); for (const [n, o] of Object.entries(OUTFITS)) sheets[n] = recolour(raw.human, o); sheets.pangolin = raw.pangolin; sheets.curl = raw.curl; });
+const ready = Promise.all(Object.entries({ ...SHEETS, ...ART }).map(([k, url]) => new Promise((ok, fail) => { const i = new Image(); i.onload = () => ok([k, i]); i.onerror = fail; i.src = url; })))
+  .then(list => { const raw = Object.fromEntries(list); for (const [n, o] of Object.entries(OUTFITS)) sheets[n] = recolour(raw.human, o); sheets.pangolin = raw.pangolin; sheets.curl = raw.curl; for (const k of Object.keys(ART)) art[k] = raw[k]; });
 function actor(c, sheet, row, col, x, y, size) {
   if (!sheets[sheet]) return;
   c.fillStyle = SHADOW; c.beginPath(); c.ellipse(x + 4, y + 1, size * .24, size * .07, 0, 0, 7); c.fill();
@@ -62,6 +64,7 @@ const SERIF = '"Noto Serif TC","Songti TC","PingFang TC",serif', SANS = '"PingFa
 let grassTile = null, seed = 1;
 const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
 function grass(c) {
+  if (!grassTile && art.grass) { grassTile = c.createPattern(art.grass, 'repeat'); return grassTile; }
   if (!grassTile) {
     const t = document.createElement('canvas'); t.width = t.height = 240; const g = t.getContext('2d');
     g.fillStyle = P.grass; g.fillRect(0, 0, 240, 240); seed = 41;
@@ -71,30 +74,32 @@ function grass(c) {
   }
   return grassTile;
 }
-const JOINT = { sidewalk: 'sidewalkJoint', paver: 'paverJoint' };
+const JOINT = { sidewalk: 'sidewalkJoint', paver: 'origStoneJoint' };
+// The original game's ground colours (landscape.mjs): asphalt, stone, kerb.
+const TONE = { road: 'origAsphalt', asphalt: 'origAsphalt', paver: 'origStone', paverRing: 'origStone', paint: 'origCrossing' };
 function drawGround(c, region, t) {
   c.fillStyle = grass(c); c.fillRect(X(region.bounds.x0) - 2000, Y(region.bounds.z0) - 2000, X(region.bounds.x1 - region.bounds.x0) + 4000, Y(region.bounds.z1 - region.bounds.z0) + 4000);
   for (const g of region.ground) {
     if (g.type === 'rect') {
-      rect(c, X(g.x0), Y(g.z0), X(g.x1), Y(g.z1), g.fill);
+      rect(c, X(g.x0), Y(g.z0), X(g.x1), Y(g.z1), TONE[g.fill] ?? g.fill);
       if (g.joints) { c.globalAlpha = .55; fill(c, JOINT[g.fill] ?? 'paverJoint'); const j = g.fill === 'paver' ? 1.5 : g.joints; for (let x = g.x0; x < g.x1; x += j) c.fillRect(X(x), Y(g.z0), 1, Y(g.z1) - Y(g.z0)); if (g.fill === 'paver') for (let z = g.z0; z < g.z1; z += j) c.fillRect(X(g.x0), Y(z), X(g.x1) - X(g.x0), 1); c.globalAlpha = 1; }
     } else if (g.type === 'circle') {
-      fill(c, 'paverJoint'); c.beginPath(); c.arc(X(g.x), Y(g.z), X(g.r) + 4, 0, 7); c.fill();
-      fill(c, g.fill); c.beginPath(); c.arc(X(g.x), Y(g.z), X(g.r), 0, 7); c.fill();
-      c.strokeStyle = P.paverJoint; c.lineWidth = 1.5; for (let r = 1; r < g.r; r += .9) { c.beginPath(); c.arc(X(g.x), Y(g.z), X(r), 0, 7); c.stroke(); }
+      fill(c, 'origBorder'); c.beginPath(); c.arc(X(g.x), Y(g.z), X(g.r) + 6, 0, 7); c.fill();
+      fill(c, TONE[g.fill] ?? g.fill); c.beginPath(); c.arc(X(g.x), Y(g.z), X(g.r), 0, 7); c.fill();
+      c.strokeStyle = P.origStoneJoint; c.lineWidth = 1; for (let r = 1; r < g.r; r += .9) { c.beginPath(); c.arc(X(g.x), Y(g.z), X(r), 0, 7); c.stroke(); }
     } else if (g.type === 'road') {
       const pts = []; for (let x = g.from; x <= g.to; x += 2) pts.push([x, g.z(x)]);
       c.lineCap = 'butt'; c.lineJoin = 'round';
-      c.strokeStyle = P.curb; c.lineWidth = X(g.width) + 8; c.beginPath(); pts.forEach(([x, z], i) => (i ? c.lineTo(X(x), Y(z)) : c.moveTo(X(x), Y(z)))); c.stroke();
-      c.strokeStyle = P.road; c.lineWidth = X(g.width); c.stroke();
+      c.strokeStyle = P.origBorder; c.lineWidth = X(g.width) + 12; c.beginPath(); pts.forEach(([x, z], i) => (i ? c.lineTo(X(x), Y(z)) : c.moveTo(X(x), Y(z)))); c.stroke();
+      c.strokeStyle = P.origAsphalt; c.lineWidth = X(g.width); c.stroke();
     } else if (g.type === 'zebra') {
-      fill(c, 'paint'); for (let z = g.z0; z < g.z1; z += g.step) { if (z > g.skip[0] && z < g.skip[1]) continue; c.fillRect(X(g.x0), Y(z), X(g.x1) - X(g.x0), M * g.bar); }
+      fill(c, 'origCrossing'); for (let z = g.z0; z < g.z1; z += g.step) { if (z > g.skip[0] && z < g.skip[1]) continue; c.fillRect(X(g.x0), Y(z), X(g.x1) - X(g.x0), M * g.bar); }
     } else if (g.type === 'zebraX') {
-      fill(c, 'paint'); for (let x = g.x0; x < g.x1; x += 1) c.fillRect(X(x), Y(g.z - g.depth / 2), M * .5, M * g.depth);
+      fill(c, 'origCrossing'); for (let x = g.x0; x < g.x1; x += 1) c.fillRect(X(x), Y(g.z - g.depth / 2), M * .5, M * g.depth);
     } else if (g.type === 'dashes') {
       fill(c, g.fill); for (let x = g.from; x < g.to; x += g.every) if (x < g.gap[0] || x > g.gap[1]) c.fillRect(X(x), Y(g.z) - 3, X(g.len), 6);
     } else if (g.type === 'curb') {
-      rect(c, X(g.x0), Y(g.z) - 5, X(g.x1), Y(g.z) + 5, 'curb'); rect(c, X(g.x0), Y(g.z) + 3, X(g.x1), Y(g.z) + 5, 'curbShade');
+      rect(c, X(g.x0), Y(g.z) - 6, X(g.x1), Y(g.z) + 6, 'origBorder'); rect(c, X(g.x0), Y(g.z) + 4, X(g.x1), Y(g.z) + 6, 'curbShade');
     } else if (g.type === 'roadText') {
       text(c, g.text, X(g.x), Y(g.z), `900 ${M * .95}px ${SANS}`, 'paint');
     }
@@ -102,164 +107,196 @@ function drawGround(c, region, t) {
 }
 
 /* ---------- objects (each returns its south edge for depth sorting) ---------- */
-const BANNER = [['bannerRed', '政治大學'], ['bannerYellow', 'NCCU']];
+/* ---------- illustrated objects, in the original game's 3/4 style ----------
+   Like gatehouse-v12 and gate-1: front face toward the viewer, the east side and the
+   top visible, flat colours (top lightest, side darkest) and a thin dark outline. */
+const OUT = 1.6;
+/** Projection for one object: a = metres east along its front, b = metres back (north), h = metres up. */
+const iso = (ox, oy) => (a, b, h) => [ox + a * M + b * M * .42, oy + a * M * .1 - b * M * .3 - h * M * .74];
+function face(c, pts, col, line = true) {
+  fill(c, col); c.beginPath(); pts.forEach(([x, y], i) => (i ? c.lineTo(x, y) : c.moveTo(x, y))); c.closePath(); c.fill();
+  if (line) { c.strokeStyle = P.outline; c.lineWidth = OUT; c.lineJoin = 'round'; c.stroke(); }
+}
+function ibox(c, p, a0, a1, b0, b1, h0, h1, [top, front, side], line = true) {
+  face(c, [p(a0, b0, h0), p(a1, b0, h0), p(a1, b0, h1), p(a0, b0, h1)], front, line);
+  face(c, [p(a1, b0, h0), p(a1, b1, h0), p(a1, b1, h1), p(a1, b0, h1)], side, line);
+  face(c, [p(a0, b0, h1), p(a1, b0, h1), p(a1, b1, h1), p(a0, b1, h1)], top, line);
+}
+/** A rectangle painted on the front face (b = b0). */
+const onFront = (c, p, b, a0, a1, h0, h1, col, line = false) => face(c, [p(a0, b, h0), p(a1, b, h0), p(a1, b, h1), p(a0, b, h1)], col, line);
+const onSide = (c, p, a, b0, b1, h0, h1, col, line = false) => face(c, [p(a, b0, h0), p(a, b1, h0), p(a, b1, h1), p(a, b0, h1)], col, line);
+function window(c, p, b, a0, a1, h0, h1) {
+  onFront(c, p, b - .01, a0 - .08, a1 + .08, h0 - .08, h1 + .08, 'frame', true);
+  onFront(c, p, b - .02, a0, a1, h0, h1, 'glassTeal');
+  onFront(c, p, b - .03, a0 + (a1 - a0) * .15, a0 + (a1 - a0) * .4, h0 + (h1 - h0) * .2, h1 - (h1 - h0) * .1, 'glassTealLight');
+}
+function groundShadow(c, pts) { c.fillStyle = SHADOW; c.beginPath(); pts.forEach(([x, y], i) => (i ? c.lineTo(x, y) : c.moveTo(x, y))); c.closePath(); c.fill(); }
+function img(c, key, x, y, w) { const i = art[key]; if (!i) return; const h = w * i.height / i.width; c.drawImage(i, x - w / 2, y - h, w, h); }
+
+const BANNER = [['bannerRed', '政'], ['bannerYellow', 'N']];
 const DRAW = {
   gatehouse(c, o) {
-    const { cx, dir } = o, x0 = cx - 3.5, x1 = cx + 3.5, zN = 9.5, zS = 14.5;
-    shadowRect(c, cx - 5.2, cx + 5.2, 14.9, 1.4);
-    // brick front: solid outer part, inner passage with one pillar
-    box(c, x0, x1, zN, zS, 0, 5.4, 'brickRed', 'brickRed');
-    const solid0 = Math.min(cx + 3.5 * dir, cx - 1.1 * dir), solid1 = Math.max(cx + 3.5 * dir, cx - 1.1 * dir);
-    const pass0 = Math.min(cx - 1.1 * dir, cx - 3.2 * dir), pass1 = Math.max(cx - 1.1 * dir, cx - 3.2 * dir);
-    rect(c, X(pass0), Y(zS) - H(2.6), X(pass1), Y(zS), 'passage');
-    rect(c, X(x0), Y(zS) - H(2.6), X(x1), Y(zS) - H(2.6) + 4, 'brickRedDark');
-    fill(c, 'brickRedDark'); for (let h = .45; h < 5.4; h += .45) c.fillRect(X(x0), Y(zS) - H(h), X(x1) - X(x0), 1);
-    rect(c, X(solid0), Y(zS) - H(.5), X(solid1), Y(zS), 'brickBase');
-    [-2.2, -.75, .75, 2.2].forEach(dx => { rect(c, X(cx + dx - .55), Y(zS) - H(4.95), X(cx + dx + .55), Y(zS) - H(4.05), 'concreteTop'); rect(c, X(cx + dx - .48), Y(zS) - H(4.88), X(cx + dx + .48), Y(zS) - H(4.12), 'winDark'); rect(c, X(cx + dx - .48), Y(zS) - H(4.88), X(cx + dx - .1), Y(zS) - H(4.5), 'winLight'); });
-    [2.5, 1.6].forEach(d => rect(c, X(cx + d * dir - .4), Y(zS) - H(2.15), X(cx + d * dir + .4), Y(zS) - H(1.05), 'winDark'));
-    const px = cx - 3.5 * dir + .3 * dir; rect(c, X(px - .3), Y(zS) - H(2.6), X(px + .3), Y(zS), 'brickRedLight');
-    rect(c, X(px - .25), Y(zS) - H(1.95), X(px + .25), Y(zS) - H(1.75), 'busBlue');
-    // concrete canopy (trimmed so the upper windows stay visible from above)
-    box(c, cx - 5.2, cx + 5.2, 7.8, 14.55, 5.4, 6.45, 'concreteTop', 'concrete', 'white');
-    rect(c, X(cx - 5.2), Y(14.55) - H(5.6), X(cx + 5.2), Y(14.55) - H(5.4), 'concreteDark');
-    rect(c, X(cx - 4.4), Y(8.6) - H(6.45), X(cx + 4.4), Y(13.8) - H(6.45), 'concrete');
-    rect(c, X(cx - 4.2), Y(8.8) - H(6.45), X(cx + 4.2), Y(13.6) - H(6.45), 'concreteTop');
-    return 14.9;
+    // two-storey red-brick gatehouse under a wide concrete canopy (nccu100 main-gate)
+    const { cx, dir } = o, p = iso(X(cx - 3.5), Y(14.5)), inner = dir > 0 ? 0 : 7;
+    groundShadow(c, [p(0, 0, 0), p(7.6, 0, 0), p(9, 3, 0), p(9, 7, 0), p(1, 7, 0)].map(([x, y]) => [x + 10, y + 4]));
+    ibox(c, p, 0, 7, 0, 5, 0, 5.4, ['brickTop', 'brickFront', 'brickSide']);
+    c.save(); c.globalAlpha = .35; for (let h = .45; h < 5.4; h += .45) { const [x0, y0] = p(0, 0, h), [x1, y1] = p(7, 0, h), [x2, y2] = p(7, 5, h); c.strokeStyle = P.brickSide; c.lineWidth = 1; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.lineTo(x2, y2); c.stroke(); } c.restore();
+    onFront(c, p, 0, 0, 7, 0, .5, 'brickBase', true);
+    // ground-floor passage on the avenue side, with one brick pillar
+    const pa0 = Math.min(inner, inner - 2.1 * (inner ? 1 : -1)), pa1 = Math.max(inner, inner - 2.1 * (inner ? 1 : -1));
+    onFront(c, p, -.01, pa0, pa1, 0, 2.6, 'passage', true);
+    const pil = inner ? 6.7 : .3; onFront(c, p, -.02, pil - .3, pil + .3, 0, 2.6, 'brickFront', true);
+    onFront(c, p, -.03, pil - .22, pil + .22, 1.75, 1.97, 'busBlue');
+    // windows: four upstairs, two downstairs on the outer side
+    [1.3, 2.75, 4.25, 5.7].forEach(a => window(c, p, 0, a - .5, a + .5, 4.05, 4.85));
+    (inner ? [1, 1.9] : [5.1, 6]).forEach(a => window(c, p, 0, a - .4, a + .4, 1.05, 2.15));
+    [1.2, 2.6, 3.9].forEach(b => onSide(c, p, 7.01, b - .4, b + .4, 4.05, 4.85, 'glassTeal', true));
+    onFront(c, p, -.01, 0, 7, 2.55, 2.68, 'brickSide');
+    // concrete canopy: thick slab, lighter recessed panel on top
+    ibox(c, p, -1.7, 8.7, -.4, 6.7, 5.4, 6.4, ['concreteTopLight', 'concreteFront', 'concreteSide']);
+    face(c, [p(-1.1, .3, 6.4), p(8.1, .3, 6.4), p(8.1, 6, 6.4), p(-1.1, 6, 6.4)], 'concreteFront', false);
+    face(c, [p(-.9, .5, 6.4), p(7.9, .5, 6.4), p(7.9, 5.8, 6.4), p(-.9, 5.8, 6.4)], 'concreteTopLight', false);
+    onFront(c, p, -.41, -1.7, 8.7, 5.4, 5.55, 'concreteSide');
+    return 14.5;
   },
-  booth(c, o) {
-    shadowRect(c, o.x - 1.7, o.x + 1.7, o.z + 1.55);
-    box(c, o.x - 1.3, o.x + 1.3, o.z - 1.2, o.z + 1.2, 0, .3, 'paverJoint', 'planter');
-    box(c, o.x - 1.05, o.x + 1.05, o.z - .95, o.z + .95, .3, 2.4, 'booth', 'booth');
-    rect(c, X(o.x - .9), Y(o.z + .95) - H(2.2), X(o.x - .2), Y(o.z + .95) - H(.6), 'boothDark');
-    box(c, o.x - 1.7, o.x + 1.7, o.z - 1.55, o.z + 1.55, 2.4, 2.8, 'concreteTop', 'concrete', 'white');
-    return o.z + 1.55;
-  },
+  booth(c, o) { img(c, 'booth', X(o.x) + M * .2, Y(o.z + 1.3), M * 4.4); return o.z + 1.2; },
   island(c, o) {
-    box(c, o.x0, o.x1, o.z0, o.z1, 0, .5, 'planter', 'paverJoint');
-    for (let z = o.z0 + .5; z < o.z1; z += 1.1) sprite(c, 'bush0', () => S.bush(false), X((o.x0 + o.x1) / 2), Y(z + .4) - H(.5), .55);
+    const p = iso(X(o.x0), Y(o.z1));
+    ibox(c, p, 0, o.x1 - o.x0, 0, o.z1 - o.z0, 0, .45, ['origStone', 'origBorder', 'origStoneJoint']);
+    for (let b = .5; b < o.z1 - o.z0; b += 1.1) { const [x, y] = p((o.x1 - o.x0) / 2, b, .45); img(c, 'bush', x, y + 8, M * 1.1); }
     return o.z1;
   },
   barrier(c, o) {
-    box(c, o.x - .22, o.x + .22, o.z - .22, o.z + .22, 0, 1.1, 'boomYellow', 'boomYellow');
-    const ax0 = Math.min(o.x, o.x + o.dir * o.len), ax1 = Math.max(o.x, o.x + o.dir * o.len), y = Y(o.z) - H(1);
-    for (let x = ax0, i = 0; x < ax1; x += .5, i++) rect(c, X(x), y - 3, X(Math.min(ax1, x + .5)), y + 3, i % 2 ? 'white' : 'boomRed');
+    const p = iso(X(o.x - .22), Y(o.z + .22));
+    ibox(c, p, 0, .44, 0, .44, 0, 1.1, ['boomYellow', 'boomYellow', 'cone']);
+    const [x0, y0] = p(.22, .22, 1), len = o.len * M * o.dir;
+    for (let i = 0; i < o.len / .5; i++) { fill(c, i % 2 ? 'white' : 'boomRed'); c.fillRect(x0 + (o.dir > 0 ? i : -i - 1) * M * .5, y0 + (o.dir > 0 ? i : -i - 1) * M * .05 - 3, M * .5, 6); }
+    c.strokeStyle = P.outline; c.lineWidth = 1.2; c.strokeRect(Math.min(x0, x0 + len), y0 - 3 + Math.min(0, len * .1), Math.abs(len), 6 + Math.abs(len * .1));
     return o.z + .22;
   },
-  cone(c, o) { poly(c, [[X(o.x) - 7, Y(o.z)], [X(o.x), Y(o.z) - H(.7)], [X(o.x) + 7, Y(o.z)]], 'cone'); rect(c, X(o.x) - 4, Y(o.z) - H(.4), X(o.x) + 4, Y(o.z) - H(.3), 'white'); return o.z; },
+  cone(c, o) { const x = X(o.x), y = Y(o.z); face(c, [[x - 7, y], [x, y - M * .6], [x + 7, y]], 'cone'); face(c, [[x - 4, y - M * .28], [x + 4, y - M * .28], [x + 3, y - M * .36], [x - 3, y - M * .36]], 'white', false); return o.z; },
   obelisk(c, o) {
-    const x = X(o.x), y = Y(o.z + 1.6);
-    c.fillStyle = SHADOW; c.beginPath(); c.ellipse(x + 34, y + 2, M * 3.6, M * .7, 0, 0, 7); c.fill();
-    box(c, o.x - 2.6, o.x + 2.6, o.z - 1.6, o.z + 1.6, 0, 1.4, 'graniteLight', 'granite', 'gold');
-    box(c, o.x - 1.7, o.x + 1.9, o.z - 1.3, o.z + 1.3, 1.4, 2.8, 'graniteLight', 'granite');
-    // tapered tower turned 45°: the west face catches the light
-    const mx = x + M * .1, base = Y(o.z + 1.3) - H(2.8), top = base - H(14), b = 1.6 * M, t = 1.05 * M;
-    poly(c, [[mx - b, base], [mx, base + 8], [mx, top + 6], [mx - t, top]], 'graniteLight');
-    poly(c, [[mx, base + 8], [mx + b, base], [mx + t, top], [mx, top + 6]], 'granite');
-    poly(c, [[mx - t, top], [mx, top - 8], [mx + t, top], [mx, top + 6]], 'graniteDark');
-    // badge and the gold vertical name on the lit face
-    const bx = mx - t * .5, by = top + H(1.3);
-    c.fillStyle = P.white; c.beginPath(); c.arc(bx, by, 12, 0, 7); c.fill(); c.strokeStyle = P.badgeBlue; c.lineWidth = 2.5; c.beginPath(); c.arc(bx, by, 9.5, 0, 7); c.stroke();
-    text(c, '政', bx, by + 1, `900 10px ${SERIF}`, 'badgeBlue');
-    '國立政治大學'.split('').forEach((ch, i) => text(c, ch, mx - t * .55 - i * .9, top + H(3.2) + i * 22, `900 17px ${SERIF}`, 'gold'));
+    // the red name tower, drawn like the game's gate-1 illustration but with the real name on it
+    const p = iso(X(o.x - 2.6), Y(o.z + 1.6));
+    groundShadow(c, [p(0, 0, 0), p(5.2, 0, 0), p(9, 1.5, 0), p(9, 3.2, 0), p(3, 3.2, 0)].map(([x, y]) => [x + 8, y + 3]));
+    ibox(c, p, 0, 5.2, 0, 3.2, 0, 1.3, ['obeliskTop', 'obeliskFront', 'obeliskSide']);
+    ibox(c, p, .8, 4.4, .4, 2.8, 1.3, 2.7, ['obeliskTop', 'obeliskFront', 'obeliskSide']);
+    const t0 = .65, t1 = .4, cxA = 2.6, cxB = 1.6, top = 17;
+    face(c, [p(cxA - 1.25, cxB - 1.25 + t0 - t0, 2.7), p(cxA + 1.25, cxB - 1.25, 2.7), p(cxA + .85, cxB - .85, top), p(cxA - .85, cxB - .85, top)], 'obeliskFront');
+    face(c, [p(cxA + 1.25, cxB - 1.25, 2.7), p(cxA + 1.25, cxB + 1.25, 2.7), p(cxA + .85, cxB + .85, top), p(cxA + .85, cxB - .85, top)], 'obeliskSide');
+    face(c, [p(cxA - .85, cxB - .85, top), p(cxA + .85, cxB - .85, top), p(cxA + .85, cxB + .85, top), p(cxA - .85, cxB + .85, top)], 'obeliskTop');
+    const [bx, by] = p(cxA, cxB - 1.05, 15.2);
+    c.fillStyle = P.plaque; c.beginPath(); c.arc(bx, by, 11, 0, 7); c.fill(); c.strokeStyle = P.outline; c.lineWidth = OUT; c.stroke();
+    text(c, '政', bx, by + 1, `900 11px ${SERIF}`, 'badgeBlue');
+    const [qx0, qy0] = p(cxA - .42, cxB - 1.15, 13.6), [, qy1] = p(cxA - .42, cxB - 1.15, 5.2);
+    fill(c, 'plaque'); c.beginPath(); c.roundRect(qx0, qy0, M * .84, qy1 - qy0, 3); c.fill(); c.stroke();
+    '國立政治大學'.split('').forEach((ch, i) => text(c, ch, qx0 + M * .42, qy0 + 16 + i * ((qy1 - qy0 - 22) / 5), `900 15px ${SERIF}`, 'graniteDark'));
     return o.z + 1.6;
   },
   nameWall(c, o) {
-    shadowRect(c, o.x0, o.x1, o.z + .3, .6);
-    box(c, o.x0, o.x1, o.z - .3, o.z + .3, 0, 1.1, 'graniteLight', 'granite');
-    text(c, 'NATIONAL CHENGCHI UNIVERSITY', X((o.x0 + o.x1) / 2), Y(o.z + .3) - H(.55), `700 ${M * .42}px Georgia,${SERIF}`, 'gold');
+    const p = iso(X(o.x0), Y(o.z + .3)), w = o.x1 - o.x0;
+    groundShadow(c, [p(0, 0, 0), p(w, 0, 0), p(w + 1, .6, 0), p(1, .6, 0)].map(([x, y]) => [x + 6, y + 6]));
+    ibox(c, p, 0, w, 0, .6, 0, 1.1, ['obeliskTop', 'obeliskFront', 'obeliskSide']);
+    const [x0, y0] = p(w / 2, 0, .55); c.save(); c.translate(x0, y0); c.rotate(Math.atan2(.1, 1));
+    text(c, 'NATIONAL CHENGCHI UNIVERSITY', 0, 0, `700 ${M * .4}px Georgia,${SERIF}`, 'plaque'); c.restore();
     return o.z + .3;
   },
   flowerBed(c, o) {
-    box(c, o.x0, o.x1, o.z0, o.z1, 0, .3, 'planter', 'paverJoint');
-    seed = 5; for (let i = 0; i < 160; i++) { fill(c, i % 5 ? 'flowerRed' : 'flowerOrange'); c.beginPath(); c.arc(X(o.x0 + .3 + rand() * (o.x1 - o.x0 - .6)), Y(o.z0 + .15 + rand() * (o.z1 - o.z0 - .3)) - H(.3), 3 + rand() * 2, 0, 7); c.fill(); }
+    const p = iso(X(o.x0), Y(o.z1)), w = o.x1 - o.x0, d = o.z1 - o.z0;
+    ibox(c, p, 0, w, 0, d, 0, .35, ['planter', 'origBorder', 'origStoneJoint']);
+    seed = 5; for (let i = 0; i < 170; i++) { const [x, y] = p(.2 + rand() * (w - .4), .15 + rand() * (d - .3), .35); fill(c, i % 5 ? 'flowerRed' : 'flowerOrange'); c.beginPath(); c.arc(x, y - rand() * 5, 3.2 + rand() * 2, 0, 7); c.fill(); }
     return o.z1;
   },
-  coneShrub(c, o) { const x = X(o.x), y = Y(o.z); poly(c, [[x - 22, y], [x, y - H(2.9)], [x, y + 4]], 'pineLight'); poly(c, [[x, y - H(2.9)], [x + 22, y], [x, y + 4]], 'pineDark'); return o.z; },
+  coneShrub(c, o) { const x = X(o.x), y = Y(o.z); face(c, [[x - 16, y], [x, y - M * 2.3], [x, y + 3]], 'pineLight'); face(c, [[x, y - M * 2.3], [x + 16, y], [x, y + 3]], 'pineDark'); return o.z; },
   trafficLight(c, o) {
     const x = X(o.x), y = Y(o.z);
-    rect(c, x - 3, y - H(5.2), x + 3, y, 'poleGrey'); rect(c, x, y - H(4.9), x + M * 2.8, y - H(4.7), 'poleGrey');
-    rect(c, x + M * 2.3, y - H(4.95), x + M * 3.2, y - H(4.3), 'metal');
-    c.fillStyle = P.signalGreen; c.beginPath(); c.arc(x + M * 3.0, y - H(4.6), 4, 0, 7); c.fill();
+    face(c, [[x - 2.5, y], [x + 2.5, y], [x + 2.5, y - M * 3.9], [x - 2.5, y - M * 3.9]], 'poleGrey');
+    face(c, [[x, y - M * 3.75], [x + M * 2.3, y - M * 3.75 + 5], [x + M * 2.3, y - M * 3.6 + 5], [x, y - M * 3.6]], 'poleGrey');
+    face(c, [[x + M * 1.9, y - M * 3.9 + 4], [x + M * 2.7, y - M * 3.9 + 5], [x + M * 2.7, y - M * 3.45 + 5], [x + M * 1.9, y - M * 3.45 + 4]], 'metal');
+    c.fillStyle = P.signalGreen; c.beginPath(); c.arc(x + M * 2.5, y - M * 3.67 + 5, 3.5, 0, 7); c.fill();
     return o.z;
   },
   hedge(c, o) {
-    box(c, o.x0, o.x1, o.z - .55, o.z + .55, 0, 1.1, 'hedgeTop', 'hedge');
-    fill(c, 'hedgeDark'); for (let x = o.x0; x < o.x1; x += 2.1) c.fillRect(X(x), Y(o.z + .55) - H(1.1), 2, H(1.1));
-    seed = Math.round(o.x0 * 7); for (let x = o.x0 + .5; x < o.x1; x += .9) { fill(c, 'leafLight'); c.beginPath(); c.arc(X(x), Y(o.z - .2) - H(1.1), 5 + rand() * 4, 0, 7); c.fill(); }
+    const p = iso(X(o.x0), Y(o.z + .55)), w = o.x1 - o.x0;
+    ibox(c, p, 0, w, 0, 1.1, 0, 1.1, ['hedgeTop', 'hedge', 'hedgeSide']);
+    seed = Math.round(o.x0 * 7); for (let a = .4; a < w; a += .8) { const [x, y] = p(a, .55, 1.1); fill(c, 'leafLight'); c.beginPath(); c.arc(x, y, 4 + rand() * 3, 0, 7); c.fill(); }
     return o.z + .55;
   },
-  shrub(c, o) { sprite(c, 'bush0', () => S.bush(false), X(o.x), Y(o.z), .8); return o.z; },
+  shrub(c, o) { img(c, 'bush', X(o.x), Y(o.z) + 6, M * 1.6); return o.z; },
   bowl(c, o) {
     const x = X(o.x), y = Y(o.z);
-    c.fillStyle = SHADOW; c.beginPath(); c.ellipse(x + 6, y + 4, M, M * .3, 0, 0, 7); c.fill();
-    poly(c, [[x - M, y - H(.4)], [x + M, y - H(.4)], [x + M * .7, y], [x - M * .7, y]], 'bowlShade');
-    c.fillStyle = P.bowl; c.beginPath(); c.ellipse(x, y - H(.4), M, M * .32, 0, 0, 7); c.fill();
-    sprite(c, 'bush0', () => S.bush(false), x, y - H(.25), .65);
-    seed = Math.round(o.x * 13); for (let i = 0; i < 12; i++) { fill(c, 'lavender'); c.beginPath(); c.arc(x + (rand() - .5) * M * 1.1, y - H(1) - rand() * 18, 3, 0, 7); c.fill(); }
+    c.fillStyle = SHADOW; c.beginPath(); c.ellipse(x + 6, y + 3, M, M * .3, 0, 0, 7); c.fill();
+    face(c, [[x - M, y - M * .35], [x + M, y - M * .35], [x + M * .7, y], [x - M * .7, y]], 'bowlShade');
+    c.fillStyle = P.bowl; c.beginPath(); c.ellipse(x, y - M * .35, M, M * .32, 0, 0, 7); c.fill(); c.strokeStyle = P.outline; c.lineWidth = OUT; c.stroke();
+    img(c, 'bush', x, y - M * .1, M * 1.5);
+    seed = Math.round(o.x * 13); for (let i = 0; i < 12; i++) { fill(c, 'lavender'); c.beginPath(); c.arc(x + (rand() - .5) * M * 1.1, y - M * .9 - rand() * 16, 3, 0, 7); c.fill(); }
     return o.z;
   },
   bannerPole(c, o) {
-    const x = X(o.x), y = Y(o.z);
+    const x = X(o.x), y = Y(o.z), hp = M * 3.6;
     c.fillStyle = SHADOW; c.beginPath(); c.ellipse(x + 4, y + 1, 9, 3, 0, 0, 7); c.fill();
-    rect(c, x - 2.5, y - H(5), x + 2.5, y, 'poleGrey');
-    BANNER.forEach(([col, word], i) => {
-      const bx = i ? x + 4 : x - 4 - M * .9;
-      rect(c, bx, y - H(4.2), bx + M * .9, y - H(2.4), col);
-      c.fillStyle = P.white; c.beginPath(); c.arc(bx + M * .45, y - H(3.3), 6, 0, 7); c.fill();
-      text(c, word === 'NCCU' ? 'N' : '政', bx + M * .45, y - H(3.3) + 1, `800 8px ${SERIF}`, i ? 'badgeBlue' : 'bannerRed');
+    face(c, [[x - 2.5, y], [x + 2.5, y], [x + 2.5, y - hp], [x - 2.5, y - hp]], 'poleGrey');
+    BANNER.forEach(([col, ch], i) => {
+      const bx = i ? x + 4 : x - 4 - M * .85;
+      face(c, [[bx, y - hp * .84], [bx + M * .85, y - hp * .84], [bx + M * .85, y - hp * .48], [bx, y - hp * .48]], col);
+      c.fillStyle = P.white; c.beginPath(); c.arc(bx + M * .42, y - hp * .66, 6, 0, 7); c.fill();
+      text(c, ch, bx + M * .42, y - hp * .66 + 1, `800 8px ${SERIF}`, i ? 'badgeBlue' : 'bannerRed');
     });
-    c.fillStyle = P.lamp; c.beginPath(); c.arc(x, y - H(5.15), 8, 0, 7); c.fill();
+    c.fillStyle = P.lamp; c.beginPath(); c.arc(x, y - hp - 6, 7, 0, 7); c.fill(); c.strokeStyle = P.outline; c.lineWidth = OUT; c.stroke();
     return o.z;
   },
-  noticeBoard(c, o) {
-    const x = X(o.x), y = Y(o.z);
-    [-1, 1].forEach(s => rect(c, x + s * M - 2, y - H(2.2), x + s * M + 2, y, 'boardWood'));
-    rect(c, x - M * 1.2, y - H(2.3), x + M * 1.2, y - H(.7), 'boardWood'); rect(c, x - M * 1.05, y - H(2.15), x + M * 1.05, y - H(.85), 'boardBlue');
-    rect(c, x - M * 1.3, y - H(2.4), x + M * 1.3, y - H(2.3), 'trunkDark');
-    return o.z;
-  },
+  noticeBoard(c, o) { img(c, 'board', X(o.x), Y(o.z) + 8, M * 2.6); return o.z; },
   mapBoard(c, o) {
-    const x = X(o.x), y = Y(o.z);
-    rect(c, x - M * 1.1, y - H(2.05), x + M * 1.1, y - H(.85), 'metal'); rect(c, x - M, y - H(1.95), x + M, y - H(.95), 'concreteDark');
-    text(c, '校園導覽圖', x, y - H(1.75), `700 9px ${SANS}`, 'white');
-    [-.9, .9].forEach(d => rect(c, x + d * M - 2, y - H(.85), x + d * M + 2, y, 'metal'));
+    const p = iso(X(o.x - 1.1), Y(o.z));
+    [.2, 2].forEach(a => face(c, [p(a - .06, 0, 0), p(a + .06, 0, 0), p(a + .06, 0, 1), p(a - .06, 0, 1)], 'metal'));
+    ibox(c, p, 0, 2.2, 0, .12, .9, 2.1, ['metalLight', 'metal', 'metal']);
+    onFront(c, p, -.01, .12, 2.08, 1, 2, 'boardBlue');
+    const [tx, ty] = p(1.1, 0, 1.78); text(c, '校園導覽圖', tx, ty, `700 9px ${SANS}`, 'white');
     return o.z;
   },
-  bollard(c, o) { const x = X(o.x), y = Y(o.z); c.fillStyle = SHADOW; c.beginPath(); c.ellipse(x + 3, y + 1, 6, 2, 0, 0, 7); c.fill(); rect(c, x - 4.5, y - H(.85), x + 4.5, y, 'bowl'); rect(c, x - 5, y - H(.88), x + 5, y - H(.75), 'poleGrey'); return o.z; },
+  bollard(c, o) { const p = iso(X(o.x - .14), Y(o.z + .14)); c.fillStyle = SHADOW; c.beginPath(); c.ellipse(X(o.x) + 3, Y(o.z) + 2, 6, 2, 0, 0, 7); c.fill(); ibox(c, p, 0, .28, 0, .28, 0, .85, ['poleGrey', 'bowl', 'bowlShade']); return o.z; },
   fountain(c, o, t) {
-    const x = X(o.x), y = Y(o.z), r = X(o.r), lip = H(.6);
-    c.fillStyle = P.basin; c.beginPath(); c.ellipse(x, y, r, r, 0, 0, Math.PI); c.lineTo(x - r, y - lip); c.ellipse(x, y - lip, r, r, 0, Math.PI, 0, true); c.closePath(); c.fill();
-    c.fillStyle = P.basinTop; c.beginPath(); c.arc(x, y - lip, r, 0, 7); c.fill();
-    c.fillStyle = P.water; c.beginPath(); c.arc(x, y - lip, r - M * .55, 0, 7); c.fill();
+    const x = X(o.x), y = Y(o.z), r = X(o.r), lip = M * .55;
+    c.fillStyle = SHADOW; c.beginPath(); c.ellipse(x + 10, y + 8, r + 6, r * .98, 0, 0, 7); c.fill();
+    c.fillStyle = P.basin; c.beginPath(); c.ellipse(x, y, r, r, 0, 0, Math.PI); c.lineTo(x - r, y - lip); c.ellipse(x, y - lip, r, r, 0, Math.PI, 0, true); c.closePath(); c.fill(); c.strokeStyle = P.outline; c.lineWidth = OUT; c.stroke();
+    c.fillStyle = P.basinTop; c.beginPath(); c.arc(x, y - lip, r, 0, 7); c.fill(); c.stroke();
+    c.fillStyle = P.water; c.beginPath(); c.arc(x, y - lip, r - M * .5, 0, 7); c.fill(); c.stroke();
     c.strokeStyle = P.waterLight; c.lineWidth = 3;
-    for (let k = 0; k < 3; k++) { const rr = ((t * 22 + k * 50) % (r - M * .7)); c.globalAlpha = 1 - rr / r; c.beginPath(); c.arc(x, y - lip, rr, 0, 7); c.stroke(); }
-    c.globalAlpha = 1;
-    c.fillStyle = P.white; for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2 + t * .8; c.globalAlpha = .7; c.beginPath(); c.arc(x + Math.cos(a) * 6, y - lip - 14 - Math.abs(Math.sin(t * 3 + k)) * 10, 3, 0, 7); c.fill(); }
+    for (let k = 0; k < 3; k++) { const rr = (t * 22 + k * 50) % (r - M * .7); c.globalAlpha = 1 - rr / r; c.beginPath(); c.arc(x, y - lip, rr, 0, 7); c.stroke(); }
+    c.globalAlpha = .75; c.fillStyle = P.white;
+    for (let k = 0; k < 7; k++) { const a = k / 7 * Math.PI * 2 + t * .8; c.beginPath(); c.arc(x + Math.cos(a) * 7, y - lip - 16 - Math.abs(Math.sin(t * 3 + k)) * 12, 3, 0, 7); c.fill(); }
     c.globalAlpha = 1;
     return o.z + o.r;
   },
   busStop(c, o) {
     const x = X(o.x), y = Y(o.z);
-    rect(c, x - 2, y - H(2.8), x + 2, y, 'metal'); rect(c, x - M * .45, y - H(3.15), x + M * .45, y - H(2.05), 'busBlue');
-    text(c, '政大', x, y - H(2.75), `900 11px ${SANS}`, 'white'); text(c, '公車站', x, y - H(2.35), `600 7px ${SANS}`, 'white');
+    face(c, [[x - 2, y], [x + 2, y], [x + 2, y - M * 2.2], [x - 2, y - M * 2.2]], 'metal');
+    face(c, [[x - M * .45, y - M * 2.5], [x + M * .45, y - M * 2.5], [x + M * .45, y - M * 1.6], [x - M * .45, y - M * 1.6]], 'busBlue');
+    text(c, '政大', x, y - M * 2.2, `900 10px ${SANS}`, 'white'); text(c, '公車站', x, y - M * 1.85, `600 7px ${SANS}`, 'white');
     return o.z;
   },
   scooter(c, o) {
     const cols = ['white', 'boomRed', 'boomYellow', 'shirtBlue', 'glass', 'metal'], x = X(o.x), y = Y(o.z);
-    c.fillStyle = SHADOW; c.beginPath(); c.ellipse(x + 4, y + 2, 12, 22, 0, 0, 7); c.fill();
-    rect(c, x - 3, y - 26 - H(.5), x + 3, y - 20 - H(.5), 'metal');
-    c.fillStyle = P[cols[o.colour]]; c.beginPath(); c.roundRect(x - 8, y - 22 - H(.5), 16, 40, 6); c.fill();
-    c.fillStyle = P.metal; c.beginPath(); c.roundRect(x - 6, y - 6 - H(.6), 12, 18, 4); c.fill();
-    rect(c, x - 13, y - 22 - H(.9), x + 13, y - 19 - H(.9), 'metal');
+    c.fillStyle = SHADOW; c.beginPath(); c.ellipse(x + 4, y + 2, 11, 20, 0, 0, 7); c.fill();
+    c.fillStyle = P[cols[o.colour]]; c.beginPath(); c.roundRect(x - 8, y - 32, 16, 38, 6); c.fill(); c.strokeStyle = P.outline; c.lineWidth = OUT; c.stroke();
+    fill(c, 'metal'); c.beginPath(); c.roundRect(x - 6, y - 18, 12, 16, 4); c.fill();
+    face(c, [[x - 13, y - 34], [x + 13, y - 34], [x + 13, y - 31], [x - 13, y - 31]], 'metal');
     return o.z;
   },
-  tree(c, o) { sprite(c, `tree${(Math.abs(Math.round(o.x * 3)) % 2)}`, () => S.tree(Math.abs(Math.round(o.x * 3)) % 2), X(o.x), Y(o.z), 1.55 * o.s); return o.z; },
+  tree(c, o) { img(c, 'tree', X(o.x), Y(o.z) + 6, M * 5 * o.s); return o.z; },
   palm(c, o) { sprite(c, 'palm', () => S.palm(false), X(o.x), Y(o.z), 1.25, o.x < 0); return o.z; },
   fanPalm(c, o) { sprite(c, 'fanPalm', () => S.palm(true), X(o.x), Y(o.z), 1.1, o.x < 0); return o.z; },
+  cat(c, o, t) {
+    const x = X(o.x), y = Y(o.z);
+    c.fillStyle = SHADOW; c.beginPath(); c.ellipse(x + 3, y, 13, 4, 0, 0, 7); c.fill();
+    img(c, 'cat', x, y + 2 + Math.sin(t * 2.4) * .6, M * 1.25);
+    fill(c, 'ink'); c.beginPath(); c.roundRect(x - 9, y - M * 2.1 - 12, 18, 22, 8); c.fill(); text(c, '!', x, y - M * 2.1 - 1, '900 14px system-ui', 'white');
+    return o.z;
+  },
 };
 // south edge used for depth sorting without drawing
 const SORT = {
-  gatehouse: () => 14.9, booth: o => o.z + 1.55, island: o => o.z1, barrier: o => o.z + .22, obelisk: o => o.z + 1.6, nameWall: o => o.z + .3,
+  gatehouse: () => 14.5, booth: o => o.z + 1.2, island: o => o.z1, barrier: o => o.z + .22, obelisk: o => o.z + 1.6, nameWall: o => o.z + .3,
   flowerBed: o => o.z1, hedge: o => o.z + .55, fountain: o => o.z + o.r,
 };
 const sortZ = o => (SORT[o.type] ? SORT[o.type](o) : o.z);
@@ -309,7 +346,7 @@ function decor(region, walls) {
   return out;
 }
 Object.assign(DRAW, {
-  decorBush(c, o) { sprite(c, o.flowers ? 'bushF' : 'bush0', () => S.bush(o.flowers), X(o.x), Y(o.z), .75); return o.z; },
+  decorBush(c, o) { img(c, 'bush', X(o.x), Y(o.z) + 6, M * (o.flowers ? 1.5 : 1.2)); return o.z; },
   decorRock(c, o) { sprite(c, 'rock', S.rock, X(o.x), Y(o.z), .9); return o.z; },
   decorMushroom(c, o) { sprite(c, 'mushroom', S.mushroom, X(o.x), Y(o.z), .9); return o.z; },
 });

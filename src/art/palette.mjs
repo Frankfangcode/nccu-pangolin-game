@@ -25,6 +25,11 @@ export const P = {
   cone: '#f0702e', boomRed: '#d8433f', boomYellow: '#f0c43a', bannerRed: '#d8433f', bannerYellow: '#efd54a', poleGrey: '#8f949a',
   water: '#5f8f89', waterLight: '#8cbab3', basin: '#8f8577', basinTop: '#a39886',
   palmFrond: '#4f9a3e', palmFrondLight: '#62b049', palmFrondDark: '#3d7f31', palmTrunk: '#cfc7b8', palmTrunkDark: '#b3aa98', fanTrunk: '#8f7c66',
+  // 原本穿山甲遊戲的插畫配色（landscape.mjs、gatehouse-v12、gate-1）：細深描線、亮頂、正面中間調、側面最暗
+  outline: '#2f3330', origAsphalt: '#7a807b', origBorder: '#d0cbbb', origStone: '#b9b9a4', origStoneJoint: '#a7a792', origCrossing: '#f4edda',
+  glassTeal: '#2f5d63', glassTealLight: '#6fa3a8', frame: '#efe6d6', frameShade: '#d8ccb6',
+  brickFront: '#c9695a', brickSide: '#a9544a', brickTop: '#d98a76', concreteFront: '#9a968d', concreteSide: '#85817a', concreteTopLight: '#b4b0a6',
+  obeliskFront: '#d9643f', obeliskSide: '#b44f33', obeliskTop: '#ec8a63', plaque: '#f1e3c4', hedgeSide: '#3f8a3e',
   signalGreen: '#52e08a', bowl: '#e9e8e3', bowlShade: '#c9c7bf', lavender: '#9b7fd0', busBlue: '#1f5fae', booth: '#a9d1e3', boothDark: '#86b4c9', boardBlue: '#7aa2c9', boardWood: '#6b4a35',
 };
 export const SHADOW = 'rgba(24,70,28,0.28)';

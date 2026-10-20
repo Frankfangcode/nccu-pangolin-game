@@ -67,6 +67,8 @@ export const MAIN_GATE = {
     { type: 'mapBoard', x: -9.6, z: -21.5 },
     // 噴水池
     { type: 'fountain', x: 0, z: -32, r: 5.6 },
+    // 原本遊戲的黑貓：在校門內的樹下等你（v13 任務起點）
+    { type: 'cat', x: -4.4, z: -.4 },
     // 指南路：公車站、機車
     { type: 'busStop', x: 27, z: 17.4 },
     ...Array.from({ length: 6 }, (_, i) => ({ type: 'scooter', x: -38 + i * 1.3, z: 14.6, colour: i })),
