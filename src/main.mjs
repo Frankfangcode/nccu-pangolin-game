@@ -1,18 +1,19 @@
-import {createTouchControls} from './touch.mjs?v=15';
-import {createQuest,QUEST_STEPS,questTarget,interactQuest} from './quest.mjs?v=15';
-import {readSave,writeSave} from './save.mjs?v=15';
-import {createStory} from './story.mjs?v=15';
-import {manifest} from './manifest.mjs?v=15';
+import {createTouchControls} from './touch.mjs?v=16';
+import {createQuest,QUEST_STEPS,questTarget,interactQuest} from './quest.mjs?v=16';
+import {readSave,writeSave} from './save.mjs?v=16';
+import {createStory} from './story.mjs?v=16';
+import {manifest} from './manifest.mjs?v=16';
 import {discoverPlaces,nearestPlace,entryObjective} from './exploration.mjs';
 import {findRoute} from './navigation.mjs';
-import {createAtlas} from './atlas.mjs?v=15';
-import { WORLD } from './world.mjs?v=15';
-import { createGame, stepMovement, advanceActivities, advanceHumans, advanceAwareness, advanceChase, interact, nearbyPrank } from './rules.mjs?v=15';
-import { createInput } from './input.mjs?v=15';
-import { render,cameraFor } from './render.mjs?v=15';
-import {createMinimap} from './minimap.mjs?v=15';
+import {createAtlas} from './atlas.mjs?v=16';
+import { WORLD } from './world.mjs?v=16';
+import { createGame, stepMovement, advanceActivities, advanceHumans, advanceAwareness, advanceChase, interact, nearbyPrank } from './rules.mjs?v=16';
+import { createInput } from './input.mjs?v=16';
+import { render,cameraFor } from './render.mjs?v=16';
+import {createMinimap} from './minimap.mjs?v=16';
 import { loadAssets } from './assets.mjs';
-import {createCloseup} from './closeup.mjs?v=15';
+import {createCloseup} from './closeup.mjs?v=16';
+import {createForage,drainStamina,nearbyAnthill,finishForage,isTired} from './forage.mjs?v=16';
 let assets;
 const startButton=document.querySelector('#start');
 const intro=document.querySelector('#intro');
@@ -54,6 +55,7 @@ function guideQuest(){guideTo(entryObjective(state,WORLD)??questTarget(state.que
 const atlas=createAtlas(WORLD,()=>state,()=>assets,guideTo);
 const questDialog=document.querySelector('#quest-dialog');
 const closeup=createCloseup(document.querySelector('#closeup'));
+const forage=createForage(document.querySelector('#forage'));let foragingAt=null;
 document.querySelector('#quest-close').onclick=()=>questDialog.close();
 questDialog.addEventListener('close',()=>{
  if(pendingFeedback){feedback={...pendingFeedback,startedAt:sceneTime};pendingFeedback=null;}
@@ -104,15 +106,26 @@ function frame(now) {
   } else if (started && !state.won && !dialog.open && !atlas.dialog.open && !story.dialog.open && !questDialog.open&&!closeup.dialog.open) {
     if (actions.restart) {state = returnHome();target=null;route=null;}
     else {
+      // The world keeps going while eating ants; dragging away abandons the meal.
       state = stepMovement(state, actions, dt, WORLD);
+      state = drainStamina(state, dt, state.player.moving);
       state = advanceActivities(state, dt);
       state = advanceHumans(state, dt, WORLD);
       state = advanceAwareness(state, dt, WORLD);
       state = advanceChase(state, dt, WORLD);
-      if (actions.interact){
+      if (forage.active&&(state.status==='chase'||Math.hypot(state.player.x-foragingAt.x,state.player.y-foragingAt.y)>40))forage.abort('spotted');
+      if (actions.interact&&!forage.active){
        const before=state.quest.stage,result=interactQuest(state,WORLD);
        if(result.dialogue){state=result.state;pendingFeedback=result.feedback??null;showQuestDialogue(result.dialogue);if(state.quest.stage!==before)guideQuest();}
        else if(result.state!==state)state=result.state;
+       else if(!nearbyPrank(state,WORLD)&&nearbyAnthill(state,WORLD,sceneTime)){
+        if(state.status!=='safe')state={...state,message:'有人在看，等一下再吃。'};
+        else{const hill=nearbyAnthill(state,WORLD,sceneTime);foragingAt={x:state.player.x,y:state.player.y};
+         forage.start((score,reason)=>{
+          if(reason==='spotted'){state={...state,message:'被發現了！螞蟻先放著，快躲起來。'};return;}
+          state=finishForage(state,hill,score,sceneTime);state={...state,message:score?`吃了 ${score} 隻螞蟻，體力回來了！`:'一隻都沒吃到……'};
+         });}
+       }
        else if(nearbyPrank(state,WORLD)){
         if(state.status==='chase')state={...state,message:'先甩掉追你的人，再搞怪。'};
         else closeup.open(nearbyPrank(state,WORLD),finished=>{if(finished)state=interact(state,WORLD);canvas.focus();});
@@ -136,6 +149,8 @@ function frame(now) {
   document.querySelector('#scout').hidden=stage!=='complete';
   document.querySelector('#save-status').textContent=saveFailed?'暫時無法存檔 · 本次仍可玩':'進度自動保存在此瀏覽器';
   document.querySelector('#save-status').hidden=!saveFailed;
+  document.querySelector('#touch-controls').classList.toggle('foraging',forage.active);
+  const stamina=document.querySelector('#stamina');stamina.style.setProperty('--fill',state.stamina??1);stamina.classList.toggle('tired',isTired(state));stamina.hidden=!started;stamina.setAttribute('aria-label',`體力 ${Math.round((state.stamina??1)*100)}%`);
   const warning=document.querySelector('#danger');warning.hidden=state.status==='safe'&&!state.player.curled;warning.textContent=state.status==='chase'?'被發現了！快躲起來':state.status==='alert'?'小心，有人看過來了':'蜷縮中 · 花叢裡才能隱藏';
   if (state.message) {
     if (!messageTime) messageTime = now;

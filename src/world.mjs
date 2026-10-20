@@ -1,5 +1,5 @@
 import {isBlocked,segmentDistance} from './navigation.mjs';
-import {CAMPUS} from './campus-data.mjs?v=15';
+import {CAMPUS} from './campus-data.mjs?v=16';
 const aliases={school:'heritage',shop:'heritage',canteen:'heritage',academic:'office'};
 const landmarks=CAMPUS.landmarks.map(p=>{
  const n={...p,asset:aliases[p.asset]??p.asset,w:p.w*.72,h:p.h*.72};
@@ -49,6 +49,11 @@ for(let i=0;i<320;i++){
  if(isBlocked(x,y,WORLD)||landmarks.some(p=>Math.abs(p.x-x)<p.w/2+90&&Math.abs(p.y-y)<p.h+80)||WORLD.roads.some(r=>r.slice(1).some((p,j)=>segmentDistance(x,y,r[j],p)<95)))continue;
  WORLD.trees.push({x,y,w,h});
 }
+
+// v16 anthills: two inside the gate to learn on, then one beside every sixth tree.
+WORLD.anthills=[{x:2160,y:3200},{x:2526,y:3018}];
+WORLD.trees.forEach((t,i)=>{if(i%6===2&&!isBlocked(t.x+40,t.y+8,WORLD))WORLD.anthills.push({x:t.x+40,y:t.y+8});});
+WORLD.anthills=WORLD.anthills.map((h,i)=>({...h,id:`ant${i}`}));
 
 // A small shaded arrival, framing the walk without hiding the open gate.
 WORLD.trees.push(...[{x:2220,y:3030},{x:2475,y:2990},{x:2220,y:2850},{x:2480,y:2800}].map(p=>({...p,w:128,h:155})));

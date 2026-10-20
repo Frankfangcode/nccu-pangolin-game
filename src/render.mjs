@@ -1,7 +1,7 @@
-import {QUEST_ACTORS,questTarget,questScene} from './quest.mjs?v=15';
-import {drawGround,drawPlace,drawRoute} from './landscape.mjs?v=15';
+import {QUEST_ACTORS,questTarget,questScene} from './quest.mjs?v=16';
+import {drawGround,drawPlace,drawRoute} from './landscape.mjs?v=16';
 import { depthSort } from './assets.mjs';
-import {visionOf,activityOf,isWaking} from './rules.mjs?v=15';
+import {visionOf,activityOf,isWaking} from './rules.mjs?v=16';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export function cameraFor(player,world,{width,height,touch}) {
  const zoom=touch?clamp(height/430,.78,1.15):1.75,viewWidth=width/zoom,viewHeight=height/zoom;
@@ -43,6 +43,14 @@ export function render(c,state,world,v,{assets:a}={}) {
  for(const p of world.trees??[])if(visible(p))objects.push({sortY:p.y,draw(){c.save();if(state.player.y<p.y&&state.player.y>p.y-p.h&&Math.abs(state.player.x-p.x)<p.w/2)c.globalAlpha=.35;sprite(c,a.tree,p.x,p.y,p.w,p.h);c.restore();}});
 
  for(const b of world.bushes)objects.push({sortY:b.y+b.h,draw(){c.save();const inside=state.player.x>=b.x&&state.player.x<=b.x+b.w&&state.player.y>=b.y&&state.player.y<=b.y+b.h;c.globalAlpha=inside?.22:1;sprite(c,a.shrub,b.x+b.w/2,b.y+b.h,b.w+24,b.h+35);c.restore();}});
+ for(const h of world.anthills??[]){if(!visible({...h,w:80,h:60}))continue;const ready=(state.anthills?.[h.id]??0)<=(v.sceneTime??0);objects.push({sortY:h.y,draw(){
+  c.fillStyle='#183e342b';c.beginPath();c.ellipse(h.x+4,h.y+2,26,8,0,0,Math.PI*2);c.fill();
+  c.fillStyle='#8a6440';c.beginPath();c.moveTo(h.x-24,h.y);c.quadraticCurveTo(h.x,h.y-30,h.x+24,h.y);c.closePath();c.fill();
+  c.fillStyle='#a77d55';c.beginPath();c.moveTo(h.x-24,h.y);c.quadraticCurveTo(h.x-6,h.y-28,h.x+2,h.y-14);c.lineTo(h.x-4,h.y);c.closePath();c.fill();
+  c.strokeStyle='#2f3330';c.lineWidth=1.4;c.beginPath();c.moveTo(h.x-24,h.y);c.quadraticCurveTo(h.x,h.y-30,h.x+24,h.y);c.stroke();
+  c.fillStyle='#4a3320';c.beginPath();c.ellipse(h.x,h.y-14,4,2.5,0,0,Math.PI*2);c.fill();
+  if(ready)for(let k=0;k<6;k++){const a=(v.reduceMotion?0:clock*1.6)+k*1.05,r=16+(k%2)*6;c.fillStyle='#2a1d14';c.beginPath();c.arc(h.x+Math.cos(a)*r,h.y-6+Math.sin(a)*r*.35,1.8,0,Math.PI*2);c.fill();}
+ }});}
  world.pranks.forEach((p,i)=>objects.push({sortY:p.y,draw(){shadow(c,p.x,p.y,50);sprite(c,a[['sign','frog','duck'][i]],p.x,p.y,i===0?68:55,i===0?78:60);const done=state.completedPranks.includes(p.id);pill(c,done?'✓':String(i+1),p.x,p.y-88,30);if(Math.hypot(state.player.x-p.x,state.player.y-p.y)<65&&!done)pill(c,touch?'按「互動」':`E · ${p.action}`,p.x,p.y-120,touch?110:220);}}));
  state.humans.forEach(p=>objects.push({sortY:p.y,draw(){const row=Math.abs(Math.cos(p.facing))>.6?(Math.cos(p.facing)>0?0:1):(Math.sin(p.facing)>0?2:3);const doing=activityOf(p);actor(c,a.human,p,clock,84,row,!v.reduceMotion&&doing==='walk');if(doing==='phone')handPhone(c,p);if(p.awareness>0)pill(c,p.mode==='chase'?'!':'?',p.x,p.y-83,28);}}));
  objects.push({sortY:state.player.y,draw(){const p=state.player;if(p.curled){shadow(c,p.x,p.y,48);sprite(c,a.curl,p.x,p.y+5,58,58);}else actor(c,a.pangolin,p,clock,85,({east:0,west:1,south:2,north:3})[p.direction]??0,p.moving&&!v.reduceMotion);}});
@@ -64,6 +72,8 @@ export function render(c,state,world,v,{assets:a}={}) {
    if(npc.id==='treasure'){const shine=v.reduceMotion?1:.65+Math.sin(clock*3)*.25;c.save();c.globalAlpha=shine;text(c,'✦',p.x+17,p.y-24,16,'#fff1b2');c.restore();}}});
  }
  depthSort(objects).forEach(o=>o.draw());
+ // Anthill prompts sit above buildings so they are never half hidden.
+ for(const h of world.anthills??[]){if(v.conversing||Math.hypot(state.player.x-h.x,state.player.y-h.y)>=70)continue;const ready=(state.anthills?.[h.id]??0)<=(v.sceneTime??0);pill(c,ready?(touch?'按互動 · 吃螞蟻':'E · 吃螞蟻'):'螞蟻還沒回來',h.x,h.y-48,touch?128:116);}
  // Habit bubbles sit above buildings and canopies so they stay readable.
  for(const p of state.humans){const doing=activityOf(p);if(!(p.awareness>0)&&doing!=='walk')habitBubble(c,p,doing,clock,isWaking(p),v.reduceMotion);}
  const closest=world.landmarks.reduce((a,b)=>Math.hypot(a.x-state.player.x,a.y-state.player.y)<Math.hypot(b.x-state.player.x,b.y-state.player.y)?a:b);

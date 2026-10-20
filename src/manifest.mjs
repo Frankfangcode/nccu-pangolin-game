@@ -1,4 +1,4 @@
-import {WORLD} from './world.mjs?v=15';
+import {WORLD} from './world.mjs?v=16';
 export const manifest = {
   hall:'assets/flat/hall.png',library:'assets/flat/library.png',
   tree:'assets/flat/tree.png',shrub:'assets/flat/pack/pack-1.png',sign:'assets/flat/pack/pack-2.png',

@@ -46,6 +46,8 @@ export function createGame(world) {
     completedPranks: [],
     visited: [],
     captureCount: 0,
+    stamina: 1,
+    anthills: {},
     won: false,
     status: 'safe',
     awareness: 0,
@@ -57,7 +59,7 @@ export function stepMovement(state, actions, dt, world) {
   const horizontal = actions.axisX || Number(Boolean(actions.right)) - Number(Boolean(actions.left));
   const vertical = actions.axisY || Number(Boolean(actions.down)) - Number(Boolean(actions.up));
   const magnitude = Math.max(1,Math.hypot(horizontal, vertical));
-  const seconds = Math.min(Math.max(dt, 0), 0.05);
+  const seconds = Math.min(Math.max(dt, 0), 0.05) * ((state.stamina ?? 1) < 0.2 ? 0.6 : 1);
   const nextX = Math.max(PLAYER_RADIUS, Math.min(world.width - PLAYER_RADIUS, state.player.x + horizontal / magnitude * PLAYER_SPEED * seconds));
   const x = blocked(nextX, state.player.y, world) ? state.player.x : nextX;
   const nextY = Math.max(PLAYER_RADIUS, Math.min(world.height - PLAYER_RADIUS, state.player.y + vertical / magnitude * PLAYER_SPEED * seconds));
