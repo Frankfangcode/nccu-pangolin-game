@@ -149,3 +149,8 @@
 !/src/art/*.mjs
 !/sample.html
 !/src/regions/*.mjs
+
+# 溪邊篇（v16 起正式遊戲）
+!/classic.html
+!/meadow.css
+!/src/meadow/*.mjs

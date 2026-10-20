@@ -9,7 +9,8 @@ test('Pages distribution works under a repository path and excludes private proj
  try{
   const run=spawnSync(process.execPath,['scripts/package-site.mjs',dir],{encoding:'utf8'});
   assert.equal(run.status,0,run.stderr);
-  const html=await readFile(join(dir,'index.html'),'utf8');assert.ok(html.includes('./src/main.mjs'));
+  const html=await readFile(join(dir,'index.html'),'utf8');assert.ok(html.includes('./src/meadow/main.mjs'));
+  assert.ok((await readFile(join(dir,'classic.html'),'utf8')).includes('./src/main.mjs'),'the campus version stays playable');await access(join(dir,'src/meadow/world.mjs'));await access(join(dir,'meadow.css'));
   await access(join(dir,'assets/story/awakening.webp'));await access(join(dir,'assets/campus/lohas-v12.webp'));
   await assert.rejects(access(join(dir,'HANDOFF.md')));await assert.rejects(access(join(dir,'.git')));
  }finally{await rm(dir,{recursive:true,force:true});}

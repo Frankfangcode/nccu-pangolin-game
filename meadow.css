@@ -1,0 +1,31 @@
+/* 溪邊篇介面：常駐只有左上體力與委託、左下背包、右下互動／躲藏 */
+.meadow #stamina{position:relative;left:auto;bottom:auto;flex:none}
+.m-hud{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(14px,env(safe-area-inset-left));right:max(14px,env(safe-area-inset-right));display:flex;align-items:center;gap:10px;pointer-events:none}
+#quest{margin:0;padding:8px 14px;border-radius:999px;background:#fff8e8ee;color:var(--ink);font-size:14px;font-weight:700;box-shadow:0 3px 0 #24463822}
+.m-hud #help{pointer-events:auto;margin-left:auto;width:42px;height:42px;border-radius:50%;background:var(--paper);color:var(--ink);font-weight:800;font-size:20px;box-shadow:0 3px 8px #00000025}
+#backpack{position:absolute;left:max(16px,env(safe-area-inset-left));bottom:max(16px,env(safe-area-inset-bottom));width:62px;height:62px;border-radius:18px;background:var(--paper);box-shadow:0 4px 0 #24463833,0 4px 12px #00000025;font-size:28px;display:grid;place-items:center;z-index:4}
+#backpack b{position:absolute;top:-6px;right:-6px;min-width:24px;height:24px;border-radius:12px;background:var(--accent);color:#fff;font-size:13px;display:grid;place-items:center;padding:0 6px}
+#pack-panel{position:absolute;left:max(16px,env(safe-area-inset-left));bottom:calc(max(16px,env(safe-area-inset-bottom)) + 72px);width:min(360px,calc(100% - 32px));background:var(--paper);border-radius:20px;padding:12px;box-shadow:0 10px 30px #18362b55;z-index:6}
+#pack-panel header{display:flex;align-items:center;gap:10px;margin-bottom:8px;color:var(--ink)}#pack-panel small{color:var(--muted);font-size:12px}
+#pack-close{margin-left:auto;width:36px;height:36px;border-radius:50%;background:transparent;color:var(--ink);font-size:22px}
+#pack-slots{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.slot{aspect-ratio:1;border-radius:12px;background:#efe6d6;border:2px dashed #d5dcc3;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px;color:var(--ink)}
+.slot:not(:disabled){border-style:solid;border-color:#d0cbbb;background:#fff}
+.slot canvas{width:44px;height:44px}.slot span{font-size:9px;line-height:1.2;text-align:center}
+.meadow #danger{top:auto;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);background:#b94d32;color:#fff;font-weight:700}
+.meadow .toast{bottom:84px}
+.m-card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,calc(100% - 40px));max-height:calc(100svh - 24px);overflow:auto;background:var(--paper);padding:26px 30px;border-radius:22px;box-shadow:0 10px 0 #24463830,0 20px 50px #00000030;z-index:8}
+.m-card h1{font-size:32px;line-height:1.3;margin:12px 0}.m-card p{font-size:14px;line-height:1.85;color:#4c5a46;margin:0 0 18px}
+.m-card button{display:block;width:100%;padding:15px 24px;border-radius:12px;background:#294e37;color:#fff8e8;font-weight:700;font-size:16px;box-shadow:0 3px 0 #193421}
+.m-card button:disabled{opacity:.65;cursor:wait}.m-card small{display:block;margin-top:14px;font-size:12px}.m-card a{color:var(--muted)}
+#cat-dialog{position:fixed;inset:auto 14px 14px auto;margin:0;width:min(480px,calc(100% - 28px));padding:18px 20px;border-radius:22px}
+#cat-dialog span{font-size:12px;font-weight:800;color:var(--muted)}#cat-dialog h2{font-size:20px;margin:4px 0 6px}#cat-dialog p{margin:0;font-size:15px;line-height:1.7}
+#cat-close{display:block;margin:12px 0 0 auto;min-height:44px;padding:10px 20px;background:var(--ink);color:var(--paper);border-radius:var(--radius);font-weight:700}
+#help-dialog{max-height:calc(100svh - 24px);overflow:auto}#help-dialog h2{margin-top:0}
+@media (max-height:500px){
+ .m-card{padding:16px 22px}.m-card h1{font-size:24px;margin:6px 0}.m-card p{font-size:13px;line-height:1.6;margin-bottom:10px}.m-card button{padding:11px 20px}
+ #backpack{width:54px;height:54px;font-size:24px}#pack-panel{bottom:calc(max(12px,env(safe-area-inset-bottom)) + 62px)}
+ #quest{font-size:13px;padding:6px 12px}
+}
+.meadow .toast{top:calc(max(12px,env(safe-area-inset-top)) + 56px);bottom:auto}
+#touch-controls.learned #touch-hint{display:none}

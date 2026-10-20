@@ -17,7 +17,7 @@ test('local launcher serves the playable page on a loopback URL', async () => {
     assert.match(url, /^http:\/\/127\.0\.0\.1:\d+\/$/);
     const response = await fetch(url);
     assert.equal(response.status, 200);
-    assert.match(await response.text(), /穿山甲出沒 · 政大校園小冒險/);
+    assert.match(await response.text(), /穿山甲出沒 · 溪邊篇/);
   } finally {
     if (child.exitCode === null) { child.kill(); await once(child, 'close'); }
   }
