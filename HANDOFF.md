@@ -1,3 +1,6 @@
+## v14.1 素材瘦身（2026-10-20）
+使用者回報正式站卡在「素材載入中…」很久。原因：開場前要下載54張PNG共17.4MB。新增 scripts/optimize-assets.py 產生 .webp（場景圖最長邊1024、任務小圖縮到實際顯示尺寸，故事插畫保留1536），manifest、故事、封裝改讀 .webp；PNG 保留為原始檔。啟動下載 17.4MB→約1.5MB；模擬快速4G 2.0秒進入故事。按鈕顯示載入百分比。70/70測試，畫面目視無明顯失真，console乾淨。新增或替換 PNG 後要重跑 optimize-assets.py。
+
 ## v14 人類習慣與特寫搞怪（2026-10-20）
 使用者看過 Sneaky Sasquatch 截圖後，要求做「人類狀態畫在頭上」與「手入鏡特寫」兩項並直接更新 GitHub。
 修改：rules.mjs 新增 ACTIVITIES／advanceActivities／visionOf／isWaking／nearbyPrank；world.mjs 五位巡邏者各有排程；render.mjs 依習慣畫視線錐、手機與泡泡（最上層）；新增 closeup.mjs 與 #closeup 對話框；main 在搞怪處開特寫、完成後才計分；說明加習慣圖示解說；版本號 v=14。無新存檔欄位、套件或外部服務。

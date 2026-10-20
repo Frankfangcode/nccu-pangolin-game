@@ -25,7 +25,7 @@ document.querySelector('#resume').onclick=()=>{dialog.close();canvas.focus();};
 startButton.onclick=()=>{if(!assets){location.reload();return;} intro.hidden=true;story.open();};
 document.querySelector('#continue-exploring').onclick=()=>{state={...state,won:false,message:''};finish.hidden=true;canvas.focus();};
 document.querySelector('#again').onclick=()=>{state=returnHome();target=null;route=null;finish.hidden=true;canvas.focus();};
-loadAssets(manifest).then(result=>{assets=result;startButton.disabled=false;startButton.textContent='開始故事 →';intro.hidden=true;if(saved.data){started=true;guideQuest();canvas.focus();}else story.open();}).catch(error=>{startButton.disabled=false;startButton.textContent='載入失敗，點此重試';document.querySelector('#game-status').textContent=error.message;});
+loadAssets(manifest,undefined,(done,total)=>{startButton.textContent=`素材載入中… ${Math.round(done/total*100)}%`;}).then(result=>{assets=result;startButton.disabled=false;startButton.textContent='開始故事 →';intro.hidden=true;if(saved.data){started=true;guideQuest();canvas.focus();}else story.open();}).catch(error=>{startButton.disabled=false;startButton.textContent='載入失敗，點此重試';document.querySelector('#game-status').textContent=error.message;});
 
 const canvas = document.querySelector('#game');
 const ctx = canvas.getContext('2d');
