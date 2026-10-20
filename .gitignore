@@ -144,3 +144,7 @@
 !/test/*.mjs
 !/QA-v14.md
 !/docs/*.md
+
+# v15 style sample (code-drawn SVG art)
+!/src/art/*.mjs
+!/sample.html

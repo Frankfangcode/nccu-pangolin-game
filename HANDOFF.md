@@ -1,3 +1,6 @@
+## v15 風格樣張（2026-10-20）
+依 docs/sasquatch-direction-plan.md 階段1第一步，新增獨立頁 sample.html：正門前廣場與林蔭步道，全部由程式產生 SVG（src/art/palette.mjs 色盤、src/art/sprites.mjs 物件、src/art/sample.mjs 場景）。正俯視、無描邊、同色系陰影；新造型路人（滑手機學生、慢跑者、看書學生、打瞌睡警衛）、鴿子被靠近會飛走、可走動與蜷縮；手機直向提示轉橫向。test/art.test.mjs 強制所有顏色出自色盤。現行遊戲未改動。待使用者確認方向後才推廣到正式場景。新目錄要記得加入 .gitignore 白名單。
+
 ## v14.2 修正：新檔被 .gitignore 白名單擋下（2026-10-20）
 v14 起正式站卡在「素材載入中…」：.gitignore 預設忽略全部，src/closeup.mjs 與所有 .webp 未被提交，main.mjs 匯入 404 導致整個模組失敗。已在白名單加入 src/*.mjs、assets/**/*.webp、test/*.mjs 等，並新增 deploy 測試：封裝出的每個執行檔都必須被 git 追蹤。驗證改用「從提交 clone 的乾淨副本」在瀏覽器實跑。新增檔案時務必確認 git status 有出現。
 

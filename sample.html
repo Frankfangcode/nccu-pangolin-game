@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#244638"><title>v15 風格樣張 · 正門前廣場</title><link rel="icon" href="data:,">
+<style>
+:root{--paper:#fff8e8;--ink:#244638}
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#6cb54a;font-family:"Avenir Next","PingFang TC",sans-serif}
+canvas{display:block;width:100vw;height:100svh;touch-action:none}
+.tag{position:fixed;top:max(14px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));background:var(--paper);color:var(--ink);padding:8px 14px;border-radius:999px;font-size:13px;font-weight:700;box-shadow:0 3px 0 #24463822}
+.tag a{color:var(--ink);margin-left:10px;font-weight:600}
+.hint{position:fixed;bottom:max(14px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#244638d9;color:var(--paper);padding:8px 16px;border-radius:999px;font-size:12px;white-space:nowrap}
+.rotate{display:none;position:fixed;inset:0;background:var(--ink);color:var(--paper);align-items:center;justify-content:center;flex-direction:column;gap:12px;text-align:center;font-size:18px;font-weight:700;padding:24px}
+.rotate span{font-size:44px;display:inline-block;transform:rotate(90deg)}
+@media (orientation:portrait) and (pointer:coarse){.rotate{display:flex}}
+</style></head>
+<body>
+<canvas id="scene" aria-label="v15 風格樣張：政大正門前廣場。方向鍵或拖曳畫面移動，C 蜷縮。"></canvas>
+<p class="tag">v15 風格樣張 · 正門前廣場<a href="./">回遊戲 ↗</a></p>
+<p class="hint">WASD／拖曳畫面移動 · 按住 C 蜷縮 · 靠近鴿子看看</p>
+<div class="rotate"><span>📱</span>轉成橫向更好玩</div>
+<script type="module">import {start} from './src/art/sample.mjs';window.__sample=start(document.querySelector('#scene'));</script>
+</body></html>
