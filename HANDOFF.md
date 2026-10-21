@@ -1,3 +1,11 @@
+## 本輪狀態 — 派派世界郵局 Demo（2026-10-21）
+使用者核可直接實作 demo。從乾淨 main 69e4c67 建立 postcard-demo；計畫／QA／限制見 docs/postcard-demo.md。
+修改：新增 postcards.html、postcards.css、src/postcards-state.mjs、src/postcards.mjs；六款校園插畫、20國家／地區、中英文、即時預覽、草稿／卡片本機保存、派派往返取件動畫、可跳過／減少動態、本人祝福牆篩選、資料清除。首頁歡迎畫面與說明連至郵局，封裝與白名單已納入。無新套件或外部服務；不是正式收件、沒有雲端同步或管理審核，校園存檔不變。
+驗證：Node v24.5.0，新行為3項紅→綠。完整 node --test test/*.test.mjs 在允許回環連接埠環境106/106，紀錄 ../../work/postcard-demo/branch-tests.log；受限環境原launcher失敗為權限問題，放行後通過。node --check src/postcards.mjs 通過。真實瀏覽器表單→法國取件→跳過→祝福牆→重載、中英文、日本、減少動態、未勾選不上牆、合成HTML安全文字、存檔錯誤保留文字、清除資料均通過，console 0 errors/0 warnings。
+前端兩輪1280×800／375×812，最終證據 ../../work/postcard-demo/round2-desktop.png 與 round2-mobile.png；八項自評、偵測逐項處理與動效審查見計畫。獨立reviewer SHIP for local demo，三項P3已修正重走流程。cream-palette依既有設計記錄限定忽略；沒有宣稱第二次偵測零項。PRODUCT追加demo範圍；既有sidecar schema落差僅回報未修改。
+局部決定：延用原生堆疊／既有插畫；選用示意世界航線而非重建國外場景；100張本機卡片上限，資料寫入成功才播放動畫。尚未實機長測；建築仍是既有藝術化示意。
+發布：既有Pages main:/，準備快轉合併、main重測與推送；公開網址驗收結果於本輪對話回報。
+
 ## 本輪狀態 — 派派頭部與步行修正（2026-10-21）
 目標：使用者回饋走路時身體應穩定、頭會動，飛行目前不錯應保留。從同步的 main b83604d 建立 `paipai-ground-motion`，開工無未提交修改。
 修改：以現有地面臺灣藍鵲圖片在 Canvas 上分出固定身體／尾巴、可轉動頭部與橘色雙腳；走路時只依實際步距改變頭角度和腳姿，停住恢復安定。地面移除整隻鳥的上下浮動及傾斜；飛行素材、拍翅節奏與起降仍沿用原邏輯。模組快取版本 v20；無新圖片、套件、存檔欄位或外部服務。
