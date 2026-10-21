@@ -4,7 +4,8 @@
 修改：新增派派移動、飛行、鏡頭、探索、地圖、獨立存檔；新增臺灣藍鵲飛行圖和第八教室／校友服務中心獨立外觀；兩張原圖轉為 WebP 並列入既有封裝。來源及尚未核實的建築見 `BUILDINGS-paipai.md`，測試及手動驗收見 `QA-paipai.md`。README 與 DESIGN 更新。
 驗證：`node --test test/*.test.mjs` 在允許本機 127.0.0.1 的環境 99/99 通過；封裝追蹤檢查通過。真實瀏覽器 1280×800、375×812 載入派派，實玩起飛、移動、地圖搜尋四維堂；`meadow.html` 和 `classic.html` 均載入、無 pageerror。Impeccable 偵測 0。整合後截圖在 `../../work/paipai-integration-{desktop,mobile,map}.png`。
 限制：39 棟建築中部分仍共用概念插畫；30 棟有文字史料線索，9 棟缺可核實外觀資料，不能宣稱全部已像實景。道路與比例是遊戲化示意。實體手機長測未做。
-下一步：整合後 QA、提交、main 全測、push；確認同一次 GitHub Pages 發布及原網址的三個入口與核心流程。
+發布：整合提交 `29a4466f3ee28b5c2876a5c5e4b3f7b7b8a41441` 已推送 `main`；main 重跑 99/99 通過。GitHub Pages `pages-build-deployment` run 39551402966 建置與部署皆成功，來源 main:/，沿用原網址 https://frankfangcode.github.io/nccu-pangolin-game/ 。公開瀏覽器驗證派派首頁可載入、起飛、搜尋並開啟四維堂史料卡；`meadow.html`、`classic.html` 都回 HTTP 200 且可載入。正式頁無 pageerror。
+下一步：逐棟收集可用的外觀照片並重畫共用建築插畫；道路尺寸與入口朝向核對。此部分尚未完成，不可宣稱每棟外觀已還原。
 
 
 ## v16 溪邊篇：取代正式遊戲（2026-10-20）
