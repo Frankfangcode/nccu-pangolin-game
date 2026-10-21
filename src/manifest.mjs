@@ -17,6 +17,8 @@ for(const key of ['green-hall','lohas','daren','pool'])manifest[key]=`assets/cam
 manifest.gatehouse='assets/campus/gatehouse-v12.png';
 manifest.alumni='assets/campus/alumni-v14.png';
 manifest['paipai-flying']='assets/campus/paipai-flying-v14.png';
+manifest['paipai-flying-down']='assets/campus/paipai-flying-down-v18.png';
+manifest['paipai-step']='assets/campus/paipai-step-v18.png';
 
 // Ship the compact .webp copies (scripts/optimize-assets.py); PNGs stay as sources.
 for(const key of Object.keys(manifest))manifest[key]=manifest[key].replace(/\.png$/,'.webp');

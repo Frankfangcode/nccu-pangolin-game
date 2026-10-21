@@ -1,11 +1,11 @@
 import {WORLD} from './world.mjs?v=17';
-import {manifest} from './manifest.mjs?v=17';
+import {manifest} from './manifest.mjs?v=18';
 import {loadAssets} from './assets.mjs';
 import {drawGround,drawPlace} from './landscape.mjs';
 import {nearestPlace} from './exploration.mjs';
 import {buildingStory} from './building-stories.mjs';
-import {createPaiPai,restorePaiPai,stepPaiPai,discoverFromAir} from './paipai-state.mjs';
-import {renderPaiPai} from './paipai-render.mjs?v=17';
+import {createPaiPai,restorePaiPai,stepPaiPai,discoverFromAir} from './paipai-state.mjs?v=18';
+import {renderPaiPai} from './paipai-render.mjs?v=18';
 
 const $=selector=>document.querySelector(selector);
 const canvas=$('#campus'),ctx=canvas.getContext('2d');
@@ -58,5 +58,5 @@ for(const type of ['pointerup','pointercancel','lostpointercapture'])joystick.ad
 loadAssets(manifest).then(result=>{assets=result;$('#begin').disabled=false;$('#begin').textContent=visited.length?'繼續探索 →':'跟派派出發 →';}).catch(error=>{$('#begin').disabled=false;$('#begin').textContent='載入失敗 · 點此重試';$('#begin').onclick=()=>location.reload();$('#live').textContent='校園素材載入失敗：'+error.message;});
 function save(){try{localStorage.setItem(saveKey,JSON.stringify({x:bird.x,y:bird.y,visited}));}catch{}}
 window.addEventListener('pagehide',save);
-function frame(now){const dt=Math.min((now-last)/1000,.05);last=now;if(started&&!mapDialog.open&&!helpDialog.open){const before=visited.length;bird=stepPaiPai(bird,{axisX:axis.x,axisY:axis.y,up:held.has('up'),down:held.has('down'),left:held.has('left'),right:held.has('right'),fly:flight},dt,WORLD);visited=discoverFromAir(visited,bird,WORLD);if(visited.length>before){const newPlace=WORLD.landmarks.find(p=>p.id===visited.at(-1));if(newPlace?.kind==='building')showCard(newPlace);$('#visited-count').textContent=`已認識 ${visited.length} / ${WORLD.landmarks.length}`;}if(target&&closeTo(target)<95)target=null;if(now-lastSave>1400){lastSave=now;save();}}if(assets)renderPaiPai(ctx,bird,WORLD,assets,{width:canvas.clientWidth,height:canvas.clientHeight},{target,visited,time:now/1000,reduceMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});$('#location').textContent=nearestPlace(bird,WORLD).name;requestAnimationFrame(frame);}requestAnimationFrame(frame);
+function frame(now){const dt=Math.min((now-last)/1000,.05);last=now;if(started&&!mapDialog.open&&!helpDialog.open){const before=visited.length;bird=stepPaiPai(bird,{axisX:axis.x,axisY:axis.y,up:held.has('up'),down:held.has('down'),left:held.has('left'),right:held.has('right'),fly:flight},dt,WORLD);visited=discoverFromAir(visited,bird,WORLD);if(visited.length>before){const newPlace=WORLD.landmarks.find(p=>p.id===visited.at(-1));if(newPlace?.kind==='building')showCard(newPlace);$('#visited-count').textContent=`已認識 ${visited.length} / ${WORLD.landmarks.length}`;}if(target&&closeTo(target)<95)target=null;if(now-lastSave>1400){lastSave=now;save();}}if(assets)renderPaiPai(ctx,bird,WORLD,assets,{width:canvas.clientWidth,height:canvas.clientHeight},{target,visited,reduceMotion:matchMedia('(prefers-reduced-motion: reduce)').matches});$('#location').textContent=nearestPlace(bird,WORLD).name;requestAnimationFrame(frame);}requestAnimationFrame(frame);
 window.__paipaiSnapshot=()=>({bird:{...bird},visited:[...visited],flight,target:target?.id??null});

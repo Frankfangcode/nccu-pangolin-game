@@ -10,7 +10,7 @@ export function discoverFromAir(visited,bird,world){
  const found=world.landmarks.filter(place=>!visited.includes(place.id)&&Math.hypot(place.entry.x-bird.x,place.entry.y-bird.y)<=radius).map(place=>place.id);
  return found.length?[...visited,...found]:visited;
 }
-export function createPaiPai(world){return {...world.start,altitude:0,direction:'north',moving:false};}
+export function createPaiPai(world){return {...world.start,altitude:0,direction:'north',moving:false,stride:0,wingPhase:0};}
 export function stepPaiPai(state,input,dt,world){
  const seconds=Math.min(Math.max(dt,0),.05);
  const floor=!input.fly&&isBlocked(state.x,state.y,world)?.25:0;
@@ -24,5 +24,8 @@ export function stepPaiPai(state,input,dt,world){
  const candidateY=Math.max(10,Math.min(world.height-10,state.y+dy/magnitude*speed*seconds));
  const y=altitude>.2||!isBlocked(x,candidateY,world)?candidateY:state.y;
  const direction=Math.abs(dx)>Math.abs(dy)?dx>0?'east':'west':dy?dy>0?'south':'north':state.direction;
- return {...state,x,y,altitude,moving:x!==state.x||y!==state.y,direction};
+ const distance=Math.hypot(x-state.x,y-state.y);
+ const stride=(state.stride??0)+(altitude<=.2?distance:0);
+ const wingPhase=(state.wingPhase??0)+(altitude>0?seconds*Math.PI*2*(3.4+altitude*.6):0);
+ return {...state,x,y,altitude,moving:distance>0,direction,stride,wingPhase};
 }

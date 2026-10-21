@@ -1,5 +1,15 @@
 # 派派校園探索驗收
 
+## 2026-10-21 派派動作改善
+
+角度：首次玩家看走、停、起飛、懸停、落地是否連貫；手機玩家用搖桿移動後放手；易暈動玩家用減少動態設定。這是 AI 情境審查，不冒稱真人認證。
+
+- 已證實並修復：原本地面和空中各只用一張固定姿勢，飛行靠整隻鳥上下浮動。新增步姿與下拍圖；步伐只依實際距離前進，撞牆、停住不空踏步；空中停留繼續拍翅，降落後停止。起降按高度漸變，減少動態時停止起伏與換姿勢。
+- TDD：三個動作行為各先見紅再最小實作見綠。全套 `node --test test/*.test.mjs` 102/102 通過；封裝 95 個檔，新 WebP 均被 Git 追蹤。第一次全測的唯一失敗是尚未暫存的新 WebP，暫存後重跑 102/102。
+- 本機真實瀏覽器：起飛高度達 1、靜止懸停 `wingPhase` 繼續前進；375×812 搖桿使 x 增加，降落回高度 0；減少動態媒體查詢生效；console 0 errors / 0 warnings。`impeccable detect --json index.html src/paipai-render.mjs src/paipai-state.mjs` 回傳 `[]`。
+- 兩輪截圖：`../../work/paipai-motion/round1-desktop.png`、`round1-mobile.png`、`round2-desktop.png`、`round2-mobile.png`。均檢視八項：層次（主角與玩法清楚）、留白（控件與場景分開）、字體（沿用既有中文層級）、配色（藍鵲與校園綠色相襯）、對齊（頂欄與操作區一致）、響應式（375px 無裁切或橫向捲動）、狀態（起飛鈕改為降落）、動效（移動才跨步、空中才拍翅）；本輪未發現新畫面缺陷。
+- 動效審查：Canvas 逐幀只畫角色換姿勢、微幅位置與旋轉；不做版面重排，遊戲暫停時相位暫停，可中斷，減少動態偏好停用微動與換姿勢。無阻擋發布的動效問題。剩餘限制：兩個姿勢的圖像混合在少數中間幀可能有輕微重影；尚無實體手機長測。
+
 ## 2026-10-21 遠端 v16 整合驗收
 
 在 `origin/main` 32e252a 上整合派派，保留 `classic.html` 與 `meadow.html`。WebP 封裝檔案追蹤測試通過，`node --test test/*.test.mjs` 在允許本機回環連接埠的環境中 99/99 通過。實際瀏覽器檢查桌機 1280×800、手機 375×812、起飛與移動、地圖搜尋四維堂；兩個穿山甲入口均能載入且沒有 pageerror。整合截圖：`../../work/paipai-integration-desktop.png`、`paipai-integration-mobile.png`、`paipai-integration-map.png`；第二輪 `../../work/paipai-final-desktop.png`、`paipai-final-mobile.png`。新版素材總共 160 KB WebP（74 KB 飛行派派、86 KB 第八教室），原 PNG 僅作來源。Impeccable 偵測 0 項。安全情境：地圖搜尋輸入 HTML 標記後，結果清單沒有建立任何 `img` 節點；沒有對正式站進行主動攻擊。下方是較早原型的驗收紀錄，舊路徑 `pangolin.html` 在整合後由 `classic.html` 取代，建築清單改為 `BUILDINGS-paipai.md`。
