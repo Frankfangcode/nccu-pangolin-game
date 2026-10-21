@@ -5,7 +5,7 @@ import {drawGround,drawPlace} from './landscape.mjs';
 import {nearestPlace} from './exploration.mjs';
 import {buildingStory} from './building-stories.mjs';
 import {createPaiPai,restorePaiPai,stepPaiPai,discoverFromAir} from './paipai-state.mjs?v=18';
-import {renderPaiPai} from './paipai-render.mjs?v=18';
+import {renderPaiPai} from './paipai-render.mjs?v=20';
 
 const $=selector=>document.querySelector(selector);
 const canvas=$('#campus'),ctx=canvas.getContext('2d');

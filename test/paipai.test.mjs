@@ -82,3 +82,16 @@ test('站定使用休息姿勢，走路切換步姿，飛行切換翅膀，減�
  assert.equal(calm.wingDown,0);
  assert.equal(calm.bob,0);
 });
+
+test('走路時身體固定，頭部轉動且腳步交替；停下與減少動態時頭會安定',()=>{
+ const bird={...createPaiPai(world),moving:true,stride:6.5};
+ const walking=paipaiMotionPose(bird);
+ assert.equal(walking.bodyBob,0);
+ assert.equal(walking.bodyAngle,0);
+ assert.ok(Math.abs(walking.headAngle)>0);
+ assert.ok(walking.walkStep>0);
+ const opposite=paipaiMotionPose({...bird,stride:19.5});
+ assert.ok(walking.headAngle*opposite.headAngle<0);
+ assert.equal(paipaiMotionPose({...bird,moving:false}).headAngle,0);
+ assert.equal(paipaiMotionPose(bird,true).headAngle,0);
+});

@@ -4,8 +4,37 @@ export function paipaiMotionPose(bird,reduceMotion=false){
  const flight=clamp(bird.altitude/.28,0,1);
  const step=bird.moving&&!reduceMotion?(Math.max(0,Math.sin((bird.stride??0)*Math.PI/13))*(1-flight)):0;
  const wingDown=reduceMotion?0:(1-Math.cos(bird.wingPhase??0))/2;
- const bob=reduceMotion?0:(bird.moving?(1-flight)*Math.abs(Math.sin((bird.stride??0)*Math.PI/13))*1.4:0)+flight*Math.sin(bird.wingPhase??0)*1.8;
- return {flight,walkStep:step,wingDown,bob};
+ const headAngle=bird.moving&&!reduceMotion?Math.sin((bird.stride??0)*Math.PI/13)*.13*(1-flight):0;
+ const bodyBob=reduceMotion?0:flight*Math.sin(bird.wingPhase??0)*1.8;
+ const bodyAngle=flight?-.14*flight:0;
+ return {flight,walkStep:step,wingDown,headAngle,bodyBob,bodyAngle,bob:bodyBob};
+}
+const groundLayers=new WeakMap();
+const headOutline=[[.635,0],[1,0],[1,.36],[.88,.35],[.8,.3],[.735,.21],[.63,.17]];
+function canvasFor(image){const canvas=document.createElement('canvas');canvas.width=image.width;canvas.height=image.height;return canvas;}
+function fillHeadOutline(c,width,height){c.beginPath();headOutline.forEach(([x,y],i)=>i?c.lineTo(x*width,y*height):c.moveTo(x*width,y*height));c.closePath();c.fill();}
+function legLayer(image,body){
+ const canvas=canvasFor(image),c=canvas.getContext('2d',{willReadFrequently:true});
+ c.drawImage(image,0,0);
+ const pixels=c.getImageData(0,0,canvas.width,canvas.height),data=pixels.data;
+ for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++){
+  const i=(y*canvas.width+x)*4,r=data[i],g=data[i+1],b=data[i+2];
+  const leg=y>canvas.height*.52&&x>canvas.width*.42&&r>125&&r>g*1.35&&r>b*1.55;
+  if(body?leg:!leg)data[i+3]=0;
+ }
+ c.putImageData(pixels,0,0);
+ return canvas;
+}
+function getGroundLayers(image,stepImage){
+ let layers=groundLayers.get(image);
+ if(layers)return layers;
+ const body=legLayer(image,true),bodyContext=body.getContext('2d');
+ bodyContext.globalCompositeOperation='destination-out';fillHeadOutline(bodyContext,body.width,body.height);
+ const head=canvasFor(image),headContext=head.getContext('2d');
+ headContext.drawImage(image,0,0);headContext.globalCompositeOperation='destination-in';fillHeadOutline(headContext,head.width,head.height);
+ layers={body,head,feet:legLayer(image,false),stepFeet:legLayer(stepImage??image,false)};
+ groundLayers.set(image,layers);
+ return layers;
 }
 export function paipaiCamera(bird,world,width,height){
  const mobile=width<600;
@@ -35,12 +64,19 @@ export function renderPaiPai(c,bird,world,assets,view,{target=null,visited=[],re
  c.fillStyle='#16393c44';c.beginPath();c.ellipse(bird.x+5,bird.y+7,28-bird.altitude*5,10-bird.altitude*2,0,0,Math.PI*2);c.fill();
  const pose=paipaiMotionPose(bird,reduceMotion);
  const size=61+16*pose.flight;
- c.save();c.translate(bird.x,bird.y-8-bird.altitude*47-pose.bob);
+ c.save();c.translate(bird.x,bird.y-8-bird.altitude*47-pose.bodyBob);
  if(bird.direction==='west')c.scale(-1,1);
- c.rotate(-.14*pose.flight+(bird.moving&&!reduceMotion?(1-pose.flight)*Math.sin((bird.stride??0)*Math.PI/13)*.025:0));
  const draw=(sprite,alpha)=>{if(!sprite||alpha<=.005)return;c.globalAlpha=alpha;c.drawImage(sprite,-size*.5,-size*.72,size,size*sprite.height/sprite.width);};
- draw(assets['quest-magpie'],(1-pose.flight)*(1-pose.walkStep));
- draw(assets['paipai-step']??assets['quest-magpie'],(1-pose.flight)*pose.walkStep);
+ if(pose.flight<.995){
+  const layers=getGroundLayers(assets['quest-magpie'],assets['paipai-step']);
+  draw(layers.body,1-pose.flight);
+  draw(layers.feet,(1-pose.flight)*(1-pose.walkStep));
+  draw(layers.stepFeet,(1-pose.flight)*pose.walkStep);
+  const height=size*layers.head.height/layers.head.width,px=size*.79,py=height*.29;
+  c.save();c.translate(-size*.5+px,-size*.72+py);c.rotate(pose.headAngle);
+  c.globalAlpha=1-pose.flight;c.drawImage(layers.head,-px,-py,size,height);c.restore();
+ }
+ c.rotate(pose.bodyAngle);
  draw(assets['paipai-flying'],pose.flight*(1-pose.wingDown));
  draw(assets['paipai-flying-down']??assets['paipai-flying'],pose.flight*pose.wingDown);
  c.restore();
