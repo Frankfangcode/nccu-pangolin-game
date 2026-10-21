@@ -4,7 +4,7 @@
 驗證：Node v24.5.0，新行為3項紅→綠。完整 node --test test/*.test.mjs 在允許回環連接埠環境106/106，紀錄 ../../work/postcard-demo/branch-tests.log；受限環境原launcher失敗為權限問題，放行後通過。node --check src/postcards.mjs 通過。真實瀏覽器表單→法國取件→跳過→祝福牆→重載、中英文、日本、減少動態、未勾選不上牆、合成HTML安全文字、存檔錯誤保留文字、清除資料均通過，console 0 errors/0 warnings。
 前端兩輪1280×800／375×812，最終證據 ../../work/postcard-demo/round2-desktop.png 與 round2-mobile.png；八項自評、偵測逐項處理與動效審查見計畫。獨立reviewer SHIP for local demo，三項P3已修正重走流程。cream-palette依既有設計記錄限定忽略；沒有宣稱第二次偵測零項。PRODUCT追加demo範圍；既有sidecar schema落差僅回報未修改。
 局部決定：延用原生堆疊／既有插畫；選用示意世界航線而非重建國外場景；100張本機卡片上限，資料寫入成功才播放動畫。尚未實機長測；建築仍是既有藝術化示意。
-發布：既有Pages main:/，準備快轉合併、main重測與推送；公開網址驗收結果於本輪對話回報。
+發布：ea96e1296d16fc4f0b033a9394b97d040e16a14c 已快轉main，main全測106/106（../../work/postcard-demo/main-tests.log），推送後遠端SHA一致。既有Pages main:/ run39566701259 success，build同SHA、built、error null。公開 https://frankfangcode.github.io/nccu-pangolin-game/postcards.html 在375×812真實瀏覽器完成法國寄件、完整8.5秒飛行、上牆、重載、清除，返回校園待素材就緒並由新入口回郵局；pageerror與HTTP失敗皆空。後續文件提交僅記錄發布，不變更執行程式。
 
 ## 本輪狀態 — 派派頭部與步行修正（2026-10-21）
 目標：使用者回饋走路時身體應穩定、頭會動，飛行目前不錯應保留。從同步的 main b83604d 建立 `paipai-ground-motion`，開工無未提交修改。
