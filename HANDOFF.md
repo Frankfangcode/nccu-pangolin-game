@@ -3,7 +3,7 @@
 修改：以現有地面臺灣藍鵲圖片在 Canvas 上分出固定身體／尾巴、可轉動頭部與橘色雙腳；走路時只依實際步距改變頭角度和腳姿，停住恢復安定。地面移除整隻鳥的上下浮動及傾斜；飛行素材、拍翅節奏與起降仍沿用原邏輯。模組快取版本 v20；無新圖片、套件、存檔欄位或外部服務。
 驗證：新行為測試紅→綠，`node --test test/paipai.test.mjs` 10/10 通過；完整 `node --test test/*.test.mjs` 103/103 通過，封裝 95 個 runtime 檔，Impeccable 偵測 `[]`。本機 1280×800、375×812 兩輪截圖 `../../work/paipai-ground-motion/round{1,2}-{desktop,mobile}.png`，目視身體穩定、頭腳動作可見且版面無新增缺陷。瀏覽器重測起飛高度 1、拍翅相位增加、降落高度 0、減少動態設定生效、console 0 errors / 0 warnings。完整 QA 見 `QA-paipai.md`。
 局部決定：以畫布遮罩現有圖片分層，不新增美術素材；腳部色彩遮罩依目前橘色素材，未來換圖時應複查。實體手機長時間效能未測。
-發布：完成全測、合併、push 與原 Pages 網址驗收後回填。
+發布：提交 `a637505b6d2fec52fc7fdea8c2e812e2faee0e82` 快轉合併 main，main 全測 103/103；遠端 main 已含該提交。既有 Pages run 39562442175 部署成功。原網址 https://frankfangcode.github.io/nccu-pangolin-game/ 真實瀏覽器載入 `paipai.mjs?v=20`，方向鍵向左移動、地面身體保持穩定且頭角度變化、起飛高度 1、拍翅相位增加、落地高度 0，console 0 errors / 0 warnings。文件證據以後續提交回補，遊戲檔不再變動。
 
 ## 本輪狀態 — 派派步行與飛行動作（2026-10-21）
 目標：只改善派派走路、飛行與起降的姿勢和節奏，保留校園版、控制方式、建築與探索流程。工作分支 `paipai-motion` 自同步的 `origin/main` 490962d 開始；開工時無未提交修改。
