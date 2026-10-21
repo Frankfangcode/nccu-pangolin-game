@@ -1,6 +1,11 @@
-## 目前可玩版本 v13
+## 目前可玩版本：派派校園
 [GitHub Pages 開始遊玩](https://frankfangcode.github.io/nccu-pangolin-game/)
-2026-10-20：入口動物冒險已發布並完整走完任務驗證。以下較舊的排隊／404紀錄已被本狀態取代。發布來源為main根目錄，push後由Pages自動建置。
+
+首頁從政大正門跟著臺灣藍鵲派派步行或飛行，靠近建築收集校園足跡。WASD／方向鍵移動、空白鍵起飛／降落、E 認識建築；手機用畫面下方的搖桿與按鈕。地圖能搜尋地點，建築介紹連到[政大記憶網](https://nccuwiki.lib.nccu.edu.tw/index.php/%E6%A0%A1%E5%9C%92%E5%BB%BA%E7%89%A9)。地圖與插畫仍是遊戲化示意，不能當實地導航；逐棟核對進度見 [BUILDINGS-paipai.md](BUILDINGS-paipai.md)。
+
+原本的兩套穿山甲玩法保留：[全校冒險](https://frankfangcode.github.io/nccu-pangolin-game/classic.html)與[溪邊篇](https://frankfangcode.github.io/nccu-pangolin-game/meadow.html)。三個入口各用自己的瀏覽器存檔。
+
+下方舊版部署與玩法記錄供追溯；本輪狀態以本段與 [HANDOFF.md](HANDOFF.md) 最上方為準。
 
 # 穿山甲出沒 · 政大校園小冒險
 

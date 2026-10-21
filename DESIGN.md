@@ -22,6 +22,17 @@ colors:
   overlay: "#244638"
   focus: "#e9a24d"
   gamePaper: "#fff9e7"
+  paiPaiBlue: "#1f5da8"
+  paiPaiMuted: "#4d675e"
+  paiPaiLine: "#d9decf"
+  paiPaiMapPaper: "#e7efdc"
+  paiPaiField: "#6ba35a"
+  paiPaiInput: "#fffdf4"
+  paiPaiHover: "#2d6154"
+  paiPaiButtonHover: "#286ec0"
+  paiPaiButtonShadow: "#164477"
+  paiPaiBackdrop: "#102f2cb5"
+  white: "#ffffff"
 rounded:
   speechTail: "4px"
   nameBadge: "20px"
@@ -34,6 +45,10 @@ rounded:
   toast: "8px"
   panel: "9px"
   circle: "50%"
+  paiPaiIdentity: "12px"
+  paiPaiCard: "13px"
+  paiPaiWelcome: "14px"
+  paiPaiDialog: "15px"
 typography:
   size11:
     fontSize: "11px"
@@ -57,9 +72,24 @@ typography:
     fontSize: "33px"
   size38:
     fontSize: "38px"
+  paiPaiIdentity:
+    fontSize: "19px"
+  paiPaiHelp:
+    fontSize: "20px"
+  paiPaiMobileCard:
+    fontSize: "23px"
+  paiPaiFlightIcon:
+    fontSize: "25px"
+  paiPaiCardTitle:
+    fontSize: "27px"
+  paiPaiFluidTitle:
+    fontSize: "29px"
 ---
 
 # 穿山甲出沒 · 視覺第二版
+
+## 派派校園入口
+延續原本滿版校園插畫。上方保留名稱、足跡、地圖、說明；近處地標才顯示深綠名稱。派派用藍鵲藍與較小的紙白介面。桌機操作靠右下，手機以搖桿和飛行／認識鈕分置兩側；上列 paiPai 色彩和尺寸是這個入口專用的設計值。
 
 ## 視覺方向
 以使用者提供的 Sneaky Sasquatch 為生活化探索遊戲參考，採原創模型生成素材：暖陽、圓潤立體角色、豐富草地、紅瓦校舍。沒有使用參考遊戲的原始圖像。

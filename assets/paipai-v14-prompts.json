@@ -1,0 +1,9 @@
+{
+  "tool": "built-in image_gen",
+  "outputs": {
+    "assets/campus/paipai-flying-v14.png": "Transparent 2D game sprite: Taiwanese blue magpie mascot with black head, orange beak, cobalt blue body, long white-tipped tail, flying with wings fully spread, three-quarter top-down angle. Match the low-poly flat cartoon character from the attached art. Full isolated bird, no shadows, scenery, grid, text or watermark.",
+    "assets/campus/alumni-v14.png": "Edit existing low-poly campus office sprite into an illustration of NCCU Eighth Classroom: two floors, dark cultural-tile pitched roof, washed-pebble walls, second-floor front balcony with glass curtain wall, ground-floor alumni center entrance. Transparent isolated building. Based on NCCU Memory text, not a photo-accurate reconstruction."
+  },
+  "source": "https://nccuwiki.lib.nccu.edu.tw/index.php/%E7%AC%AC%E5%85%AB%E6%95%99%E5%AE%A4",
+  "limitations": "The new building art is an interpretation of the listed architectural features. It has not been directly matched to a licensed facade photograph."
+}

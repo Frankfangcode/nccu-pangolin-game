@@ -4,7 +4,7 @@ const aliases={school:'heritage',shop:'heritage',canteen:'heritage',academic:'of
 const landmarks=CAMPUS.landmarks.map(p=>{
  const n={...p,asset:aliases[p.asset]??p.asset,w:p.w*.72,h:p.h*.72};
  n.entry={x:n.x,y:n.y+34};
- const corrected={'志希樓':'green-hall','果夫樓':'green-hall','樂活館':'lohas','大仁樓':'daren'};
+ const corrected={'志希樓':'green-hall','果夫樓':'green-hall','樂活館':'lohas','大仁樓':'daren','校友服務中心':'alumni'};
  if(corrected[p.name])n.asset=corrected[p.name];
  if(p.name==='政大校門'){n.x=2220;n.w=105;n.h=190;n.entry={x:2360,y:3190};}
  if(p.kind==='route'||p.w===0)n.entry={x:n.x,y:n.y};
