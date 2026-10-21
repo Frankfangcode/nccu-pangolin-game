@@ -3,7 +3,7 @@
 修改：加入走路跨步與飛行下拍兩張臺灣藍鵲原圖及 WebP；依實際移動距離推進步伐，停止或撞牆時回到站姿；空中拍翅時鐘只在遊戲狀態更新時推進，起降連續混合姿勢。減少動態偏好維持靜態姿勢。新增素材列入 manifest、Git 白名單與快取版本 v18。無新套件、存檔欄位或外部服務。
 驗證：TDD 紅綠循環 3 個新行為；`node --test test/*.test.mjs` 102/102 通過，`scripts/package-site.mjs` 封裝 95 個 runtime 檔，Impeccable 偵測 0 項。瀏覽器在 1280×800、375×812 各做兩輪截圖，見 `../../work/paipai-motion/round{1,2}-{desktop,mobile}.png`；手機搖桿移動、起飛、拍翅、降落、減少動態均驗收，console 0 errors / 0 warnings。詳見 `QA-paipai.md`。
 局部決定：使用原有畫風生成兩張補間姿勢，用 Canvas 依步距與拍翅相位合成，不修改地圖或 UI。限制：只用兩張姿勢圖組合，尚未有完整逐格骨骼動畫；實體手機長時間效能未測。
-發布：完成主線合併與原 GitHub Pages 網址驗收後回填提交、部署證據。下一步：全測、合併、main 全測、push、正式站實玩與查 console。
+發布：提交 `fc9f4f6fe6742db8585ea1e18f93b479b2dcd5f0` 已快轉合併 main，main 全測 102/102；遠端 main 與提交相同。既有 Pages run 39557815827 成功，最新 Pages build 指向本提交且 `built`、error null。正式網址 https://frankfangcode.github.io/nccu-pangolin-game/ 真實瀏覽器載入 `paipai.mjs?v=18` 與兩張 v18 WebP，按起飛高度到 1、落地高度回 0，console 0 errors / 0 warnings。文件狀態以後續 `[skip ci]` 提交回補，遊戲檔不再變動。
 
 ## 本輪狀態 — 派派校園入口（2026-10-21）
 目標與授權：使用者要求原校園版回到首頁，新增臺灣藍鵲派派可飛行並認識校舍；原 GitHub Pages 網址自動發布。參考政大記憶網校園建物與既有校園相對位置。

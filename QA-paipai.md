@@ -9,6 +9,7 @@
 - 本機真實瀏覽器：起飛高度達 1、靜止懸停 `wingPhase` 繼續前進；375×812 搖桿使 x 增加，降落回高度 0；減少動態媒體查詢生效；console 0 errors / 0 warnings。`impeccable detect --json index.html src/paipai-render.mjs src/paipai-state.mjs` 回傳 `[]`。
 - 兩輪截圖：`../../work/paipai-motion/round1-desktop.png`、`round1-mobile.png`、`round2-desktop.png`、`round2-mobile.png`。均檢視八項：層次（主角與玩法清楚）、留白（控件與場景分開）、字體（沿用既有中文層級）、配色（藍鵲與校園綠色相襯）、對齊（頂欄與操作區一致）、響應式（375px 無裁切或橫向捲動）、狀態（起飛鈕改為降落）、動效（移動才跨步、空中才拍翅）；本輪未發現新畫面缺陷。
 - 動效審查：Canvas 逐幀只畫角色換姿勢、微幅位置與旋轉；不做版面重排，遊戲暫停時相位暫停，可中斷，減少動態偏好停用微動與換姿勢。無阻擋發布的動效問題。剩餘限制：兩個姿勢的圖像混合在少數中間幀可能有輕微重影；尚無實體手機長測。
+- 正式站：Pages run 39557815827 成功，build commit `fc9f4f6fe6742db8585ea1e18f93b479b2dcd5f0`。原網址載入 `paipai.mjs?v=18`、兩張 v18 動作 WebP；起飛高度 1、降落高度 0；console 0 errors / 0 warnings。
 
 ## 2026-10-21 遠端 v16 整合驗收
 
